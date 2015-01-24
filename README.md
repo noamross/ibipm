@@ -1,4 +1,5 @@
-[![Build Status](https://magnum.travis-ci.com/noamross/ibipm.svg?token=JkBWVYYe2yNqyquByRrv)](https://magnum.travis-ci.com/noamross/ibipm)
+[![Build Status](https://travis-ci.org/noamross/ibipm.svg)](https://travis-ci.org/noamross/ibipm)
+[![Coverage Status](https://coveralls.io/repos/noamross/ibipm/badge.png?style=flat)](https://coveralls.io/r/noamross/ibipm)
 
 # Individual-Based Integro-Projection Models
 
