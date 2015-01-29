@@ -2,7 +2,6 @@
 title: Establishment of size-structured populations]{Establishment and extinction risk of size-structured populations
 author: Sebastian Schreiber
 ---
-
 Introduction
 ============
 
