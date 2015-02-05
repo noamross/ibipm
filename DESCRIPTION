@@ -9,6 +9,7 @@ Maintainer: Noam Ross <noam.ross@gmail.com>
 Description: More about what it does (maybe more than one line)
 License: MIT
 LazyData: TRUE
+Depends: IPMpack
 Suggests: testthat,
     knitr
 VignetteBuilder: knitr
