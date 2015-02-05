@@ -42,10 +42,10 @@ alpha=min(data$size[which(data$size>0)],data$sizeNext[which(data$sizeNext>0)]) #
 beta=max(data$size[which(data$size>0)],data$sizeNext[which(data$sizeNext>0)]) # the maximum size of an individual
 xs=seq(alpha,beta,length=100) # a sequence of sizes from min size to max size
 
-pdf("Week5-A.pdf")
+#pdf("Week5-A.pdf")
 plot(data$size,jitter(data$surv,factor=0.1),pch=21,bg=rgb(1,0,0,0.5))
 lines(xs,Survival(xs),lwd=4,col="blue")
-dev.off()
+#dev.off()()
 
 ######################################
 # Estimating the growth kernel G(x,y)
@@ -56,20 +56,20 @@ model.growth=lm(sizeNext~size,data=data)
 summary(model.growth) # provides the summary statistics
 
 # plotting the residuals below shows that they are approximately normal.
-pdf("Week5-B.pdf")
+#pdf("Week5-B.pdf")
 hist(model.growth$residuals)
-dev.off()
+#dev.off()()
 
 # hence, we will assume that one can model the variation in growth as a mean size based trend with gaussian variation around this mean.
 b=sd(model.growth$residuals) # the SD of the gaussian
 Growth=function(y,x)dnorm(y,mean=predict(model.growth,data.frame('size'=x),type='response'),sd=b) # the growth kernel
 
 # plot the data and the fit
-pdf("Week5-C.pdf")
+#pdf("Week5-C.pdf")
 par(cex.lab=1.5,cex.axis=1.5)
 image(xs,xs,t(outer(xs,xs,Growth)),xlab=expression(size[t]),ylab=expression(size[t+1]))
 points(data$size,data$sizeNext,pch=21,bg=rgb(0,0,1,0.5))
-dev.off()
+#dev.off()()
 
 #######################
 # Estimating the fecundity kernel
@@ -84,10 +84,10 @@ f.fecundity=function(x)predict(model.fecundity,data.frame('size'=x),type="respon
 
 #plot the seed data and the fit
 
-pdf("Week5-D.pdf")
+#pdf("Week5-D.pdf")
 plot(data$size,data$fec.seed,pch=21,bg=rgb(1,0,0,0.5),bty="n",xlab="size",ylab="fecundity")
 lines(xs,f.fecundity(xs),lwd=2)
-dev.off()
+#dev.off()()
 
 # estimate probability of seed establishment
 establishment.prob=sum(is.na(data$size))/sum(data$fec.seed,na.rm=TRUE)
@@ -129,9 +129,9 @@ IPM=(IPM.left+IPM.right)/2
 
 
 #plot kernel
-pdf("Week5-E.pdf")
+#pdf("Week5-E.pdf")
 image(xs[-n],xs[-n],IPM)
-dev.off()
+#dev.off()()
 
 
 #############################################
@@ -144,7 +144,7 @@ v=v/sum(v)
 w=Re(eigen(t(IPM))$vectors[,1])
 w=w/sum(v*w)
 
-pdf("Week5-F.pdf")
+#pdf("Week5-F.pdf")
 par(cex.axis=1.5,cex.lab=1.5,mar=c(4,4,1,4))
 plot(xs[-n],v,type="l",ylab="stable size distribution",xlab="size",lwd=3,col="black")
 par(new=TRUE)
@@ -152,13 +152,13 @@ plot(xs[-n],w,type="l",yaxt="n",xlab="",ylab="",lwd=3,col="red")
 axis(4)
 mtext("reproductive values",side=4,line=3,cex=1.5)
 legend("top",c("stable size","reproductive values"),col=c("black","red"),lwd=3,bty="n",cex=1.5)
-dev.off()
+#dev.off()()
 
 
 S=w%o%v
 E=S*IPM/lambda
 
-pdf("Week5-G.pdf")
+#pdf("Week5-G.pdf")
 image(xs[-n],xs[-n],E/dx^2,xlab="size at t",ylab="size at t+1")
 contour(xs[-n],xs[-n],E/dx^2,add=TRUE)
-dev.off()
+#dev.off()()
