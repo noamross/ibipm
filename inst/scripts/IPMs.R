@@ -20,7 +20,7 @@ rm (list = ls ())
 
 # read in the data from the J Ecology paper. This data includes information about year to year size changes, survivorship, and fecundity.
 
-data=as.data.frame(read.csv("data/IPM-data.csv"))
+data=as.data.frame(read.csv("IPM-data.csv"))
 
 #====================
 # Estimate survival kernel
@@ -162,3 +162,5 @@ E=S*IPM/lambda
 image(xs[-n],xs[-n],E/dx^2,xlab="size at t",ylab="size at t+1")
 contour(xs[-n],xs[-n],E/dx^2,add=TRUE)
 #dev.off()()
+
+save.image("IPMs.Rdata")
