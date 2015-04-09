@@ -1,0 +1,30 @@
+---
+title: "Building the individual based model"
+author: "Sebastian Schreiber"
+date: "April 8, 2015"
+output: html_document
+---
+First, clear all the variables and load the build of the IPM which I saved in the IPMs.Rdata file
+
+```{r setup}
+rm (list = ls ())
+load("IPMs.Rdata")
+```
+
+Next pull out the key functions from the IPM build which are 
+s(x) the size-dependent survival function, probability density g(y,x) of growing from size x to y, the mean number of offspring f(x) produced by an individual of size x given the individual is having offspring, the probability b(x) of having offspring at size x, and os(y) the probability density of an offspring being size y at the next census. 
+
+```{r}
+s=function(x)Survival(x)
+g=function(y,x)Growth(y,x)
+f=function(x)f.fecundity(x)*establishment.prob
+b=function(x)1
+os=function(y)dnorm(y,mean=recruit.size.mean,sd=recruit.size.sd)
+```
+Now comes the important new piece. Need to define the probability generating function associated with the fecundity function. Since we used the Poisson family for getting the fecundity function, I assume that the number of offspring is Poisson distributed with mean f(x) for an individual of size x. Hence, the probability generating function (with size x treated like a parameter) is given by  
+
+```{r}
+phi=function(x,s)exp(f(x)*(s-1))
+```
+
+
