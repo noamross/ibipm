@@ -5,7 +5,7 @@
 #===============================================================================
 
 
-# change.the.parameters are passed to this code 
+# change.the.parameters are passed to this code
 # for creating bifurcation diagrams
 # if the first coordinate (survival.factor) equals 0 then
 # no changes are made
@@ -20,9 +20,9 @@ survival.factor=change.the.parameters[1];
 rust.percent=change.the.parameters[2]
 
 # TURN ON FOR THE BASE RUN. TURN OFF FOR BIF RUNS
-load("data.Rdata")
-load("IPM-season-stats.Rdata")
-load("IPM-season-build.Rdata")
+load("data/data.Rdata")
+load("data/IPM-season-stats.Rdata")
+load("data/IPM-season-build.Rdata")
 
 ###########################
 # KEY FUNCTIONS
@@ -43,7 +43,7 @@ if(survival.factor>0){
          temp=predict(model.disease,data.frame(X.temp=rust.percent),type='response')
          disease.factor=temp/model.seedcount
          }
-            
+
 phi=function(s)exp(disease.factor*FuncFecund()*(s-1))
 
 #################################
@@ -62,7 +62,7 @@ n=length(bin.mids) # number of bins
 # The generating functionals
 # coordinates 1:n is for the continuous part i.e. the function h
 # coordinate n+1 is for the seeds i.e. the variable z
-# 
+#
 # Key observation: except for fecundity all is linear!
 #---------------------------------------
 
@@ -111,7 +111,7 @@ Gsp=function(hz){
 	z.new=z
 	return(c(h.new,z.new))
 	}
-	
+
 Gsu=function(hz){
 	h=hz[1:n]
 	z=hz[n+1]
@@ -119,7 +119,7 @@ Gsu=function(hz){
 	z.new=z
 	return(c(h.new,z.new))
 	}
-	
+
 # winter generating functional
 
 Gwi=function(hz){
@@ -146,7 +146,7 @@ G.quarter=list(sp=Gsp,su=Gsu,fa=Gfa,wi=Gwi)
 
 # yearly starting in winter
 
-G.year=function(hz){	
+G.year=function(hz){
 	years=c(3,2,1,4)
 	for(i in 1:4){
 		hz=G.quarter[[years[i]]](hz)
@@ -173,7 +173,7 @@ G.iterate=function(T){
 	Fa[,1]=G.quarter[[4]](temp)
 	for(t in 1:T){
 		Wi[,t+1]=G.year(Wi[,t])
-		Sp[,t+1]=G.year(Sp[,t])		
+		Sp[,t+1]=G.year(Sp[,t])
 		Su[,t+1]=G.year(Su[,t])
 		Fa[,t+1]=G.year(Fa[,t])
 	}
@@ -214,7 +214,7 @@ probs=function(out,N){
 		cum=Fa[,i]
 	}
 	return(pr)
-	
+
 }
 
 # sensitivity analysis for extinction probability with respect to survival
@@ -235,7 +235,7 @@ Sensitivity=function(q){
 	DG[1:n,1:n,4]=diag(s.evict[,4]*(1-p.mat))%*%t(g.mat[,,4])
 	DG[1:n,n+1,4]=s.evict[,4]*p.mat*phi.prime(q[n+1])
 	DG[n+1,n+1,4]=0
-	
+
 	dGeps=array(0,dim=c(n+1,n+1,4))
 	dGeps[1:n,1:n,3]=diag(-1+t(g.mat[,,3])%*%q[1:n])
 	q.temp=Gfa(q)
@@ -244,7 +244,7 @@ Sensitivity=function(q){
 	dGeps[1:n,1:n,1]=diag(-1+t(g.mat[,,3])%*%q.temp[1:n])
 	q.temp=Gsu(q.temp)
 	dGeps[1:n,1:n,4]=diag(-1+diag(1-p.mat)%*%t(g.mat[,,i]))%*%q.temp[1:n]+p.mat*phi.prime(q.temp[n+1])
-	
+
 	A=solve(diag(n+1)-DG[,,4]%*%DG[,,1]%*%DG[,,2]%*%DG[,,3])
 	S=array(0,dim=c(n+1,n+1,4))
 	S[,,4]=A%*%dGeps[,,4]
