@@ -9,7 +9,7 @@ Read in the data
 ```{r setup}
 library(IPMpack)
 library(knitr)
-data = read.csv("../data/IPM-data.csv")
+data = read.csv("../../data/IPM-data.csv")
 opts_chunk$set(cache=TRUE)
 ```
 
