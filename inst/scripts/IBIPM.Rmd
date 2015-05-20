@@ -123,5 +123,25 @@ plot(0:T,out,typ="l",lwd=3,bty="n",xlab="time t",ylab="probability of extinction
 abline(h=0.01)
 ```
 
-Clearly these probabilities asymptote. It would be good to have a function that (1) determines whether or not there is asymptotically a positive probability of non-exctinction and (2) computes this asymptotic probability of extinction by iterating toward the steady state. 
+Clearly these probabilities asymptote. The following function computes this asymptotic probability of extinction by iterating toward the steady state. 
 
+```{r}
+AE=function(tol=0.0001){
+  h=rep(0,n)
+  diff=1
+  while(diff>tol){
+    h.old=h
+    h=Psi(h)
+    diff=sum(abs(h.old-h))
+  }
+  return(h)
+}
+```
+Lets try this out. 
+
+```{r}
+h=AE()
+plot(xs,h,type="l",xlab="size",ylab="asymptotic extinction probability",lwd=3)
+```
+
+Can see that the asymptotic exinction probability tends to decrease with the size of the founding individual but at large sizes begins increasing again. This latter trend is due to the eviction in the model at large sizes.
