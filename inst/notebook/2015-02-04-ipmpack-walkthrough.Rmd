@@ -2,6 +2,9 @@
 title: Re-implementing the IPM script using IPMpack
 author: Noam Ross
 date: February 4, 2015
+output:
+  html_document:
+    keep_md: true
 ---
 
 Read in the data
