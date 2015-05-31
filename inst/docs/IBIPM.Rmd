@@ -1,0 +1,72 @@
+---
+title: "IBIPM"
+author: "Sebastian Schreiber"
+date: "May 22, 2015"
+output: html_document
+---
+
+$\def\N{\mathbb N}$
+$\def\P{\mathbb P}$
+$\def\S{\mathcal S}$
+$\def\n{\mathbf n}$
+$\def\s{S}$
+$\def\x{\mathbf x}$
+$\def\y{\mathbf y}$
+$\def\o{\%*\%}$
+
+##Models and methods
+
+### The inidividual based IPM
+We consider an individual- and size- based model where the set of all possible individual sizes lies in a compact interval $X=[a,b]$. While these methods extend quite naturally to any compact state space $X$, our methods currently are restricted to this simpler, commonly used case. As we only consider populations with a finite number of individuals, the state of the population at any point of the time is characterized by the sizes  of individuals within the population  and how many individuals are of a given size $(n_1,n_2,\dots, n_k)$. For example, if there $n_1$ individuals of size $x_1$, $n_2$ individuals of size $x_2$,..., $n_k$ individuals of size $x_k$, then the state of the population is given by $(n_1,n_2,\dots, n_k; x_1,x_2,\dots, x_k)$. The set of all possible population states is
+\[
+\S= \{(\n,\x)=(n_1,\dots, n_k, x_1\dots , x_k): k,n_i\in \N, x_i \in X\} \cup \{0\}
+\]
+where $\N=\{1,2,3,\dots\}$ denotes the natural numbers and $0$ is the extinction state i.e. no individuals in the population.
+
+Let  $\s_t=( \n, \x)\in \S$ be the population state at time $t$. The dynamics of $\s_t$ are determined by a set of probabilistic rules that determine the contribution of each individual in the population to the population in next time step $t+1$. While the set of probabilitistic update rules can be fairly general, we focus on a relatively standard IPM set up in which there is size-dependent survival followed by size-dependent growth and reproduction. Let $s(x)$ be the probability that an individual of state $x$ survives to the next time step. Let $G(y,x)$ be the growth kernel conditioned on survival i.e. $G(y,x)dy$ is the ``infinitesmal'' probability that a surviving individual of size $x$ grows to size $y$ in the next year. Let $p_k(x)$ be the probability that an individual of size $x$ produces $k$ offspring. Let $e(y,x)dy$ be the infinitesmal probability that an offspring from a parent of size $x$ is of size $y$. We assume that the size of each offspring is independent of all other offspring and the total number of offspring. While this assumption may be reasonable for some species (e.g. many plants and sessile invertebrates), it is likely to be violated for other species (e.g. large mammals or birds). Thus, future development of these methods will account for these correlations.  
+
+Under these assumptions, the state $\s_{t+1}$ of the population is determined by the following update rule. *For each individual in the population at time $t$,*
+
+1. The individual survives with probability $s(x)$ where $x$ is the size of the focal individual. 
+2. If the individual survives, then draw its size $y$ from the density $G(y,x)$
+3. If the individual survives, randomly draw its number of offspring from the distribution $p_0(x),p_1(x),\dots$
+4. For each offspring, randomly draw its size from the density $e(y,x)$
+
+### Probability generating functionals and extinction probabilities
+As with single- and multiple-type branching processes, we can characterize the probabilistic state of the system using probability generating maps $\Phi$ (pgms). In the case of these individual-based IPMs, these pgms take continuous functions $h$ on $[0,1]$ to continuous function on $[0,1]$.  To write down $\Phi$, we need the probability generation function for the offspring distribution for an individual of size $x$: 
+\[
+\psi_x(z)=\sum_{k=0}^\infty p_k(x)z^k
+\]
+where $z$ takes on values in $[0,1]$. Recall that $\psi_x(z)$ is called a probability generating function as it includes the probabilitistic information about the offspring distribution. Specifically, 
+\[
+\frac{d^k}{dz^k}\psi_x(0)/k!=p_k(x)=\mbox{probability of having $k$ offspring}
+\]
+and
+\[
+\frac{d}{dz}\psi_x(1)=\sum_k k p_k(x)=\mbox{expected number of offspring}.
+\]
+With $\psi_x$ in hand, probability generating functional $\Phi$ is given by
+\[
+\Phi(h)(x)=1-s(x)+s(x)\times \int g(y,x)h(y)dy\times \psi_x\left(\int h(y)e(y,x)dy\right).
+\]
+
+This functional has the nice property that if $\s_0=(1,x)$ then the probability of extinction by $t$ of the population is given by 
+\[
+E(t,x):=\Phi^t(h)(\mathbf{0})(x)
+\]
+where $\mathbf{0}$ denotes the zero function from $[0,1]$ to $[0,1]$ and $\Phi^t$ denotes the composition of $\Phi$ with itself $t$ times. More generally, for any initial states $\s_0=(\n,\x)$ of the popoulation, independence among individuals implies that the proability of extinction by time $t$ is given by 
+\[
+\prod_i E(t,x_i)^{n_i}.
+\]
+
+### Sensitivity formulas
+
+Suppose that the IBIPM depends on some parameter $a$. Then the pgf $\Phi$ and extinction probabilities $E(t,x)$ will also depend on $a$. A simple computation reveals that the function $E(t,\cdot)$ satifies the following recursion
+\[
+\frac{\partial E}{\partial a}(t,\cdot)=
+\frac{\partial \Phi}{\partial a}(E(t-1,\cdot))+D\Phi(E(t-1,\cdot))\frac{\partial E }{\partial a}(t-1,\cdot)
+\]
+where $D\Phi$ denotes the derivative of $\Phi$ 
+and, consequently, can be solved for interatively. 
+
+
