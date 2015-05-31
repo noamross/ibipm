@@ -2,7 +2,7 @@
 title: "Building the individual based model"
 author: "Sebastian Schreiber"
 date: "April 8, 2015"
-output: html_document
+output: word_document
 ---
 First, clear all the variables and load the build of the IPM which I saved in the IPMs.Rdata file. Then pull out the key functions from the IPM build which are 
 $s(x)$ the size-dependent survival function, probability density $g(y,x)$ of growing from size x to y, the mean number of offspring $f(x)$ produced by an individual of size $x$ given the individual is having offspring, the probability $p_f(x)$ of having offspring at size $x$, and $os(y)$ the probability density of an offspring being size $y$ at the next census.
