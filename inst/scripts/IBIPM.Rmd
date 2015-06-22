@@ -25,24 +25,28 @@ Statement of main goals: adapt the methods of continous-state branching processe
 
 ##Models and methods
 
-### The individual based IPM
+### The General Individual Based IPM
 We consider an individual- and size- based model where the set of all possible individual states (e.g. age, size, etc.) lies in a compact metric space $X$. For example, for the standard size-structured IPM, $X=[a,b]$ is the interval of sizes. For a mixture of age and size stucture, $X=\{1,\dots,T\}\times [a,b]$ where $T$ is the maximal age. As we only consider populations with a finite number of individuals, the state of the population at any point of the time is characterized by the sizes $(x_1,x_2,\dots, x_k)$  of individuals within the population  and how many individuals are of a given size $(n_1,n_2,\dots, n_k)$. Specifically, if there $n_1$ individuals of size $x_1$, $n_2$ individuals of size $x_2$,..., $n_k$ individuals of size $x_k$, then the state of the population is given by $(n_1,n_2,\dots, n_k; x_1,x_2,\dots, x_k)$. We denote the set of all possible population states is
 \[
 \S= \{(\n,\x)=(n_1,\dots, n_k, x_1\dots , x_k): k,n_i\in \N, x_i \in X\} \cup \{0\}
 \]
 where $\N=\{1,2,3,\dots\}$ denotes the natural numbers and $0$ is the extinction state i.e. no individuals in the population.
 
-Let  $\s_t=( \n, \x)\in \S$ be the population state at time $t$. The dynamics of $\s_t$ are determined by a set of probabilistic rules that determine the contribution of each individual in the population to the population in next time step $t+1$. Consistent with standard branching process theory, we assume that each individual in the population updates independent of all other individuals. The update rule for an individual of size $x$ is, in general, given by a probability measure $m(x,d\s)$ on the state space $\S$. Specically, the probability an individual state $x$ is "replaced" by some collection of individuals $\s$ in $A\subset\S$ is given by
+Let  $\s_t=( \n, \x)\in \S$ be the population state at time $t$. The dynamics of $\s_t$ are determined by a set of probabilistic rules that determine the contribution of each individual in the population to the population in next time step $t+1$. Consistent with standard branching process theory, we assume that each individual in the population updates independent of all other individuals. The update rule for an individual of size $x$ is given by a probability measure $m(x,d\s)$ on the state space $\S$. Specically, the probability an individual in state $x$ contributes $\s$ individuals to the population in the next time step where $\s$ lies in a subset $A\subset \S$ equals
 \[
 \P[\s_1\in A| \s_0 =(1,x)]=\int_A m(x,d\s)
 \]
-where the left hand side reads "the probability the population is in some state $A$ at time $t=1$ after initially having only one individual in state $x$." These "replacements" may correspond to an individual surviving and growing (i.e. changing state) and having offspring. In the next section, we provide very specific examples of how these measures might be defined. 
+where the left hand side reads "the probability the population state lies $A$ at time $t=1$ after initially having only one individual in state $x$." These "contributions" may correspond to an individual surviving and growing (i.e. changing state) and having offspring. 
 
-The stochastic dynamics of the entire popoulation is given by the following probabilistic update rule. If the population state is currently $\s_t=(n_1,\dots,n_k,x_1,\dots,x_k)$, then 
+The stochastic dynamics of the entire popoulation is given by a probabilistic update rule determined by the probability measures $m(x,d\s)$. Specifically, if the population state is currently $\s_t=(n_1,\dots,n_k,x_1,\dots,x_k)$, then 
 
-1. for each of the $n_i$ individuals in state $i$, randomly and indepedently choose the number of replacement individuals from distribution $m(d\,\s,x_i)$.
-2. repeat step 1. for all different types in the population. 
-3. determine the new population state by identifying all the types of replacement individuals and the total numbers of individuals in each state. 
+1. for each of the $n_1$ individuals in state $x_1$, randomly and indepedently choose the number of replacement individuals from distribution $m(d\,\s,x_1)$.
+2. repeat step 1. for the types $x_2,\dots, x_k$.
+3. determine the new population state by identifying the states of all individuals and counting the total number of individuals in each of these states. 
+
+This iterative algorithm can be used to create individual based simulations of the IBIPM. As with any branching process, stochastic realizations of this process, with probability one, either go to extinction in finite time, or the population size asymptotically approaches infinity. 
+
+### Probability generating functionals and extinction
 
 As with single- and multiple-type branching processes, we can characterize the probabilistic state of the system using probability generating functionals $\Phi$ (pgfs). In the case of these individual-based IPMs, these pgfs take continuous functions $h:X\to \R$  to continuous functions of the same type. To define this pgf, we introduce the following notation. Given a continuous function $h:X\to\R$ and $\s\in \S$, let 
 \[
@@ -60,7 +64,7 @@ Now, define the pgf by
 \]
 The relevance of the pgf to extinction is based on two facts. The first fact, which stems immediately from the definition, is that if $h$ is the zero function (denoted $0$), then 
 \[
-\Psi(O)(x)=\int 1 \,m(d\s,x)= \P[\s_1=0|\s_0=(1,x) ]
+\Psi(O)(x)=\int 1 \,m(d\s,x)= \P[\s_1=0|\s_0=(1,x) 
 \]
 is the probability the population goes extinct in one time step given that initially it consisted of one individual is state $x$. To state the second fact, define 
 \[
@@ -70,18 +74,45 @@ to be the $t$-fold composition of $\Psi$ with itself. We claim that
 \[
 \Psi^t(0)(x)=\P[\s_t=0|\s_0=(1,x)]
 \]
-is the population is extinct by time $t$ (or sooner) given that it initially consisted of one individual in state $x$. To see why, we argue by induction. The first fact proves that the statement holds for $t=1$. Now suppose the assertion holds for $t$, we will show it holds for $t+1$. Assume that $\s_0=(1,x)$. On the event that $\s_1=(n_1,\dots,n_k,x_1,\dots,x_k)$, extinction occurs by time $t+1$ only if each of the lineages of the $n_1+\dots +n_k$ go extinct in the next $t$ time steps. As the fates of these lineages are independent of one another and the probability of a lineage starting with one individual is state $x$ going extinct in $t$ time steps equals, by our inductive hypothesis, $\Psi^t(0)(x)$, it follows that 
+is the population is extinct by time $t$ (or sooner) given that it initially consisted of one individual in state $x$. To see why, we argue by induction. The first fact proves that the statement holds for $t=1$. Now suppose the assertion holds for $t$, we will show it holds for $t+1$. Assume that $\s_0=(1,x)$. On the event that $\s_1=(n_1,\dots,n_k,x_1,\dots,x_k)$, extinction occurs by time $t+1$ only if each of the lineages of the $n_1+\dots +n_k$ go extinct in the next $t$ time steps. As the fates of these lineages are independent of one another, it follows that 
 \[
-\P[s_{t+1}=0|s_0=(1,x),s_1=(n_1,\dots,n_k,x_1,\dots,x_k)]=
-\prod_{i=1}^k\left(\Psi^t(0)(x_i)\right)^n_i=\Psi_t(0)^{\s_1}
+\begin{aligned}
+\P[s_{t+1}=0|s_0=(1,x),s_1=(n_1,\dots,n_k,x_1,\dots,x_k)]&= \prod_{i=1}^k \P[s_t=0|s_0=(1,x_i)]^{n_i}\\
+&=\prod_{i=1}^k\left(\Psi^t(0)(x_i)\right)^{n_i}=\Psi_t(0)^{\s_1}
+\end{aligned}
 \]
-By the law of total probability
+where the second equality follows from our inductive hypothesis. By the law of total probability
 \[
 \P[s_{t+1}=0|s_0=(1,x)]=\int [\Psi^t(0)]^\s \,m(d\s,x)
 \]
 which, by definition, equals $\Psi^{t+1}(0)(x)$ as claimed. 
 
+As individuals update independent of one another, the probability of the population going extinct by time $t$ for any inititial condition $\s=(n_1,\dots,n_k,x_1,\dots,x_k)$ equals 
+\[
+\P[\s_t=0|\s_0=\s]=\Psi(0)^\s.
+\]
+This analytic expression allows to efficiently compute extinction probabilities by constructing a numerical approximation of the pgf and iterating it with an initial condition of a zero vector which corresponds to the numerical approximation of the zero function. 
 
+As $\Psi_0(0)(x)\le \Psi_1(0)_1(x),\le \Psi_2(0)(x)\dots$ for any $x\in X$, there is a well defined limit corresponding to the probability of eventual extinction:
+\[
+q_\infty(x):=\lim_{t\to\infty} \Psi_t(0)(x).
+\]
+Using moment generating functionals, Harris provided a criterion for when $q_\infty(x)<1$ for all $x$ or $q_\infty(x)=1$ for all $x$. This limit theorem is based on the IPM corresponding to the expected dynamics of the individual based IPM. Namely, define the probability measure
+\[
+K(dy,x)=\int_{\{s=(n_1,\dots, n_k,x_1,\dots,x_k)\in \S| x_1=y\}} n_1  m(d\s,x)
+\]
+which defines the following IPM
+\[
+N_{t+1}(dy)=\int N_t(x) 
+\]
+
+
+### Sensitivity Formulas
+
+
+## A Numerical Illustration
+
+*I NEED TO UPDATE THE STUFF BELOW*
 
 
 While the set of probabilitistic update rules can be fairly general, we focus on a relatively standard IPM set up in which there is size-dependent survival followed by size-dependent growth and reproduction. Let $s(x)$ be the probability that an individual of state $x$ survives to the next time step. Let $G(y,x)$ be the growth kernel conditioned on survival i.e. $G(y,x)dy$ is the ``infinitesmal'' probability that a surviving individual of size $x$ grows to size $y$ in the next year. Let $p_k(x)$ be the probability that an individual of size $x$ produces $k$ offspring. Let $e(y,x)dy$ be the infinitesmal probability that an offspring from a parent of size $x$ is of size $y$. We assume that the size of each offspring is independent of all other offspring and the total number of offspring. While this assumption may be reasonable for some species (e.g. many plants and sessile invertebrates), it is likely to be violated for other species (e.g. large mammals or birds). Thus, future development of these methods should account for these correlations.  

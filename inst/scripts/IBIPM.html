@@ -76,20 +76,24 @@ img {
 </div>
 <div id="models-and-methods" class="section level2">
 <h2>Models and methods</h2>
-<div id="the-individual-based-ipm" class="section level3">
-<h3>The individual based IPM</h3>
+<div id="the-general-individual-based-ipm" class="section level3">
+<h3>The General Individual Based IPM</h3>
 <p>We consider an individual- and size- based model where the set of all possible individual states (e.g. age, size, etc.) lies in a compact metric space <span class="math">\(X\)</span>. For example, for the standard size-structured IPM, <span class="math">\(X=[a,b]\)</span> is the interval of sizes. For a mixture of age and size stucture, <span class="math">\(X=\{1,\dots,T\}\times [a,b]\)</span> where <span class="math">\(T\)</span> is the maximal age. As we only consider populations with a finite number of individuals, the state of the population at any point of the time is characterized by the sizes <span class="math">\((x_1,x_2,\dots, x_k)\)</span> of individuals within the population and how many individuals are of a given size <span class="math">\((n_1,n_2,\dots, n_k)\)</span>. Specifically, if there <span class="math">\(n_1\)</span> individuals of size <span class="math">\(x_1\)</span>, <span class="math">\(n_2\)</span> individuals of size <span class="math">\(x_2\)</span>,…, <span class="math">\(n_k\)</span> individuals of size <span class="math">\(x_k\)</span>, then the state of the population is given by <span class="math">\((n_1,n_2,\dots, n_k; x_1,x_2,\dots, x_k)\)</span>. We denote the set of all possible population states is <span class="math">\[
 \S= \{(\n,\x)=(n_1,\dots, n_k, x_1\dots , x_k): k,n_i\in \N, x_i \in X\} \cup \{0\}
 \]</span> where <span class="math">\(\N=\{1,2,3,\dots\}\)</span> denotes the natural numbers and <span class="math">\(0\)</span> is the extinction state i.e. no individuals in the population.</p>
-<p>Let <span class="math">\(\s_t=( \n, \x)\in \S\)</span> be the population state at time <span class="math">\(t\)</span>. The dynamics of <span class="math">\(\s_t\)</span> are determined by a set of probabilistic rules that determine the contribution of each individual in the population to the population in next time step <span class="math">\(t+1\)</span>. Consistent with standard branching process theory, we assume that each individual in the population updates independent of all other individuals. The update rule for an individual of size <span class="math">\(x\)</span> is, in general, given by a probability measure <span class="math">\(m(x,d\s)\)</span> on the state space <span class="math">\(\S\)</span>. Specically, the probability an individual state <span class="math">\(x\)</span> is “replaced” by some collection of individuals <span class="math">\(\s\)</span> in <span class="math">\(A\subset\S\)</span> is given by <span class="math">\[
+<p>Let <span class="math">\(\s_t=( \n, \x)\in \S\)</span> be the population state at time <span class="math">\(t\)</span>. The dynamics of <span class="math">\(\s_t\)</span> are determined by a set of probabilistic rules that determine the contribution of each individual in the population to the population in next time step <span class="math">\(t+1\)</span>. Consistent with standard branching process theory, we assume that each individual in the population updates independent of all other individuals. The update rule for an individual of size <span class="math">\(x\)</span> is given by a probability measure <span class="math">\(m(x,d\s)\)</span> on the state space <span class="math">\(\S\)</span>. Specically, the probability an individual in state <span class="math">\(x\)</span> contributes <span class="math">\(\s\)</span> individuals to the population in the next time step where <span class="math">\(\s\)</span> lies in a subset <span class="math">\(A\subset \S\)</span> equals <span class="math">\[
 \P[\s_1\in A| \s_0 =(1,x)]=\int_A m(x,d\s)
-\]</span> where the left hand side reads “the probability the population is in some state <span class="math">\(A\)</span> at time <span class="math">\(t=1\)</span> after initially having only one individual in state <span class="math">\(x\)</span>.” These “replacements” may correspond to an individual surviving and growing (i.e. changing state) and having offspring. In the next section, we provide very specific examples of how these measures might be defined.</p>
-<p>The stochastic dynamics of the entire popoulation is given by the following probabilistic update rule. If the population state is currently <span class="math">\(\s_t=(n_1,\dots,n_k,x_1,\dots,x_k)\)</span>, then</p>
+\]</span> where the left hand side reads “the probability the population state lies <span class="math">\(A\)</span> at time <span class="math">\(t=1\)</span> after initially having only one individual in state <span class="math">\(x\)</span>.” These “contributions” may correspond to an individual surviving and growing (i.e. changing state) and having offspring.</p>
+<p>The stochastic dynamics of the entire popoulation is given by a probabilistic update rule determined by the probability measures <span class="math">\(m(x,d\s)\)</span>. Specifically, if the population state is currently <span class="math">\(\s_t=(n_1,\dots,n_k,x_1,\dots,x_k)\)</span>, then</p>
 <ol style="list-style-type: decimal">
-<li>for each of the <span class="math">\(n_i\)</span> individuals in state <span class="math">\(i\)</span>, randomly and indepedently choose the number of replacement individuals from distribution <span class="math">\(m(d\,\s,x_i)\)</span>.</li>
-<li>repeat step 1. for all different types in the population.</li>
-<li>determine the new population state by identifying all the types of replacement individuals and the total numbers of individuals in each state.</li>
+<li>for each of the <span class="math">\(n_1\)</span> individuals in state <span class="math">\(x_1\)</span>, randomly and indepedently choose the number of replacement individuals from distribution <span class="math">\(m(d\,\s,x_1)\)</span>.</li>
+<li>repeat step 1. for the types <span class="math">\(x_2,\dots, x_k\)</span>.</li>
+<li>determine the new population state by identifying the states of all individuals and counting the total number of individuals in each of these states.</li>
 </ol>
+<p>This iterative algorithm can be used to create individual based simulations of the IBIPM. As with any branching process, stochastic realizations of this process, with probability one, either go to extinction in finite time, or the population size asymptotically approaches infinity.</p>
+</div>
+<div id="probability-generating-functionals-and-extinction" class="section level3">
+<h3>Probability generating functionals and extinction</h3>
 <p>As with single- and multiple-type branching processes, we can characterize the probabilistic state of the system using probability generating functionals <span class="math">\(\Phi\)</span> (pgfs). In the case of these individual-based IPMs, these pgfs take continuous functions <span class="math">\(h:X\to \R\)</span> to continuous functions of the same type. To define this pgf, we introduce the following notation. Given a continuous function <span class="math">\(h:X\to\R\)</span> and <span class="math">\(\s\in \S\)</span>, let <span class="math">\[
 h^\s=
 \left\{
@@ -101,17 +105,37 @@ h^\s=
 \]</span> Now, define the pgf by <span class="math">\[
 \Psi(h)(x)=\int h^\s \,m(d\s,x)
 \]</span> The relevance of the pgf to extinction is based on two facts. The first fact, which stems immediately from the definition, is that if <span class="math">\(h\)</span> is the zero function (denoted <span class="math">\(0\)</span>), then <span class="math">\[
-\Psi(O)(x)=\int 1 \,m(d\s,x)= \P[\s_1=0|\s_0=(1,x) ]
+\Psi(O)(x)=\int 1 \,m(d\s,x)= \P[\s_1=0|\s_0=(1,x) 
 \]</span> is the probability the population goes extinct in one time step given that initially it consisted of one individual is state <span class="math">\(x\)</span>. To state the second fact, define <span class="math">\[
 \Psi^t(h)=\underbrace{\Psi(\Psi(\dots \Psi}_{\mbox{$t$ times}}(h)\dots))
 \]</span> to be the <span class="math">\(t\)</span>-fold composition of <span class="math">\(\Psi\)</span> with itself. We claim that <span class="math">\[
 \Psi^t(0)(x)=\P[\s_t=0|\s_0=(1,x)]
-\]</span> is the population is extinct by time <span class="math">\(t\)</span> (or sooner) given that it initially consisted of one individual in state <span class="math">\(x\)</span>. To see why, we argue by induction. The first fact proves that the statement holds for <span class="math">\(t=1\)</span>. Now suppose the assertion holds for <span class="math">\(t\)</span>, we will show it holds for <span class="math">\(t+1\)</span>. Assume that <span class="math">\(\s_0=(1,x)\)</span>. On the event that <span class="math">\(\s_1=(n_1,\dots,n_k,x_1,\dots,x_k)\)</span>, extinction occurs by time <span class="math">\(t+1\)</span> only if each of the lineages of the <span class="math">\(n_1+\dots +n_k\)</span> go extinct in the next <span class="math">\(t\)</span> time steps. As the fates of these lineages are independent of one another and the probability of a lineage starting with one individual is state <span class="math">\(x\)</span> going extinct in <span class="math">\(t\)</span> time steps equals, by our inductive hypothesis, <span class="math">\(\Psi^t(0)(x)\)</span>, it follows that <span class="math">\[
-\P[s_{t+1}=0|s_0=(1,x),s_1=(n_1,\dots,n_k,x_1,\dots,x_k)]=
-\prod_{i=1}^k\left(\Psi^t(0)(x_i)\right)^n_i=\Psi_t(0)^{\s_1}
-\]</span> By the law of total probability <span class="math">\[
+\]</span> is the population is extinct by time <span class="math">\(t\)</span> (or sooner) given that it initially consisted of one individual in state <span class="math">\(x\)</span>. To see why, we argue by induction. The first fact proves that the statement holds for <span class="math">\(t=1\)</span>. Now suppose the assertion holds for <span class="math">\(t\)</span>, we will show it holds for <span class="math">\(t+1\)</span>. Assume that <span class="math">\(\s_0=(1,x)\)</span>. On the event that <span class="math">\(\s_1=(n_1,\dots,n_k,x_1,\dots,x_k)\)</span>, extinction occurs by time <span class="math">\(t+1\)</span> only if each of the lineages of the <span class="math">\(n_1+\dots +n_k\)</span> go extinct in the next <span class="math">\(t\)</span> time steps. As the fates of these lineages are independent of one another, it follows that <span class="math">\[
+\begin{aligned}
+\P[s_{t+1}=0|s_0=(1,x),s_1=(n_1,\dots,n_k,x_1,\dots,x_k)]&amp;= \prod_{i=1}^k \P[s_t=0|s_0=(1,x_i)]^{n_i}\\
+&amp;=\prod_{i=1}^k\left(\Psi^t(0)(x_i)\right)^{n_i}=\Psi_t(0)^{\s_1}
+\end{aligned}
+\]</span> where the second equality follows from our inductive hypothesis. By the law of total probability <span class="math">\[
 \P[s_{t+1}=0|s_0=(1,x)]=\int [\Psi^t(0)]^\s \,m(d\s,x)
 \]</span> which, by definition, equals <span class="math">\(\Psi^{t+1}(0)(x)\)</span> as claimed.</p>
+<p>As individuals update independent of one another, the probability of the population going extinct by time <span class="math">\(t\)</span> for any inititial condition <span class="math">\(\s=(n_1,\dots,n_k,x_1,\dots,x_k)\)</span> equals <span class="math">\[
+\P[\s_t=0|\s_0=\s]=\Psi(0)^\s.
+\]</span> This analytic expression allows to efficiently compute extinction probabilities by constructing a numerical approximation of the pgf and iterating it with an initial condition of a zero vector which corresponds to the numerical approximation of the zero function.</p>
+<p>As <span class="math">\(\Psi_0(0)(x)\le \Psi_1(0)_1(x),\le \Psi_2(0)(x)\dots\)</span> for any <span class="math">\(x\in X\)</span>, there is a well defined limit corresponding to the probability of eventual extinction: <span class="math">\[
+q_\infty(x):=\lim_{t\to\infty} \Psi_t(0)(x).
+\]</span> Using moment generating functionals, Harris provided a criterion for when <span class="math">\(q_\infty(x)&lt;1\)</span> for all <span class="math">\(x\)</span> or <span class="math">\(q_\infty(x)=1\)</span> for all <span class="math">\(x\)</span>. This limit theorem is based on the IPM corresponding to the expected dynamics of the individual based IPM. Namely, define the probability measure <span class="math">\[
+K(dy,x)=\int_{\{s=(n_1,\dots, n_k,x_1,\dots,x_k)\in \S| x_1=y\}} n_1  m(d\s,x)
+\]</span> which defines the following IPM <span class="math">\[
+N_{t+1}(dy)=\int N_t(x) 
+\]</span></p>
+</div>
+<div id="sensitivity-formulas" class="section level3">
+<h3>Sensitivity Formulas</h3>
+</div>
+</div>
+<div id="a-numerical-illustration" class="section level2">
+<h2>A Numerical Illustration</h2>
+<p><em>I NEED TO UPDATE THE STUFF BELOW</em></p>
 <p>While the set of probabilitistic update rules can be fairly general, we focus on a relatively standard IPM set up in which there is size-dependent survival followed by size-dependent growth and reproduction. Let <span class="math">\(s(x)\)</span> be the probability that an individual of state <span class="math">\(x\)</span> survives to the next time step. Let <span class="math">\(G(y,x)\)</span> be the growth kernel conditioned on survival i.e. <span class="math">\(G(y,x)dy\)</span> is the ``infinitesmal’’ probability that a surviving individual of size <span class="math">\(x\)</span> grows to size <span class="math">\(y\)</span> in the next year. Let <span class="math">\(p_k(x)\)</span> be the probability that an individual of size <span class="math">\(x\)</span> produces <span class="math">\(k\)</span> offspring. Let <span class="math">\(e(y,x)dy\)</span> be the infinitesmal probability that an offspring from a parent of size <span class="math">\(x\)</span> is of size <span class="math">\(y\)</span>. We assume that the size of each offspring is independent of all other offspring and the total number of offspring. While this assumption may be reasonable for some species (e.g. many plants and sessile invertebrates), it is likely to be violated for other species (e.g. large mammals or birds). Thus, future development of these methods should account for these correlations.</p>
 <p>Under these assumptions, the state <span class="math">\(\s_{t+1}\)</span> of the population is determined by the following update rule. <em>For each individual in the population at time <span class="math">\(t\)</span>,</em></p>
 <ol style="list-style-type: decimal">
@@ -120,7 +144,6 @@ h^\s=
 <li>If the individual survives, randomly draw its number of offspring from the distribution <span class="math">\(p_0(x),p_1(x),\dots\)</span></li>
 <li>For each offspring, randomly draw its size from the density <span class="math">\(e(y,x)\)</span></li>
 </ol>
-</div>
 <div id="probability-generating-functionals-and-extinction-probabilities" class="section level3">
 <h3>Probability generating functionals and extinction probabilities</h3>
 <p>As with single- and multiple-type branching processes, we can characterize the probabilistic state of the system using probability generating functionals <span class="math">\(\Phi\)</span> (pgfs). In the case of these individual-based IPMs, these pgfs take continuous functions on <span class="math">\([0,1]\)</span> to continuous function on <span class="math">\([0,1]\)</span>.</p>
@@ -140,7 +163,7 @@ E(t,x):=\Phi^t(h)(\mathbf{0})(x)
 \prod_i E(t,x_i)^{n_i}.
 \]</span></p>
 </div>
-<div id="sensitivity-formulas" class="section level3">
+<div id="sensitivity-formulas-1" class="section level3">
 <h3>Sensitivity formulas</h3>
 <p>Suppose that the IBIPM depends on some parameter <span class="math">\(a\)</span>. Then the pgf <span class="math">\(\Phi\)</span> and extinction probabilities <span class="math">\(E(t,x)\)</span> will also depend on <span class="math">\(a\)</span>. A simple computation reveals that the function <span class="math">\(E(t,\cdot)\)</span> satifies the following recursion <span class="math">\[
 \frac{\partial E}{\partial a}(t,\cdot)=
