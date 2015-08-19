@@ -98,14 +98,7 @@ As $\Psi_0(0)(x)\le \Psi_1(0)_1(x),\le \Psi_2(0)(x)\dots$ for any $x\in X$, ther
 \[
 q_\infty(x):=\lim_{t\to\infty} \Psi_t(0)(x).
 \]
-Using moment generating functionals, Harris provided a criterion for when $q_\infty(x)<1$ for all $x$ or $q_\infty(x)=1$ for all $x$. This limit theorem is based on the IPM corresponding to the expected dynamics of the individual based IPM. Namely, define the probability measure
-\[
-K(dy,x)=\int_{\{s=(n_1,\dots, n_k,x_1,\dots,x_k)\in \S| x_1=y\}} n_1  m(d\s,x)
-\]
-which defines the following IPM
-\[
-N_{t+1}(dy)=\int N_t(x) 
-\]
+Using moment generating functionals, Harris provided a criterion for when $q_\infty(x)<1$ for all $x$ or $q_\infty(x)=1$ for all $x$. This limit theorem requires the existence of mean field model satifying several technical assumptions. Typically, this mean field model with be the IPM 
 
 
 ### Sensitivity Formulas
