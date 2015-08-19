@@ -98,15 +98,16 @@ As $\Psi_0(0)(x)\le \Psi_1(0)_1(x),\le \Psi_2(0)(x)\dots$ for any $x\in X$, ther
 \[
 q_\infty(x):=\lim_{t\to\infty} \Psi_t(0)(x).
 \]
-Using moment generating functionals, Harris provided a criterion for when $q_\infty(x)<1$ for all $x$ or $q_\infty(x)=1$ for all $x$. This limit theorem requires the existence of mean field model satifying several technical assumptions. Typically, this mean field model with be the IPM 
+Using moment generating functionals, Harris provided a criterion for when $q_\infty(x)<1$ for all $x$ or $q_\infty(x)=1$ for all $x$. Under suitable technical assumptions, this limit theorem implies that $q_\infty(x)=0$ for all $x$ whenever the dominant eigenvalue of the meanfield IPM is less than or equal to one, and $q_\infty(x)>0$ for all $x$, otherwise.  
 
 
 ### Sensitivity Formulas
 
+**Need to decide whether this is worth doing**
 
 ## A Numerical Illustration
 
-*I NEED TO UPDATE THE STUFF BELOW*
+*I NEED TO UPDATE THE STUFF BELOW TO DEAL WITH THE SPECIFIC EXAMPLE AND ITS IMPLEMENTATION*
 
 
 While the set of probabilitistic update rules can be fairly general, we focus on a relatively standard IPM set up in which there is size-dependent survival followed by size-dependent growth and reproduction. Let $s(x)$ be the probability that an individual of state $x$ survives to the next time step. Let $G(y,x)$ be the growth kernel conditioned on survival i.e. $G(y,x)dy$ is the ``infinitesmal'' probability that a surviving individual of size $x$ grows to size $y$ in the next year. Let $p_k(x)$ be the probability that an individual of size $x$ produces $k$ offspring. Let $e(y,x)dy$ be the infinitesmal probability that an offspring from a parent of size $x$ is of size $y$. We assume that the size of each offspring is independent of all other offspring and the total number of offspring. While this assumption may be reasonable for some species (e.g. many plants and sessile invertebrates), it is likely to be violated for other species (e.g. large mammals or birds). Thus, future development of these methods should account for these correlations.  

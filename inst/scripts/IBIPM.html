@@ -102,7 +102,7 @@ h^\s=
 \end{array}
 \right.
 \]</span> Using this notation, we define the pgf by <span class="math">\[
-\Psi(h)(x)=\int h^\s \,m(d\s,x)
+\Psi(h)(x)=\int h^\s \,m(d\s,x).
 \]</span></p>
 <p>The relevance of the pgf to extinction probabilities follows from two facts. The first fact, which stems immediately from the definition, is that if <span class="math">\(h_0\)</span> is the zero function (i.e. <span class="math">\(h_0(x)=0\)</span> for all <span class="math">\(x\)</span>), then <span class="math">\[
 \Psi(h_0)(x)=\int 1 \,m(d\s,x)= \P[\s_1=0|\s_0=(1,x)]
@@ -116,26 +116,23 @@ h^\s=
 &amp;=\prod_{i=1}^k\left(\Psi^t(h_0)(x_i)\right)^{n_i}=\Psi_t(h_0)^{\s_1}
 \end{aligned}
 \]</span> where the second equality follows from our inductive hypothesis. By the law of total probability <span class="math">\[
-\P[s_{t+1}=0|s_0=(1,x)]=\int [\Psi^t(0)]^\s \,m(d\s,x)
+\P[s_{t+1}=0|\s_0=(1,x)]=\int [\Psi^t(h_0)]^\s \,m(d\s,x)
 \]</span> which, by definition, equals <span class="math">\(\Psi^{t+1}(0)(x)\)</span> as claimed.</p>
 <p>As individuals update independent of one another, the probability of the population going extinct by time <span class="math">\(t\)</span> for any inititial condition <span class="math">\(\s=(n_1,\dots,n_k,x_1,\dots,x_k)\)</span> equals <span class="math">\[
-\P[\s_t=0|\s_0=\s]=\Psi(0)^\s.
+\P[\s_t=0|\s_0=\s]=\Psi(h_0)^\s.
 \]</span> This analytic expression allows to efficiently compute extinction probabilities by constructing a numerical approximation of the pgf and iterating it with an initial condition of a zero vector which corresponds to the numerical approximation of the zero function.</p>
 <p>As <span class="math">\(\Psi_0(0)(x)\le \Psi_1(0)_1(x),\le \Psi_2(0)(x)\dots\)</span> for any <span class="math">\(x\in X\)</span>, there is a well defined limit corresponding to the probability of eventual extinction: <span class="math">\[
 q_\infty(x):=\lim_{t\to\infty} \Psi_t(0)(x).
-\]</span> Using moment generating functionals, Harris provided a criterion for when <span class="math">\(q_\infty(x)&lt;1\)</span> for all <span class="math">\(x\)</span> or <span class="math">\(q_\infty(x)=1\)</span> for all <span class="math">\(x\)</span>. This limit theorem is based on the IPM corresponding to the expected dynamics of the individual based IPM. Namely, define the probability measure <span class="math">\[
-K(dy,x)=\int_{\{s=(n_1,\dots, n_k,x_1,\dots,x_k)\in \S| x_1=y\}} n_1  m(d\s,x)
-\]</span> which defines the following IPM <span class="math">\[
-N_{t+1}(dy)=\int N_t(x) 
-\]</span></p>
+\]</span> Using moment generating functionals, Harris provided a criterion for when <span class="math">\(q_\infty(x)&lt;1\)</span> for all <span class="math">\(x\)</span> or <span class="math">\(q_\infty(x)=1\)</span> for all <span class="math">\(x\)</span>. Under suitable technical assumptions, this limit theorem implies that <span class="math">\(q_\infty(x)=0\)</span> for all <span class="math">\(x\)</span> whenever the dominant eigenvalue of the meanfield IPM is less than or equal to one, and <span class="math">\(q_\infty(x)&gt;0\)</span> for all <span class="math">\(x\)</span>, otherwise.</p>
 </div>
 <div id="sensitivity-formulas" class="section level3">
 <h3>Sensitivity Formulas</h3>
+<p><strong>Need to decide whether this is worth doing</strong></p>
 </div>
 </div>
 <div id="a-numerical-illustration" class="section level2">
 <h2>A Numerical Illustration</h2>
-<p><em>I NEED TO UPDATE THE STUFF BELOW</em></p>
+<p><em>I NEED TO UPDATE THE STUFF BELOW TO DEAL WITH THE SPECIFIC EXAMPLE AND ITS IMPLEMENTATION</em></p>
 <p>While the set of probabilitistic update rules can be fairly general, we focus on a relatively standard IPM set up in which there is size-dependent survival followed by size-dependent growth and reproduction. Let <span class="math">\(s(x)\)</span> be the probability that an individual of state <span class="math">\(x\)</span> survives to the next time step. Let <span class="math">\(G(y,x)\)</span> be the growth kernel conditioned on survival i.e. <span class="math">\(G(y,x)dy\)</span> is the ``infinitesmal’’ probability that a surviving individual of size <span class="math">\(x\)</span> grows to size <span class="math">\(y\)</span> in the next year. Let <span class="math">\(p_k(x)\)</span> be the probability that an individual of size <span class="math">\(x\)</span> produces <span class="math">\(k\)</span> offspring. Let <span class="math">\(e(y,x)dy\)</span> be the infinitesmal probability that an offspring from a parent of size <span class="math">\(x\)</span> is of size <span class="math">\(y\)</span>. We assume that the size of each offspring is independent of all other offspring and the total number of offspring. While this assumption may be reasonable for some species (e.g. many plants and sessile invertebrates), it is likely to be violated for other species (e.g. large mammals or birds). Thus, future development of these methods should account for these correlations.</p>
 <p>Under these assumptions, the state <span class="math">\(\s_{t+1}\)</span> of the population is determined by the following update rule. <em>For each individual in the population at time <span class="math">\(t\)</span>,</em></p>
 <ol style="list-style-type: decimal">
