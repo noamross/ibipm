@@ -17,6 +17,10 @@ $\def\o{\%*\%}$
 
 ##Introduction
 
+The likelihoods of extinction or establishment success lie on opposing sides of a theoretican's coin that has and continues to play an important role in questions in conservation biology, restoration ecology, biological invasions and population genetics. These likelihoods stem from populations consisting of a finite number of individuals each of which faces a positive risk of mortality on any given day. Moreover, these extinction and establishment likelihoods are shaped by population structure in which individuals may differ in age, size, geographical location, or other important distinguishing features. Multi-type branching processes, in which individuals survive, grow, and repoduce independent of one another, provide  
+
+
+
 Brief review of the extinction/establishment question, the use of branching processes for single and multiple type. 
 
 Brief review of size-structured models of the IPM type
