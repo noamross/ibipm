@@ -1,5 +1,6 @@
 ---
-title: "Individual-based Integral Projection Models: The role of size-structure on extinction risk and establishment success"
+title: 'Individual-based Integral Projection Models: The role of size-structure on
+  extinction risk and establishment success'
 author: "Sebastian Schreiber and Noam Ross"
 date: "April 8, 2015"
 output: html_document
@@ -17,7 +18,7 @@ $\def\o{\%*\%}$
 
 ##Introduction
 
-The likelihoods of extinction or establishment success lie on opposing sides of a theoretican's coin that has and continues to play an important role in questions in conservation biology, restoration ecology, biological invasions and population genetics. These likelihoods stem from populations consisting of a finite number of individuals each of which faces a positive risk of mortality on any given day. Moreover, these extinction and establishment likelihoods are shaped by population structure in which individuals may differ in age, size, geographical location, or other important distinguishing features. Multi-type branching processes, in which individuals survive, grow, and repoduce independent of one another, are a natural stochastic counterpart of matrix models (Caswell 2001). These models allow one to examine how extinction risk or establishment success depend on the population size and its distribution across a finite number of states (e.g. ages, size classes, patches). 
+The likelihoods of extinction or establishment success lie on opposing sides of a theoretican's coin used to address questions in conservation biology, restoration ecology, biological invasions and population genetics. These likelihoods stem from populations consisting of a finite number of individuals each of which faces a positive risk of mortality on any given day. Moreover, these extinction and establishment likelihoods are shaped by population structure in which individuals may differ in age, size, geographical location, or other important distinguishing features. Multi-type branching processes, in which individuals survive, grow, and repoduce independent of one another, are a natural stochastic counterpart of matrix models (Caswell 2001). These models allow one to examine how extinction risk or establishment success depend on the population size and its distribution across a finite number of states (e.g. ages, size classes, patches). 
 
 When collecting demographic data, one commonly makes continuous measurements (e.g. mass, length) about individuals. Consequently, since their introduction in the early 2000s, there has been a surge of interest in integral projection models (IPMs) that account for continuous population structure and correspond to infinite-dimensional analog of matrix models. The individual based counterparts of these models were effectively introduced in the 1950s by Theodore Harris. He called them continuous-state branching processes. Here, we describe a generalization of these models as well an explicit analytical method for computing time-dependent extinction probabilities associated with these individual based IPMs. We illustrate how to implement these methods in R using the IPM of XXX developed by XXX. Explicit sensitivity formulas for these extinction probabilities are also provided. 
 
