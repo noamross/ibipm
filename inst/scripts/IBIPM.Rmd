@@ -41,7 +41,7 @@ where the left hand side reads "the probability the population state lies $A$ at
 
 The stochastic dynamics of the entire popoulation is given by a probabilistic update rule determined by the probability measures $m(x,d\s)$. Specifically, if the population state is currently $\s_t=(n_1,\dots,n_k,x_1,\dots,x_k)$, then 
 
-1. for each of the $n_1$ individuals in state $x_1$, randomly and indepedently choose the number of replacement individuals from distribution $m(d\,\s,x_1)$.
+1. for each of the $n_1$ individuals in state $x_1$, randomly and indepedently choose the number of replacement individuals from distribution $m(x_1,d\,\s)$.
 2. repeat step 1. for the types $x_2,\dots, x_k$.
 3. determine the new population state by identifying the states of all individuals and counting the total number of individuals in each of these states. 
 
@@ -61,8 +61,9 @@ h^\s=
 \]
 Using this notation, we define the pgf by 
 \[
-\Psi(h)(x)=\int h^\s \,m(d\s,x).
+\Psi(h)(x)=\int h^\s \,m(x,d\s).
 \]
+Namely, $\Psi(h)(x)$ corresponds to finding the expected value of $h^\s$ due to the contributions of individuals in the next time step from an individual in state $x$. This expectation corresponds to integrating over all possible populations states in the next time step.  
 
 The relevance of the pgf to extinction probabilities follows from two facts. The first fact, which stems immediately from the definition, is that if $h_0$ is the zero function (i.e. $h_0(x)=0$ for all $x$), then 
 \[
@@ -80,7 +81,7 @@ is the population is extinct by time $t$ (or sooner) given that it initially con
 \[
 \begin{aligned}
 \P[s_{t+1}=0|\s_0=(1,x),\s_1=(n_1,\dots,n_k,x_1,\dots,x_k)]&= \prod_{i=1}^k \P[\s_t=0|\s_0=(1,x_i)]^{n_i}\\
-&=\prod_{i=1}^k\left(\Psi^t(h_0)(x_i)\right)^{n_i}=\Psi_t(h_0)^{\s_1}
+&=\prod_{i=1}^k\left(\Psi^t(h_0)(x_i)\right)^{n_i}=\Psi^t(h_0)^{\s_1}
 \end{aligned}
 \]
 where the second equality follows from our inductive hypothesis. By the law of total probability
@@ -102,6 +103,7 @@ E_\infty(x):=\lim_{t\to\infty} E_t(x).
 Using moment generating functionals, Harris provided a criterion for when $E_\infty(x)<1$ for all $x$ or $E_\infty(x)=1$ for all $x$. Under suitable technical assumptions, this limit theorem implies that $E_\infty(x)=0$ for all $x$ whenever the dominant eigenvalue of the meanfield IPM is less than or equal to one, and $E_\infty(x)>0$ for all $x$, otherwise.  
 
 
+
 ### Sensitivity Formulas
 
 To examine the sensitivity of the extinction probability $E_t(x)$ to a parameter $a$ in the IBIPM (e.g. the slope or intercept of the logistic regression for surival or the linear regression for the growth kernel), the chain rule implies that 
@@ -115,67 +117,15 @@ where the product refers to composition of the linear operators given by taking 
 
 ## A Numerical Illustration
 
-*I NEED TO UPDATE THE STUFF BELOW TO DEAL WITH THE SPECIFIC EXAMPLE AND ITS IMPLEMENTATION*
+To illustrate how these general methods can be applied to a data set, we develop an individual-based IPM based on **add details about the endangered plant species and the work of Nicols et al**. 
 
-
-While the set of probabilitistic update rules can be fairly general, we focus on a relatively standard IPM set up in which there is size-dependent survival followed by size-dependent growth and reproduction. Let $s(x)$ be the probability that an individual of state $x$ survives to the next time step. Let $G(y,x)$ be the growth kernel conditioned on survival i.e. $G(y,x)dy$ is the ``infinitesmal'' probability that a surviving individual of size $x$ grows to size $y$ in the next year. Let $p_k(x)$ be the probability that an individual of size $x$ produces $k$ offspring. Let $e(y,x)dy$ be the infinitesmal probability that an offspring from a parent of size $x$ is of size $y$. We assume that the size of each offspring is independent of all other offspring and the total number of offspring. While this assumption may be reasonable for some species (e.g. many plants and sessile invertebrates), it is likely to be violated for other species (e.g. large mammals or birds). Thus, future development of these methods should account for these correlations.  
-
-Under these assumptions, the state $\s_{t+1}$ of the population is determined by the following update rule. *For each individual in the population at time $t$,*
-
-1. The individual survives with probability $s(x)$ where $x$ is the size of the focal individual. 
-2. If the individual survives, then draw its size $y$ from the density $G(y,x)$
-3. If the individual survives, randomly draw its number of offspring from the distribution $p_0(x),p_1(x),\dots$
-4. For each offspring, randomly draw its size from the density $e(y,x)$
-
-### Probability generating functionals and extinction probabilities
-As with single- and multiple-type branching processes, we can characterize the probabilistic state of the system using probability generating functionals $\Phi$ (pgfs). In the case of these individual-based IPMs, these pgfs take continuous functions on $[0,1]$ to continuous function on $[0,1]$.  
-
-To write down  $\Phi$, we need the probability generation function for the offspring distribution for an individual of size $x$: 
+For the mean-field IPM, Nicols et al. had a model of the form 
 \[
-\psi_x(z)=\sum_{k=0}^\infty p_k(x)z^k
+N_{t+1}(x)=\int_a^b s(y)G(y,x)+e(x)f(y)N_t(y)\,dy
 \]
-where $z$ takes on values in $[0,1]$. Recall that  $\psi_x(z)$ is called a probability generating function as it includes the probabilistic information about the offspring distribution. Specifically, 
-\[
-\frac{d^k}{dz^k}\psi_x(0)/k!=p_k(x)=\mbox{probability of having $k$ offspring}
-\]
-and
-\[
-\frac{d}{dz}\psi_x(1)=\sum_k k p_k(x)=\mbox{expected number of offspring}.
-\]
+where $s(x)$ is the probability of surviving to the next year for individuals of size $y$, $G(y,x)dy$ is the infinitesmal probability that a surviving individual of size $x$ is size $y$ in the next year, $f(x)$ is the mean number of offspring produced by an individual of size $x$, and $e(x)$ is the infinitesmal probability of an offspring is of size $x$ at the time of the annual census. 
 
-With $\psi_x$ in hand, probability generating functional $\Phi$ is given by
-\[
-\Phi(h)(x)=1-s(x)+s(x)\times \int g(y,x)h(y)dy\times \psi_x\left(\int h(y)e(y,x)dy\right).
-\]
-This functional has the property that 
-
-
-This functional has the nice property that if $\s_0=(1,x)$ then the probability of extinction by $t$ of the population is given by 
-\[
-E(t,x):=\Phi^t(h)(\mathbf{0})(x)
-\]
-where $\mathbf{0}$ denotes the zero function from $[0,1]$ to $[0,1]$ and $\Phi^t$ denotes the composition of $\Phi$ with itself $t$ times. More generally, for any initial states $\s_0=(\n,\x)$ of the popoulation, independence among individuals implies that the proability of extinction by time $t$ is given by 
-\[
-\prod_i E(t,x_i)^{n_i}.
-\]
-
-### Sensitivity formulas
-
-Suppose that the IBIPM depends on some parameter $a$. Then the pgf $\Phi$ and extinction probabilities $E(t,x)$ will also depend on $a$. A simple computation reveals that the function $E(t,\cdot)$ satifies the following recursion
-\[
-\frac{\partial E}{\partial a}(t,\cdot)=
-\frac{\partial \Phi}{\partial a}(E(t-1,\cdot))+D\Phi(E(t-1,\cdot))\frac{\partial E }{\partial a}(t-1,\cdot)
-\]
-where $D\Phi$ denotes the derivative of $\Phi$ 
-and, consequently, can be solved for interatively. 
-
-
-
-
-
-First, clear all the variables and load the build of the IPM which I saved in the IPMs.Rdata file. Then pull out the key functions from the IPM build which are 
-$s(x)$ the size-dependent survival function, probability density $g(y,x)$ of growing from size x to y, the mean number of offspring $f(x)$ produced by an individual of size $x$ given the individual is having offspring, the probability $p_f(x)$ of having offspring at size $x$, and $os(y)$ the probability density of an offspring being size $y$ at the next census.
-
+The following code loads the functions for the mean field IPM: 
 ```{r}
 rm (list = ls ())
 load("IPMs.Rdata")
@@ -183,20 +133,48 @@ g=function(y,x)Growth(y,x)
 s=function(x)Survival(x)
 f=function(x)f.fecundity(x)*establishment.prob
 pf=function(x)1
-os=function(y)dnorm(y,mean=recruit.size.mean,sd=recruit.size.sd)
+e=function(y)dnorm(y,mean=recruit.size.mean,sd=recruit.size.sd) 
 ```
-Now comes the important new piece. Need to define the probability generating function associated with the fecundity function. Since we used the Poisson family for getting the fecundity function, I assume that the number of offspring is Poisson distributed with mean $f(x)$ for an individual of size $x$. Hence, the probability generating function (with size $x$ treated like a parameter) is given by  
 
+The kernels $s(x)$, $G(y,x)$, and $e(x)$ provide us with all the information the individual-based IPMs requires for probabilistic updating individuals for survival, growth, and size at first census. The fecundity kernel $f(y)$, however, only specifies the mean number of offspring produced, but for an individual-based IPM, we need the distribution of the number of offspring produced by an individual. Fortunately, when using GLMs to model fecundity data, we are often getting this extra information for free. For example, one might use the Poisson family in a GLM to model the fecundity data.  In which case, the mean $f(x)$ also specifies the distribution. Alternatively, one might use multi-parameter distributions such as the negative binomial or mixtures of several distributions.
+
+Consisent with the analysis of Nicols et al, we assume this distribution for an individual of size $y$ is Poisson distributed with mean $f(y)$. Recall that pgf for a Poisson distribution with mean $\lambda$ is $\phi(s)=\exp(\lambda(s-1))$ where $s$ is a dummy variable. Hence, the pgf for the number of offspring of an individual of size $x$ is given by 
 ```{r}
 phi=function(x,s)exp(f(x)*(s-1))
 ```
+We will need this pgf to construct the pfg $\Psi$ of the individual-based IPM. 
 
-Using all of these pieces, we can define the probability generating functional for individual based IPM by 
-\[\Psi(h)(x)=\left(1-p_f(x)+p_f(x)\phi\left(x,\int_a^b os(y) h(y) dy\right)\right)\left(1-s(x)
-						+s(x)\int_a^b g(y,x)h(y)dy\right)\]
-where $h$ is a continuous function from $[a,b]$ to $[0,1]$.
+To define $\Psi$, notice that the contributions of an individual of size $x$ to the population in the next time step involves the sum of two independent random variables. There is the contribution due to survival and growth, and the contribution due to reproduction. We can define a pgf for each of these processes seperately. For the survival and growth pgf $\Psi_g$, $\Psi_g(h)(x)$ corresponds to integrating $h^\s$ over all contributes $\s$ due to an individual of size $x$ surviving and growing. These possible states are of two types: $\s=\emptyset$ corresponding to an individual dying and $\s=(1,y)$ corresponding to an individual suriving and growing to size $y$. The first event occurs with probability $1-s(x)$ and the infinitesmal probability of the second event is $s(x)G(y,x)dy$. As $h^\s=1$ on the event of death and $h^\s=h(y)$ on the event $\s=(1,y)$, integrating over all possible contributions due to survival and growth yields 
+\[
+\Psi_{g}(h)(x)=(1-s(x))\times 1 + s(x)\int h(y)G(y,x)dy.
+\]
+For the pgf $\Psi_f$ corresponding to contributions due to fecundity, $\Psi_f(h)(x)$ is given by integrating $h^\s$ over all possible states $\s$ corresponding to the offspring produced by an individual of size $x$. With this two pgfs, we can use a fundamental property of pgfs: the pgf for a sum of indepedent random variables is the product of the pgfs of these random variables. Hence, our pgf $\Psi$ for the individual-based IPM will be given by 
+\[
+\Psi=\Psi_g \times \Psi_f
+\]
 
-To create this probability generating functional numerically, I use the grid on x values xs which go from the minimum size $\alpha$ to the maximum size $\beta$ with n bins. 
+But what about $\Psi_f$? To write this down, we can take advantage of the fact that the reproductive contribution of an individual of size $x$ corresponds to a Poisson number of offspring with mean $f(x)$ whose sizes are drawn *independently* from the same offspring distribution. To make use of this observation, we can condition on the number of offspring an individual has. Lets say our individual of size $x$ has $N$ offspring. Then its contribution is a sum of $N$ indendent random variables taking values of the form $\s=(1,y)$. The pgf $\Psi_{kid}$ associated with one of these contributions is given by 
+\[
+\Psi_{kid}(h)(x)=\int h(y)e(y)dy
+\]
+as $h^{{1,y}}(x)=h(y)$ and $e(y)dy$ is the infinitesmal probability of an offspring being of size $y$. Since there are $N$ kids independent of one another, the pfg for this sum is given by the product of the pfgs:
+\[
+\Psi_{N\,kids}(h)(x)=\left(\int h(y)e(y)dy\right)^N.
+\]
+Finally, to get $\Psi_f$, we can sum over all possible number of kids weighted by their probabilities:
+\[
+\Psi_f(h)(x)=\sum \frac{\exp(-f(x))f(x)^N}{N!} \Psi_{kid}(h)(x)^N
+\]
+but this corresponds simply to 
+\[
+\Psi_f(h)(x)=\phi(x, \Psi_{kid}(h)(x))=\phi(x,\int h(y)e(y)dy)
+\]
+Thus we have
+\[
+\Psi(h)(x)=\left((1-s(x))\times 1 + s(x)\int h(y)G(y,x)dy\right)\phi(x,\int h(y)e(y)dy)
+\]
+
+To create this probability generating functional numerically, we can use the grid on x values xs which go from the minimum size $\alpha$ to the maximum size $\beta$ with n bins. 
 
 ```{r}
 n=100
@@ -209,7 +187,7 @@ Now create the survival, probability of having offspring, and offspring size vec
 ```{r}
 s.mat=s(xs)
 pf.mat=pf(xs)
-os.mat=os(xs)*dx
+os.mat=e(xs)*dx
 ```
 We need to make sure that the o.mat integrates to one i.e. there is no eviction. Eviction creates a major problem for the probability generating functionals. 
 
