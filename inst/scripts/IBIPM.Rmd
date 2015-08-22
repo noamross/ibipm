@@ -18,7 +18,7 @@ $\def\o{\%*\%}$
 
 ##Introduction
 
-Computations of extinction probabilities or likelihoods of establishment success lie on opposing sides of a theoretican's coin and are used to address questions in conservation biology, restoration ecology, biological invasions and population genetics. Risks of extinction or establishment failure stem from populations consisting of a finite number of individuals each of which faces a non-zero risk of mortality on any given day. These risks are shaped, in part, by the size and composition of a population in which individuals may differ in age, size, geographical location, or other important characteristics influencing demography. When population structure is finite-dimensional (i.e. a finite number of age classes, stages, geographical locations), multi-type branching processes serve as the stochastic counterpart of matrix models (A & Ney 19XX, Caswell 2001). These models allow one to examine how extinction risk or establishment success depend on the population size and its distribution across a finite number of states (e.g. ages, size classes, patches). 
+Computations of extinction probabilities or likelihoods of establishment success lie on opposing sides of a theoretician's coin and are used to address questions in conservation biology, restoration ecology, biological invasions and population genetics. Risks of extinction or establishment failure stem from populations consisting of a finite number of individuals each of which faces a non-zero risk of mortality on any given day. These risks are shaped, in part, by the size and composition of a population in which individuals may differ in age, size, geographical location, or other important characteristics influencing demography. When population structure is finite-dimensional (i.e. a finite number of age classes, stages, geographical locations), multi-type branching processes serve as the stochastic counterpart of matrix models (A & Ney 19XX, Caswell 2001). These models allow one to examine how extinction risk or establishment success depend on the population size and its distribution across a finite number of states (e.g. ages, size classes, patches). 
 
 When collecting demographic data, one commonly makes continuous measurements (e.g. mass, length) about individuals. Consequently, since their introduction in the early 2000s, there has been a surge of interest in integral projection models (IPMs) that account for continuous population structure (REFs). As IPMs correspond to infinite-dimensional matrix models which are nummerically approximated by finite-dimensional matrix models, many of the standard demographic concepts and methods for matrix models (e.g. stable state distributions, reproductive values, life table response experiements) extend to IPMs (REFs).  
 
@@ -53,35 +53,37 @@ This iterative algorithm can be used to create individual based simulations of t
 
 ### Probability generating functionals and extinction probabilities
 
-As with single- and multiple-type branching processes, we can characterize the probabilistic state of the system using probability generating functionals $\Phi$ (pgfs). In the case of these individual-based IPMs, these pgfs take continuous functions $h:X\to \R$  to continuous functions of the same type. To define this pgf, we introduce the following notation. Given a continuous function $h:X\to\R$ and $\s\in \S$, let 
+As with multiple-type branching processes, we can characterize the probabilistic state of the system using probability generating functionals $\Psi$ (pgfs). Our approach differs from Harris (1963) who used moment generating functionals instead. Unlike mgfs, the pgfs allow us to compute how extinction probabilties change in time as well as compute asymptotic extinction probabilities. 
+
+To define the pgf $\Psi$, we introduce the following notation: given a continuous function $h:X\to\R$ and $\s\in \S$, let 
 \[
 h^\s=
 \left\{
 \begin{array}{cc}
 \prod_{i=1}^k h(x_i)^{n_i}&\mbox{ if }\s=(n_1,\dots,n_k,x_1,\dots,x_k)\\
-1 &\mbox{ if }\s=0
+1 &\mbox{ if }\s=0.
 \end{array}
 \right.
 \]
-Using this notation, we define the pgf by 
+We define the pgf by 
 \[
-\Psi(h)(x)=\int h^\s \,m(x,d\s).
+\Psi(h)(x)=\int h^\s \,m(x,d\s).\tag{*}
 \]
-Namely, $\Psi(h)(x)$ corresponds to finding the expected value of $h^\s$ due to the contributions of individuals in the next time step from an individual in state $x$. This expectation corresponds to integrating over all possible populations states in the next time step.  
+In words, $\Psi(h)(x)$ corresponds to the expected value of $h^\s$ due to the contributions of individuals in the next time step from an individual in state $x$. This requires integrating over all possible populations states in the next time step.  
 
-The relevance of the pgf to extinction probabilities follows from two facts. The first fact, which stems immediately from the definition, is that if $h_0$ is the zero function (i.e. $h_0(x)=0$ for all $x$), then 
+The utility of $\Psi$ for computing extinction probabilities follows from two facts. The first fact stems immediately from the definition: if $h_0$ is the zero function (i.e. $h_0(x)=0$ for all $x$), then 
 \[
 \Psi(h_0)(x)=\int 1 \,m(d\s,x)= \P[\s_1=0|\s_0=(1,x)]
 \]
-is the probability the population goes extinct in one time step given that initially it consisted of one individual is state $x$. To state the second fact, define 
+is the probability the population goes extinct in one time step given that initially it consisted of one individual is state $x$. For the second fact, we define 
 \[
 \Psi^t(h)=\underbrace{\Psi(\Psi(\dots \Psi}_{\mbox{$t$ times}}(h)\dots))
 \]
 to be the $t$-fold composition of $\Psi$ with itself. We claim that 
 \[
-\Psi^t(h_0)(x)=\P[\s_t=0|\s_0=(1,x)]=:E_t(x)
+\Psi^t(h_0)(x)=\P[\s_t=0|\s_0=(1,x)]=:E_t(x)\tag{**}
 \]
-is the population is extinct by time $t$ (or sooner) given that it initially consisted of one individual in state $x$. To see why, we argue by induction. The first fact proves that the statement holds for $t=1$. Now suppose the assertion holds for $t$, we will show it holds for $t+1$.  On the event that $\s_1=(n_1,\dots,n_k,x_1,\dots,x_k)$, extinction occurs by time $t+1$ only if each of the lineages of the $n_1+\dots +n_k$ go extinct in the next $t$ time steps. As the fates of these lineages are independent of one another, it follows that 
+is the probability of extinction by time $t$ given that the population initially consisted of one individual in state $x$. To see why this fact is true, we argue by induction. The first fact proves that the statement holds for $t=1$. Now suppose the assertion holds for $t$, we will show it holds for $t+1$.  On the event that $\s_1=(n_1,\dots,n_k,x_1,\dots,x_k)$ is the population state at time $1$, extinction occurs by time $t+1$ only if each of the lineages of the $n_1+\dots +n_k$ individuals go extinct in the next $t$ time steps. As the fates of these lineages are independent of one another, it follows that 
 \[
 \begin{aligned}
 \P[s_{t+1}=0|\s_0=(1,x),\s_1=(n_1,\dots,n_k,x_1,\dots,x_k)]&= \prod_{i=1}^k \P[\s_t=0|\s_0=(1,x_i)]^{n_i}\\
@@ -94,27 +96,27 @@ where the second equality follows from our inductive hypothesis. By the law of t
 \]
 which, by definition, equals $\Psi^{t+1}(0)(x)$ as claimed. 
 
-As individuals update independent of one another, the probability of the population going extinct by time $t$ for any inititial condition $\s=(n_1,\dots,n_k,x_1,\dots,x_k)$ equals 
+Hence, equation (**) can be used to compute extinction probabilities iteratively. Furthremore, as individuals update independent of one another, the probability of the population going extinct by time $t$ for any initial condition $\s=(n_1,\dots,n_k,x_1,\dots,x_k)$ equals 
 \[
-\P[\s_t=0|\s_0=\s]=\Psi(h_0)^\s.
+\P[\s_t=0|\s_0=\s]=E_t^\s.
 \]
-This analytic expression allows to efficiently compute extinction probabilities by constructing a numerical approximation of the pgf and iterating it with an initial condition of a zero vector which corresponds to the numerical approximation of the zero function. 
+These analytic expressions allow us to efficiently compute extinction probabilities by constructing a numerical approximation of the pgf and iterating it with an initial condition of a zero vector which corresponds to the numerical approximation of the zero function. 
 
-As $E_0(x)\le E_1(x),\le E_2(x)\dots$ for any $x\in X$, there is a well defined limit corresponding to the probability of eventual extinction:
+As $E_0(x)\le E_1(x),\le E_2(x)\dots$ for any $x\in X$ and $E_t(x)\le 1$ for all $t$, there is a well defined limit corresponding to the probability of eventual extinction:
 \[
 E_\infty(x):=\lim_{t\to\infty} E_t(x).
 \]
-Using moment generating functionals, Harris provided a criterion for when $E_\infty(x)<1$ for all $x$ or $E_\infty(x)=1$ for all $x$. Under suitable technical assumptions, this limit theorem implies that $E_\infty(x)=0$ for all $x$ whenever the dominant eigenvalue of the meanfield IPM is less than or equal to one, and $E_\infty(x)>0$ for all $x$, otherwise.  
+Using moment generating functionals and under suitable technical hypotheses, Harris showed that $E_\infty(x)<1$ for all $x$ if the dominant eigenvalue of the mean-field IPM is greater than one, and $E_\infty(x)=1$ for all $x$ otherwise.
 
 
 
 ### Sensitivity Formulas
 
-To examine the sensitivity of the extinction probability $E_t(x)$ to a parameter $a$ in the IBIPM (e.g. the slope or intercept of the logistic regression for surival or the linear regression for the growth kernel), the chain rule implies that 
+To examine the sensitivity of the extinction probability $E_t(x)$ to a parameter $a$ in an individual-based IPM such as the slope or intercept of the logistic regression for a survival function, the chain rule implies that 
 \[
 \frac{d}{da}E_t(x)=\left(\prod_{s=0}^{t-1} \frac{d\Psi}{da}(E_s)\right)(x)
 \]
-where the product refers to composition of the linear operators given by taking the derivative of the pgf with respect to the parameter $a$. From these sensitivities, we can compute the elasticities of these extinction probabilities to $a$ which describe proportional changes in $E_t(x)$ due to proportional changes in $a$. These elasticies are given by 
+where the product refers to composition of the linear operators given by taking the derivative of the pgf with respect to the parameter $a$. From these sensitivities, we can compute the elasticities of these extinction probabilities to $a$ which describe proportional changes in $E_t(x)$ due to proportional changes in $a$:
 \[
  \frac{a}{E_t(x)}\left(\prod_{s=0}^{t-1} \frac{d\Psi}{da}(E_s)\right)(x).
 \]
@@ -127,7 +129,7 @@ For the mean-field IPM, Nicols et al. had a model of the form
 \[
 N_{t+1}(x)=\int_a^b s(y)G(y,x)+e(x)f(y)N_t(y)\,dy
 \]
-where $s(x)$ is the probability of surviving to the next year for individuals of size $y$, $G(y,x)dy$ is the infinitesmal probability that a surviving individual of size $x$ is size $y$ in the next year, $f(x)$ is the mean number of offspring produced by an individual of size $x$, and $e(x)$ is the infinitesmal probability of an offspring is of size $x$ at the time of the annual census. 
+where $s(x)$ is the probability of surviving to the next year for individuals of size $y$, $G(y,x)dy$ is the infinitesimal probability that a surviving individual of size $x$ is size $y$ in the next year, $f(x)$ is the mean number of offspring produced by an individual of size $x$, and $e(x)$ is the infinitesimal probability of an offspring is of size $x$ at the time of the annual census. 
 
 The following code loads the functions for the mean field IPM: 
 ```{r}
@@ -142,29 +144,29 @@ e=function(y)dnorm(y,mean=recruit.size.mean,sd=recruit.size.sd)
 
 The kernels $s(x)$, $G(y,x)$, and $e(x)$ provide us with all the information the individual-based IPMs requires for probabilistic updating individuals for survival, growth, and size at first census. The fecundity kernel $f(y)$, however, only specifies the mean number of offspring produced, but for an individual-based IPM, we need the distribution of the number of offspring produced by an individual. Fortunately, when using GLMs to model fecundity data, we are often getting this extra information for free. For example, one might use the Poisson family in a GLM to model the fecundity data.  In which case, the mean $f(x)$ also specifies the distribution. Alternatively, one might use multi-parameter distributions such as the negative binomial or mixtures of several distributions.
 
-Consisent with the analysis of Nicols et al, we assume this distribution for an individual of size $y$ is Poisson distributed with mean $f(y)$. Recall that pgf for a Poisson distribution with mean $\lambda$ is $\phi(s)=\exp(\lambda(s-1))$ where $s$ is a dummy variable. Hence, the pgf for the number of offspring of an individual of size $x$ is given by 
+Consistent with the analysis of Nicols et al, we assume this distribution for an individual of size $y$ is Poisson distributed with mean $f(y)$. Recall that pgf for a Poisson distribution with mean $\lambda$ is $\phi(s)=\exp(\lambda(s-1))$ where $s$ is a dummy variable. Hence, the pgf for the number of offspring of an individual of size $x$ is given by 
 ```{r}
 phi=function(x,s)exp(f(x)*(s-1))
 ```
-We will need this pgf to construct the pfg $\Psi$ of the individual-based IPM. 
+We will need this pgf to construct the pgf $\Psi$ of the individual-based IPM. 
 
 
 ### Deriving the pgf $\Psi$
 
-To define $\Psi$, notice that the contributions of an individual of size $x$ to the population in the next time step involves the sum of two independent random variables. There is the contribution due to survival and growth, and the contribution due to reproduction. We can define a pgf for each of these processes seperately. For the survival and growth pgf $\Psi_g$, $\Psi_g(h)(x)$ corresponds to integrating $h^\s$ over all contributes $\s$ due to an individual of size $x$ surviving and growing. These possible states are of two types: $\s=\emptyset$ corresponding to an individual dying and $\s=(1,y)$ corresponding to an individual suriving and growing to size $y$. The first event occurs with probability $1-s(x)$ and the infinitesmal probability of the second event is $s(x)G(y,x)dy$. As $h^\s=1$ on the event of death and $h^\s=h(y)$ on the event $\s=(1,y)$, integrating over all possible contributions due to survival and growth yields 
+To define $\Psi$, notice that the contributions of an individual of size $x$ to the population in the next time step involves the sum of two independent random variables. There is the contribution due to survival and growth, and the contribution due to reproduction. We can define a pgf for each of these processes separately. For the survival and growth pgf $\Psi_g$, $\Psi_g(h)(x)$ corresponds to integrating $h^\s$ over all contributes $\s$ due to an individual of size $x$ surviving and growing. These possible states are of two types: $\s=\emptyset$ corresponding to an individual dying and $\s=(1,y)$ corresponding to an individual surviving and growing to size $y$. The first event occurs with probability $1-s(x)$ and the infinitesimal probability of the second event is $s(x)G(y,x)dy$. As $h^\s=1$ on the event of death and $h^\s=h(y)$ on the event $\s=(1,y)$, integrating over all possible contributions due to survival and growth yields 
 \[
 \Psi_{g}(h)(x)=(1-s(x))\times 1 + s(x)\int h(y)G(y,x)dy.
 \]
-For the pgf $\Psi_f$ corresponding to contributions due to fecundity, $\Psi_f(h)(x)$ is given by integrating $h^\s$ over all possible states $\s$ corresponding to the offspring produced by an individual of size $x$. With this two pgfs, we can use a fundamental property of pgfs: the pgf for a sum of indepedent random variables is the product of the pgfs of these random variables. Hence, our pgf $\Psi$ for the individual-based IPM will be given by 
+For the pgf $\Psi_f$ corresponding to contributions due to fecundity, $\Psi_f(h)(x)$ is given by integrating $h^\s$ over all possible states $\s$ corresponding to the offspring produced by an individual of size $x$. With this two pgfs, we can use a fundamental property of pgfs: the pgf for a sum of independent random variables is the product of the pgfs of these random variables. Hence, our pgf $\Psi$ for the individual-based IPM will be given by 
 \[
 \Psi=\Psi_g \times \Psi_f
 \]
 
-But what about $\Psi_f$? To write this down, we can take advantage of the fact that the reproductive contribution of an individual of size $x$ corresponds to a Poisson number of offspring with mean $f(x)$ whose sizes are drawn *independently* from the same offspring distribution. To make use of this observation, we can condition on the number of offspring an individual has. Lets say our individual of size $x$ has $N$ offspring. Then its contribution is a sum of $N$ indendent random variables taking values of the form $\s=(1,y)$. The pgf $\Psi_{kid}$ associated with one of these contributions is given by 
+But what about $\Psi_f$? To write this down, we can take advantage of the fact that the reproductive contribution of an individual of size $x$ corresponds to a Poisson number of offspring with mean $f(x)$ whose sizes are drawn *independently* from the same offspring distribution. To make use of this observation, we can condition on the number of offspring an individual has. Lets say our individual of size $x$ has $N$ offspring. Then its contribution is a sum of $N$ independent random variables taking values of the form $\s=(1,y)$. The pgf $\Psi_{kid}$ associated with one of these contributions is given by 
 \[
 \Psi_{kid}(h)(x)=\int h(y)e(y)dy
 \]
-as $h^{{1,y}}(x)=h(y)$ and $e(y)dy$ is the infinitesmal probability of an offspring being of size $y$. Since there are $N$ kids independent of one another, the pfg for this sum is given by the product of the pfgs:
+as $h^{{1,y}}(x)=h(y)$ and $e(y)dy$ is the infinitesimal probability of an offspring being of size $y$. Since there are $N$ kids independent of one another, the pgf for this sum is given by the product of the pgfs:
 \[
 \Psi_{N\,kids}(h)(x)=\left(\int h(y)e(y)dy\right)^N.
 \]
@@ -183,7 +185,7 @@ Thus we have
 
 ### Numerically Implementing and Utilizing $\Psi$
 
-To create this probability generating functional numerically, we discritize the size interval $[\alpha,\beta]$ using $n$ equal sized intervals of width $dx=(\beta-\alha)/n$. **NEED TO MAKE SURE EVERYTHING IS CONSISTENT WITH MIDPOINT RULE**
+To create this probability generating functional numerically, we discretize the size interval $[\alpha,\beta]$ using $n$ equal sized intervals of width $dx=(\beta-\alha)/n$. **NEED TO MAKE SURE EVERYTHING IS CONSISTENT WITH MIDPOINT RULE**
 
 ```{r}
 n=100
@@ -208,7 +210,7 @@ As this sum is pretty close to one, we just renormalize it.
 e.mat=e.mat/sum(e.mat)
 ```
 
-Next, we define the growth matrix and deal with the eviction issue. We choose to am treat eviction as mortality to be consistent with Nicols et al. The new growth model is s.evict*g.evict which agrees with the orginal growth kernel g but has a column stochastic matrix g.evict. Note: Most of this eviction is occuring at negative sizes. 
+Next, we define the growth matrix and deal with the eviction issue. We choose to am treat eviction as mortality to be consistent with Nicols et al. The new growth model is s.evict*g.evict which agrees with the original growth kernel g but has a column stochastic matrix g.evict. Note: Most of this eviction is occurring at negative sizes. 
 
 ```{r}
 g.mat=outer(xs,xs,g)*dx
@@ -248,7 +250,7 @@ matplot(xs,t(out[times,]),xlim=c(alpha,beta),type="l",lty=1,xlab="size",ylab="ex
 legend("topright",as.character(times-1),bty="n")
 ```
 
-Intuitively, this figure illustrates that (i) extinction probability descreases if the size of one individual initially in the popoulation is larger, and (ii) extinction probabilities increase over time. Furthermore, this figure illustrates that $E_t(x)$ are approaching limiting extinction probabilities $E_{\infy}(x)$ which are less than one. This stems from the fact that the dominant eigenvalue of the meanfield IPM is greater than one. The following function computes this asymptotic probability of extinction by iterating until a tolerance condition is met.  
+Intuitively, this figure illustrates that (i) extinction probability decreases if the size of one individual initially in the population is larger, and (ii) extinction probabilities increase over time. Furthermore, this figure illustrates that $E_t(x)$ are approaching limiting extinction probabilities $E_{\infy}(x)$ which are less than one. This stems from the fact that the dominant eigenvalue of the mean-field IPM is greater than one. The following function computes this asymptotic probability of extinction by iterating until a tolerance condition is met.  
 
 ```{r}
 AE=function(tol=0.0001){
