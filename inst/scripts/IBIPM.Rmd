@@ -3,7 +3,9 @@ title: 'Individual-based Integral Projection Models: The role of size-structure 
   extinction risk and establishment success'
 author: "Sebastian Schreiber and Noam Ross"
 date: "April 8, 2015"
-output: html_document
+output: 
+  html_document: 
+    fig_caption: yes
 ---
 $\def\N{\mathbb N}$
 $\def\R{\mathbb R}$
@@ -142,9 +144,9 @@ pf=function(x)1
 e=function(y)dnorm(y,mean=recruit.size.mean,sd=recruit.size.sd) 
 ```
 
-The kernels $s(x)$, $G(y,x)$, and $e(x)$ provide us with all the information the individual-based IPMs requires for probabilistic updating individuals for survival, growth, and size at first census. The fecundity kernel $f(y)$, however, only specifies the mean number of offspring produced, but for an individual-based IPM, we need the distribution of the number of offspring produced by an individual. Fortunately, when using GLMs to model fecundity data, we are often getting this extra information for free. For example, one might use the Poisson family in a GLM to model the fecundity data.  In which case, the mean $f(x)$ also specifies the distribution. Alternatively, one might use multi-parameter distributions such as the negative binomial or mixtures of several distributions.
+The kernels $s(x)$, $G(y,x)$, and $e(x)$ provide us with all the information the individual-based IPMs requires for probabilistic updating individuals for survival, growth, and size at first census. The fecundity kernel $f(y)$, however, only specifies the mean number of offspring produced, but for an individual-based IPM, we need the distribution of the number of offspring produced by an individual. Fortunately, when using GLMs to model fecundity data, we are often getting this extra information for free. For example, we used the Poisson family in a GLM to model the fecundity data.  In which case, the mean $f(x)$ also specifies the distribution. Alternatively, one might use multi-parameter distributions such as the negative binomial or mixtures of several distributions. 
 
-Consistent with the analysis of Nicols et al, we assume this distribution for an individual of size $y$ is Poisson distributed with mean $f(y)$. Recall that pgf for a Poisson distribution with mean $\lambda$ is $\phi(s)=\exp(\lambda(s-1))$ where $s$ is a dummy variable. Hence, the pgf for the number of offspring of an individual of size $x$ is given by 
+Recall that pgf for a Poisson distribution with mean $\lambda$ is $\phi(s)=\exp(\lambda(s-1))$ where $s$ is a dummy variable. Hence, the pgf for the number of offspring of an individual of size $x$ is given by 
 ```{r}
 phi=function(x,s)exp(f(x)*(s-1))
 ```
@@ -153,13 +155,17 @@ We will need this pgf to construct the pgf $\Psi$ of the individual-based IPM.
 
 ### Deriving the pgf $\Psi$
 
-To define $\Psi$, notice that the contributions of an individual of size $x$ to the population in the next time step involves the sum of two independent random variables. There is the contribution due to survival and growth, and the contribution due to reproduction. We can define a pgf for each of these processes separately. For the survival and growth pgf $\Psi_g$, $\Psi_g(h)(x)$ corresponds to integrating $h^\s$ over all contributes $\s$ due to an individual of size $x$ surviving and growing. These possible states are of two types: $\s=\emptyset$ corresponding to an individual dying and $\s=(1,y)$ corresponding to an individual surviving and growing to size $y$. The first event occurs with probability $1-s(x)$ and the infinitesimal probability of the second event is $s(x)G(y,x)dy$. As $h^\s=1$ on the event of death and $h^\s=h(y)$ on the event $\s=(1,y)$, integrating over all possible contributions due to survival and growth yields 
+To define $\Psi$, notice that the contributions of an individual of size $x$ to the population in the next time step involves the sum of two independent random variables. There is the contribution due to survival and growth, and the contribution due to reproduction. We can define a pgf for each of these processes separately. For the survival and growth pgf $\Psi_g$, $\Psi_g(h)(x)$ corresponds to integrating $h^\s$ over all contributions $\s$ due to an individual of size $x$ surviving and growing. These contributions are of two types: $\s=\emptyset$ corresponding to an individual dying and $\s=(1,y)$ corresponding to an individual surviving and growing to size $y$. The first event occurs with probability $1-s(x)$ and the infinitesimal probability of the second event is $s(x)G(y,x)dy$. As $h^\s=1$ on the event of death and $h^\s=h(y)$ on the event $\s=(1,y)$, integrating over all possible contributions due to survival and growth yields 
 \[
 \Psi_{g}(h)(x)=(1-s(x))\times 1 + s(x)\int h(y)G(y,x)dy.
 \]
-For the pgf $\Psi_f$ corresponding to contributions due to fecundity, $\Psi_f(h)(x)$ is given by integrating $h^\s$ over all possible states $\s$ corresponding to the offspring produced by an individual of size $x$. With this two pgfs, we can use a fundamental property of pgfs: the pgf for a sum of independent random variables is the product of the pgfs of these random variables. Hence, our pgf $\Psi$ for the individual-based IPM will be given by 
+For the pgf $\Psi_f$ corresponding to contributions due to fecundity, $\Psi_f(h)(x)$ is given by integrating $h^\s$ over all possible states $\s$ corresponding to the offspring produced by an individual of size $x$. Before deriving $\Psi_f$, we describe how $\Psi_g$ and $\Psi_f$ give us the pgf $\Psi$ for the entire individual-based IPM. To do so, we make use of a fundamental property of pgfs: 
+
+>The pgf for a sum of independent random variables is the product of the pgfs of these random variables. 
+
+Hence, $\Psi$ is given by the product:
 \[
-\Psi=\Psi_g \times \Psi_f
+\Psi=\Psi_g \times \Psi_f.
 \]
 
 But what about $\Psi_f$? To write this down, we can take advantage of the fact that the reproductive contribution of an individual of size $x$ corresponds to a Poisson number of offspring with mean $f(x)$ whose sizes are drawn *independently* from the same offspring distribution. To make use of this observation, we can condition on the number of offspring an individual has. Lets say our individual of size $x$ has $N$ offspring. Then its contribution is a sum of $N$ independent random variables taking values of the form $\s=(1,y)$. The pgf $\Psi_{kid}$ associated with one of these contributions is given by 
@@ -180,12 +186,14 @@ but this corresponds simply to
 \]
 Thus we have
 \[
-\Psi(h)(x)=\left((1-s(x))\times 1 + s(x)\int h(y)G(y,x)dy\right)\phi(x,\int h(y)e(y)dy)
+\Psi(h)(x)=\left((1-s(x))\times 1 + s(x)\int h(y)G(y,x)dy\right)\phi(x,\int h(y)e(y)dy).
 \]
+We note that this argument works did not rely on the form of the offspring pgf $\phi$. Hence, we can use the same expression for alternative offspring distributions as we do below. 
+
 
 ### Numerically Implementing and Utilizing $\Psi$
 
-To create this probability generating functional numerically, we discretize the size interval $[\alpha,\beta]$ using $n$ equal sized intervals of width $dx=(\beta-\alha)/n$. **NEED TO MAKE SURE EVERYTHING IS CONSISTENT WITH MIDPOINT RULE**
+To create this probability generating functional numerically, we discretize the size interval $[\alpha,\beta]$ using $n$ equal sized intervals of width $dx=(\beta-\alpha)/n$. **NEED TO MAKE SURE EVERYTHING IS CONSISTENT WITH MIDPOINT RULE**
 
 ```{r}
 n=100
@@ -296,4 +304,32 @@ out=PVA(N,T)
 plot(0:T,out,typ="l",lwd=3,bty="n",xlab="time t",ylab="probability of extinction by year t")
 abline(h=0.01)
 ```
+
+Finally, lets examine the sensitivity of some of these extinction probabilities to some of the IPM parameters. We will examine two cases: senisitivity to the slope of the survival regression (i.e. how much size gives an advantage in survival) and the slope of the fecundity regression (i.e. how quickly number of offspring grows with the size of an individual). In the case of the survival curve, it is of the form 
+\[
+s(x)=\frac{1}{1+\exp(-a-bx)}
+\]
+and its derivative with respect to the parameter $b$ is 
+\[
+\frac{\partial s}{\partial b}(x)=\frac{x\exp(-a-bx)}{(1+\exp(-a-bx))^2}
+\]
+Hence, the deriviative of $\Psi$ with respect to $b$ is given by 
+\[
+\frac{\partial \Psi}{\partial b}=\left(-\frac{\partial s}{\partial b} + \frac{\partial s}{\partial b}\int h(y)G(y,x)dy\right)\phi(x,\int h(y)e(y)dy).
+\]
+Alternatively, the fecundity relationship is of the form $f(x)=\exp(\alpha+\beta x)$ and 
+\[
+\phi(x,s)=\exp\left(\exp(\alpha+\beta x)(s-1)\right).
+\]
+Hence,
+\[
+\frac{\partial \phi}{\partial \beta}(x,s)=
+\exp\left(\exp(\alpha+\beta x)*(s-1)+\alpha+\beta x\right)\beta(s-1)
+\]
+and
+\[
+\frac{\partial \Psi}{\partial \beta}=\left((1-s(x))\times 1 + s(x)\int h(y)G(y,x)dy\right)\frac{\partial \phi}{\partial \beta}(x,\int h(y)e(y)dy).
+\]
+**Need to implement these formulas and then create plots showing how sensitivities of extintion probabilities depend on size and time**
+
 
