@@ -116,14 +116,13 @@ Using moment generating functionals and under suitable technical hypotheses, Har
 
 ### Sensitivity Formulas
 
-To examine the sensitivity of the extinction probability $E_t(x)$ to a parameter $a$ in an individual-based IPM such as the slope or intercept of the logistic regression for a survival function, the chain rule implies that 
+**I corrected the formula below, but it will be much harder to explain and illustrate how to generally implement. Consequently, I am planning on removing this section**
+
+To examine the sensitivity of the extinction probability $E_t(x)$ to a parameter $\alpha$ in an individual-based IPM such as the slope or intercept of the logistic regression for a survival function, the chain rule implies that 
 \[
-\frac{d}{da}E_t(x)=\left(\prod_{s=0}^{t-1} \frac{d\Psi}{da}(E_s)\right)(x)
+\frac{\partial E_{t+1} }{\partial \alpha}(x)=\frac{\partial\Psi}{\partial \alpha}(E_t)(x)+\frac{\partial \Psi}{\partial h}(E_t)(x)\frac{\partial E_t}{\partial \alpha}(x)
 \]
-where the product refers to composition of the linear operators given by taking the derivative of the pgf with respect to the parameter $a$. From these sensitivities, we can compute the elasticities of these extinction probabilities to $a$ which describe proportional changes in $E_t(x)$ due to proportional changes in $a$:
-\[
- \frac{a}{E_t(x)}\left(\prod_{s=0}^{t-1} \frac{d\Psi}{da}(E_s)\right)(x).
-\]
+We can use this equation to inductively find these sensitivities as $\frac{\partial E_0}{\partial \alpha}(x)=0$ for all $x$. 
 
 ## An Illustration with an Endangered Plant Species
 
@@ -307,6 +306,8 @@ plot(0:T,out,typ="l",lwd=3,bty="n",xlab="time t",ylab="probability of extinction
 abline(h=0.01)
 ```
 
+
+**IGNORE THINGS BELOW HERE AS THEY ARE NOT RIGHT**
 Finally, lets examine the sensitivity of some of these extinction probabilities to some of the IPM parameters. We will examine two cases: senisitivity to the slope of the survival regression (i.e. how much size gives an advantage in survival) and the slope of the fecundity regression (i.e. how quickly number of offspring grows with the size of an individual). In the case of the survival curve, it is of the form 
 \[
 s(x)=\frac{1}{1+\exp(-a_1-a_2x)}
