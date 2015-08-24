@@ -20,6 +20,8 @@ $\def\o{\%*\%}$
 
 ##Introduction
 
+
+
 Computations of extinction probabilities or likelihoods of establishment success lie on opposing sides of a theoretician's coin and are used to address questions in conservation biology, restoration ecology, biological invasions and population genetics. Risks of extinction or establishment failure stem from populations consisting of a finite number of individuals each of which faces a non-zero risk of mortality on any given day. These risks are shaped, in part, by the size and composition of a population in which individuals may differ in age, size, geographical location, or other important characteristics influencing demography. When population structure is finite-dimensional (i.e. a finite number of age classes, stages, geographical locations), multi-type branching processes serve as the stochastic counterpart of matrix models (A & Ney 19XX, Caswell 2001). These models allow one to examine how extinction risk or establishment success depend on the population size and its distribution across a finite number of states (e.g. ages, size classes, patches). 
 
 When collecting demographic data, one commonly makes continuous measurements (e.g. mass, length) about individuals. Consequently, since their introduction in the early 2000s, there has been a surge of interest in integral projection models (IPMs) that account for continuous population structure (REFs). As IPMs correspond to infinite-dimensional matrix models which are nummerically approximated by finite-dimensional matrix models, many of the standard demographic concepts and methods for matrix models (e.g. stable state distributions, reproductive values, life table response experiements) extend to IPMs (REFs).  
@@ -307,15 +309,15 @@ abline(h=0.01)
 
 Finally, lets examine the sensitivity of some of these extinction probabilities to some of the IPM parameters. We will examine two cases: senisitivity to the slope of the survival regression (i.e. how much size gives an advantage in survival) and the slope of the fecundity regression (i.e. how quickly number of offspring grows with the size of an individual). In the case of the survival curve, it is of the form 
 \[
-s(x)=\frac{1}{1+\exp(-a-bx)}
+s(x)=\frac{1}{1+\exp(-a_1-a_2x)}
 \]
-and its derivative with respect to the parameter $b$ is 
+and its derivative with respect to the parameter $a_2$ is 
 \[
-\frac{\partial s}{\partial b}(x)=\frac{x\exp(-a-bx)}{(1+\exp(-a-bx))^2}
+\frac{\partial s}{\partial a_2}(x)=\frac{x\exp(-a_1-a_2x)}{(1+\exp(-a_1-a_2x))^2}
 \]
 Hence, the deriviative of $\Psi$ with respect to $b$ is given by 
 \[
-\frac{\partial \Psi}{\partial b}=\left(-\frac{\partial s}{\partial b} + \frac{\partial s}{\partial b}\int h(y)G(y,x)dy\right)\phi(x,\int h(y)e(y)dy).
+\frac{\partial \Psi}{\partial a_2}=\left(-\frac{\partial s}{\partial a_2} + \frac{\partial s}{\partial a_2}\int h(y)G(y,x)dy\right)\phi(x,\int h(y)e(y)dy).
 \]
 Alternatively, the fecundity relationship is of the form $f(x)=\exp(\alpha+\beta x)$ and 
 \[
@@ -330,6 +332,25 @@ and
 \[
 \frac{\partial \Psi}{\partial \beta}=\left((1-s(x))\times 1 + s(x)\int h(y)G(y,x)dy\right)\frac{\partial \phi}{\partial \beta}(x,\int h(y)e(y)dy).
 \]
-**Need to implement these formulas and then create plots showing how sensitivities of extintion probabilities depend on size and time**
+**Need to implement these formulas and then create plots showing how sensitivities of extintion probabilities depend on size and time** First attempt for surival is below, but not sure if the output makes sense. Need to think over this. 
 
+```{r}
+a=as.numeric(model.survival$coefficients)
+s.prime=function(x)x*exp(-a[1]-a[2]*x)/(1+exp(-a[1]-a[2]*x))^2*0.9
+s.prime.mat=s.prime(xs)
+Psi.sensitivity=function(h){
+	h.new=(s.prime.mat*(t(g.evict)%*%h)-s.prime.mat)*(1-pf(xs)+phi(xs,e.mat%*%h))
+	return(h.new)
+}
+Sensitivity=function(T){
+  E=Psi.iterate(T);
+  sensitivities=matrix(0,T+1,n)
+  sensitivities[1,]=Psi.sensitivity(xs*0)
+  for(t in 1:T)sensitivities[t+1,]=Psi.sensitivity(E[t+1,])*sensitivities[t,]
+  return(sensitivities)
+}
+out=Sensitivity(10)
+times=2:10
+matplot(xs,t(out[times,]),type="l",lty=1,lwd=2,xlim=c(alpha,beta),xlab="size",ylab="sensitivity")
+```
 
