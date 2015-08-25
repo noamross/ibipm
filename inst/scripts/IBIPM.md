@@ -1,15 +1,8 @@
----
-title: 'Individual-based Integral Projection Models: The role of size-structure on
-  extinction risk and establishment success'
-author: "Sebastian Schreiber and Noam Ross"
-date: "April 8, 2015"
-output: 
-  html_document: 
-    fig_caption: yes
-    keep_md: yes
----
+# Individual-based Integral Projection Models: The role of size-structure on extinction risk and establishment success
+Sebastian Schreiber and Noam Ross  
+April 8, 2015  
 
-`r knitr::opts_chunk$set(echo=TRUE)`
+
 $\def\N{\mathbb N}$
 $\def\R{\mathbb R}$
 $\def\P{\mathbb P}$
@@ -135,9 +128,10 @@ For the mean-field IPM, Nicols et al. had a model of the form
 \[
 N_{t+1}(x)=\int_a^b s(y)G(y,x)+e(x)f(y)N_t(y)\,dy
 \]
-where $s(x)$ is the probability of surviving to the next year for individuals of size $y$, $G(y,x) \, dy$ is the infinitesimal probability that a surviving individual of size $x$ is size $y$ in the next year, $f(x)$ is the mean number of offspring produced by an individual of size $x$, and $e(x)$ is the infinitesimal probability of an offspring is of size $x$ at the time of the annual census. 
+where $s(x)$ is the probability of surviving to the next year for individuals of size $y$, $G(y,x)dy$ is the infinitesimal probability that a surviving individual of size $x$ is size $y$ in the next year, $f(x)$ is the mean number of offspring produced by an individual of size $x$, and $e(x)$ is the infinitesimal probability of an offspring is of size $x$ at the time of the annual census. 
 
-```{r}
+
+```r
 # The following code loads the functions for the mean field IPM: 
 
 rm (list = ls ())
@@ -153,16 +147,17 @@ The kernels $s(x)$, $G(y,x)$, and $e(x)$ provide us with all the information the
 
 Recall that pgf for a Poisson distribution with mean $\lambda$ is $\phi(s)=\exp(\lambda(s-1))$ where $s$ is a dummy variable. Hence, the pgf for the number of offspring of an individual of size $x$ is given by $f(x,s)\exp(\lambda(s-1))$. We will use this to construct the pgf $\Psi$ of the individual-based IPM. 
 
-```{r}
+
+```r
 #PGF for IBIPM
 phi=function(x,s)exp(f(x)*(s-1))
 ```
 
 ### Deriving the pgf $\Psi$
 
-To define $\Psi$, notice that the contributions of an individual of size $x$ to the population in the next time step involves the sum of two independent random variables. There is the contribution due to survival and growth, and the contribution due to reproduction. We can define a pgf for each of these processes separately. For the survival and growth pgf $\Psi_g$, $\Psi_g(h)(x)$ corresponds to integrating $h^\s$ over all contributions $\s$ due to an individual of size $x$ surviving and growing. These contributions are of two types: $\s=\emptyset$ corresponding to an individual dying and $\s=(1,y)$ corresponding to an individual surviving and growing to size $y$. The first event occurs with probability $1-s(x)$ and the infinitesimal probability of the second event is $s(x)G(y,x) \, dy$. As $h^\s=1$ on the event of death and $h^\s=h(y)$ on the event $\s=(1,y)$, integrating over all possible contributions due to survival and growth yields 
+To define $\Psi$, notice that the contributions of an individual of size $x$ to the population in the next time step involves the sum of two independent random variables. There is the contribution due to survival and growth, and the contribution due to reproduction. We can define a pgf for each of these processes separately. For the survival and growth pgf $\Psi_g$, $\Psi_g(h)(x)$ corresponds to integrating $h^\s$ over all contributions $\s$ due to an individual of size $x$ surviving and growing. These contributions are of two types: $\s=\emptyset$ corresponding to an individual dying and $\s=(1,y)$ corresponding to an individual surviving and growing to size $y$. The first event occurs with probability $1-s(x)$ and the infinitesimal probability of the second event is $s(x)G(y,x)dy$. As $h^\s=1$ on the event of death and $h^\s=h(y)$ on the event $\s=(1,y)$, integrating over all possible contributions due to survival and growth yields 
 \[
-\Psi_{g}(h)(x)=(1-s(x))\times 1 + s(x)\int h(y)G(y,x) \, dy.
+\Psi_{g}(h)(x)=(1-s(x))\times 1 + s(x)\int h(y)G(y,x)dy.
 \]
 For the pgf $\Psi_f$ corresponding to contributions due to fecundity, $\Psi_f(h)(x)$ is given by integrating $h^\s$ over all possible states $\s$ corresponding to the offspring produced by an individual of size $x$. Before deriving $\Psi_f$, we describe how $\Psi_g$ and $\Psi_f$ give us the pgf $\Psi$ for the entire individual-based IPM. To do so, we make use of a fundamental property of pgfs: 
 
@@ -175,11 +170,11 @@ Hence, $\Psi$ is given by the product:
 
 But what about $\Psi_f$? To write this down, we can take advantage of the fact that the reproductive contribution of an individual of size $x$ corresponds to a Poisson number of offspring with mean $f(x)$ whose sizes are drawn *independently* from the same offspring distribution. To make use of this observation, we can condition on the number of offspring an individual has. Lets say our individual of size $x$ has $N$ offspring. Then its contribution is a sum of $N$ independent random variables taking values of the form $\s=(1,y)$. The pgf $\Psi_{kid}$ associated with one of these contributions is given by 
 \[
-\Psi_{kid}(h)(x)=\int h(y)e(y) \, dy
+\Psi_{kid}(h)(x)=\int h(y)e(y)dy
 \]
-as $h^{{1,y}}(x)=h(y)$ and $e(y) \, dy$ is the infinitesimal probability of an offspring being of size $y$. Since there are $N$ offspring independent of one another, the pgf for this sum is given by the product of the pgfs:
+as $h^{{1,y}}(x)=h(y)$ and $e(y)dy$ is the infinitesimal probability of an offspring being of size $y$. Since there are $N$ kids independent of one another, the pgf for this sum is given by the product of the pgfs:
 \[
-\Psi_{N\,kids}(h)(x)=\left(\int h(y)e(y) \, dy\right)^N.
+\Psi_{N\,kids}(h)(x)=\left(\int h(y)e(y)dy\right)^N.
 \]
 Finally, to get $\Psi_f$, we can sum over all possible number of kids weighted by their probabilities:
 \[
@@ -187,11 +182,11 @@ Finally, to get $\Psi_f$, we can sum over all possible number of kids weighted b
 \]
 but this corresponds simply to 
 \[
-\Psi_f(h)(x)=\phi(x, \Psi_{kid}(h)(x))=\phi(x,\int h(y)e(y) \, dy)
+\Psi_f(h)(x)=\phi(x, \Psi_{kid}(h)(x))=\phi(x,\int h(y)e(y)dy)
 \]
 Thus we have
 \[
-\Psi(h)(x)=\left((1-s(x))\times 1 + s(x)\int h(y)G(y,x) \, dy\right)\phi(x,\int h(y)e(y) \, dy).
+\Psi(h)(x)=\left((1-s(x))\times 1 + s(x)\int h(y)G(y,x)dy\right)\phi(x,\int h(y)e(y)dy).
 \]
 We note that this argument works did not rely on the form of the offspring pgf $\phi$. Hence, we can use the same expression for alternative offspring distributions as we do below. 
 
@@ -200,7 +195,8 @@ We note that this argument works did not rely on the form of the offspring pgf $
 
 To create this probability generating functional numerically, we discretize the size interval $[\alpha,\beta]$ using $n$ equal sized intervals of width $dx=(\beta-\alpha)/n$. **NEED TO MAKE SURE EVERYTHING IS CONSISTENT WITH MIDPOINT RULE**
 
-```{r}
+
+```r
 n=100
 xs=seq(alpha,2*beta,length=n)
 dx=xs[2]-xs[1]
@@ -208,24 +204,32 @@ dx=xs[2]-xs[1]
 
 Now create the survival and offspring size vectors. For illustrative purposes, we reduced survivorship of all individuals by 10\%. 
 
-```{r}
+
+```r
 s.mat=s(xs)*0.9
 e.mat=e(xs)*dx
 ```
 We need to make sure that the e.mat integrates to one i.e. there is no eviction. Eviction creates a major problem for the probability generating functionals. 
 
-```{r}
+
+```r
 sum(e.mat)
+```
+
+```
+## [1] 0.9973678
 ```
 As this sum is pretty close to one, we just renormalize it. 
 
-```{r}
+
+```r
 e.mat=e.mat/sum(e.mat)
 ```
 
-Next, we define the growth matrix and deal with the eviction issue. We choose to treat eviction as mortality to be consistent with Nicols et al. The new growth model is s.evict*g.evict which agrees with the original growth kernel g but has a column stochastic matrix g.evict. Note: Most of this eviction is occurring at negative sizes. 
+Next, we define the growth matrix and deal with the eviction issue. We choose to am treat eviction as mortality to be consistent with Nicols et al. The new growth model is s.evict*g.evict which agrees with the original growth kernel g but has a column stochastic matrix g.evict. Note: Most of this eviction is occurring at negative sizes. 
 
-```{r}
+
+```r
 g.mat=outer(xs,xs,g)*dx
 q.evict=1-colSums(g.mat) 
 g.evict=g.mat%*%diag(1/(1-q.evict))
@@ -234,7 +238,8 @@ s.evict=(1-q.evict)*s.mat
 
 We can create the discretized pgf $\Psi$ which takes vectors of length $n$ (i.e. the discretized function $h$) and returns vectors of length $n$. 
 
-```{r}
+
+```r
 Psi=function(h){
 	h.new=(s.evict*(t(g.evict)%*%h)+1-s.evict)*(1-pf(xs)+phi(xs,e.mat%*%h))
 	return(h.new)
@@ -243,7 +248,8 @@ Psi=function(h){
 
 To compute how the probability of extinction varies in time, the following function iterates the zero vector (the discretized $h_0$ function) until time $T$ and returns a matrix of dimension $n\times (T+1)$ whose $t-1$-th column corresponds to $\Psi^t(h_0)$. 
  
-```{r}
+
+```r
 Psi.iterate=function(T){
 	hs=matrix(0,T+1,n)
 	for(t in 1:T){
@@ -255,7 +261,8 @@ Psi.iterate=function(T){
 
 Lets try this function out and plot the probabilities of extinction as functions of size for a subset of years. 
 
-```{r}
+
+```r
 T=100
 out=Psi.iterate(T)
 times=c(1,5,10,25,50,100)+1
@@ -263,9 +270,12 @@ matplot(xs,t(out[times,]),xlim=c(alpha,beta),type="l",lty=1,xlab="size",ylab="ex
 legend("topright",as.character(times-1),bty="n")
 ```
 
+![](IBIPM_files/figure-html/unnamed-chunk-10-1.png) 
+
 Intuitively, this figure illustrates that (i) extinction probability decreases if the size of one individual initially in the population is larger, and (ii) extinction probabilities increase over time. Furthermore, this figure illustrates that $E_t(x)$ are approaching limiting extinction probabilities $E_{\infty}(x)$ which are less than one. This stems from the fact that the dominant eigenvalue of the mean-field IPM is greater than one. The following function computes this asymptotic probability of extinction by iterating until a tolerance condition is met.  
 
-```{r}
+
+```r
 AE=function(tol=0.0001){
   h=rep(0,n)
   diff=1
@@ -280,15 +290,19 @@ AE=function(tol=0.0001){
 
 Using this function yields the following plot of $E_\infty(x)$
 
-```{r}
+
+```r
 h=AE()
 plot(xs,h,type="l",xlab="size",ylab="asymptotic extinction probability",lwd=3,xlim=c(alpha,beta))
 ```
 
+![](IBIPM_files/figure-html/unnamed-chunk-12-1.png) 
+
 
 To scale things up to an entire population, we can introduce the following function with two inputs: N vector of length $n$ which specifies the initial number of individuals in each size bin, and $T$ the length of the time to look things over. The function returns a vector of length $T+1$ corresponding to the probabilities of extinction by time $t$ or sooner. 
 
-```{r}
+
+```r
 PVA=function(N,T){
 	hs=Psi.iterate(T)
 	output=numeric(T+1)
@@ -301,7 +315,8 @@ PVA=function(N,T){
 
 Lets try this out by considering a population of 100 individuals of the smallest size.
 
-```{r}
+
+```r
 T=25
 N=rep(0,n)
 N[1]=100
@@ -309,6 +324,8 @@ out=PVA(N,T)
 plot(0:T,out,typ="l",lwd=3,bty="n",xlab="time t",ylab="probability of extinction by year t")
 abline(h=0.01)
 ```
+
+![](IBIPM_files/figure-html/unnamed-chunk-14-1.png) 
 
 
 **IGNORE THINGS BELOW HERE AS THEY ARE NOT RIGHT**
@@ -322,7 +339,7 @@ and its derivative with respect to the parameter $a_2$ is
 \]
 Hence, the deriviative of $\Psi$ with respect to $b$ is given by 
 \[
-\frac{\partial \Psi}{\partial a_2}=\left(-\frac{\partial s}{\partial a_2} + \frac{\partial s}{\partial a_2}\int h(y)G(y,x) \, dy\right)\phi(x,\int h(y)e(y) \, dy).
+\frac{\partial \Psi}{\partial a_2}=\left(-\frac{\partial s}{\partial a_2} + \frac{\partial s}{\partial a_2}\int h(y)G(y,x)dy\right)\phi(x,\int h(y)e(y)dy).
 \]
 Alternatively, the fecundity relationship is of the form $f(x)=\exp(\alpha+\beta x)$ and 
 \[
@@ -335,11 +352,12 @@ Hence,
 \]
 and
 \[
-\frac{\partial \Psi}{\partial \beta}=\left((1-s(x))\times 1 + s(x)\int h(y)G(y,x) \, dy\right)\frac{\partial \phi}{\partial \beta}(x,\int h(y)e(y) \, dy).
+\frac{\partial \Psi}{\partial \beta}=\left((1-s(x))\times 1 + s(x)\int h(y)G(y,x)dy\right)\frac{\partial \phi}{\partial \beta}(x,\int h(y)e(y)dy).
 \]
 **Need to implement these formulas and then create plots showing how sensitivities of extintion probabilities depend on size and time** First attempt for surival is below, but not sure if the output makes sense. Need to think over this. 
 
-```{r}
+
+```r
 a=as.numeric(model.survival$coefficients)
 s.prime=function(x)x*exp(-a[1]-a[2]*x)/(1+exp(-a[1]-a[2]*x))^2*0.9
 s.prime.mat=s.prime(xs)
@@ -358,4 +376,6 @@ out=Sensitivity(10)
 times=2:10
 matplot(xs,t(out[times,]),type="l",lty=1,lwd=2,xlim=c(alpha,beta),xlab="size",ylab="sensitivity")
 ```
+
+![](IBIPM_files/figure-html/unnamed-chunk-15-1.png) 
 
