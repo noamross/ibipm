@@ -323,7 +323,21 @@ legend("bottomleft",c("in 5 years","in 50 years"),pch=22,pt.bg=c("pink","white")
 
 
 
-## Discussion
+## Recommendations, Extensions, and Future Challenges
+
+Paragraph on recommendations and basic guidelines for putting together this machinery: Thoughts for what are things we should emphasize?  
+
+extensions and future challenges:
+
+1. Temporally varying environments - relatively straightforward to implement; perhaps outline the idea. 
+
+2. Multi-dimensional state variables (e.g. location and size) as these involve approximiating higher-dimensional integrals which are notoriously difficult to do
+
+3. accounting for density dependent feedbacks in a tractable way - no longer can use the very tractable pgf machinery, could try using standard Markov chain tools but this will suffer from a course of dimensionality
+
+
+
+
 
 
 ## Extra stuff
