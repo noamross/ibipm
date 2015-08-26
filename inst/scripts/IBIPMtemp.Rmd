@@ -26,7 +26,7 @@ Computations of extinction probabilities or likelihoods of establishment success
 
 When collecting demographic data, one commonly makes continuous measurements (e.g. mass, length) about individuals. Consequently, since their introduction in the early 2000s, there has been a surge of interest in integral projection models (IPMs) that account for continuous population structure citep{easterling-00,ellner-rees-06,rees-ellner-09,childs-etal-04,ramula-etal-09,jongejans-etal-11,tpb-12}. As IPMs correspond to infinite-dimensional matrix models which are nummerically approximated by finite-dimensional matrix models, many of the standard demographic concepts and methods for matrix models (e.g. stable state distributions, reproductive values, life table response experiements) extend to IPMs citep{metcalf-etal-13,rees-etal-14}.
 
-Here, we describe individual-based counterparts of IPMs by making use of the theory of continuous-state branching processes introduce by citet{harris-63}. We present an analytical method, differing from Harris, for computing extinction probabilities for these individual-based IPMs. These methods are easily implemented numerically and circumvent running individual-based simulations to examine how extinction probabilities depend on continuous or discrete population structure. To illustrate the implementation of these methods, we introduce and analyze an individual-based IPM of the endangered alpine plant \emph{Dracocephalum ausriacum}, which corresponds to a stochastic counterpart of the IPM developed by citet{nicole-etal-11}.
+Here, we describe individual-based counterparts of IPMs by making use of the theory of continuous-state branching processes introduce by citet{harris-63}. We present an analytical method, differing from Harris, for computing extinction probabilities for these individual-based IPMs. These methods are easily implemented numerically and circumvent running individual-based simulations to examine how extinction probabilities depend on continuous or discrete population structure. To illustrate the implementation of these methods, we introduce and analyze an individual-based IPM of the endangered alpine plant *Dracocephalum ausriacum*, which corresponds to a stochastic counterpart of the IPM developed by citet{nicole-etal-11}.
 
 
 
@@ -57,7 +57,7 @@ This iterative algorithm can be used to create individual based simulations of t
 
 ### Probability generating functionals and extinction probabilities
 
-As with multiple-type branching processes, we can characterize the probabilistic state of the system using probability generating functionals $\Psi$ (pgfs). Our approach differs from Harris (1963) who used moment generating functionals instead. Unlike mgfs, the pgfs allow us to compute how extinction probabilties change in time as well as compute asymptotic extinction probabilities.
+As with multiple-type branching processes, we can characterize the probabilistic state of the system using probability generating functionals $\Psi$ (pgfs). Our approach differs from citet{harris-63} who used moment generating functionals instead. Unlike mgfs, the pgfs allow us to compute how extinction probabilties change in time as well as compute asymptotic extinction probabilities.
 
 To define the pgf $\Psi$, we introduce the following notation: given a continuous function $h:X\to\R$ and $\s\in \S$, let
 \[
@@ -114,13 +114,15 @@ Using moment generating functionals and under suitable technical hypotheses, Har
 
 ## An Illustration with an Endangered Plant Species
 
-To illustrate how these general methods can be applied to a data set, we develop an individual-based IPM based on **add details about the endangered plant species and the work of Nicols et al. Mention reducing survival by 5% for illustrative purposes**.
+To illustrate how these general methods can be applied to a data set, we develop an individual-based IPM based for the endangered alpine plant *Dracocephalum ausriacum*. This model will corresponds to an individual-based counterpart of the IPM developed by citet{nicole-etal-11}. The Austrian Dragonhead (D. austriacum L., Lamiaceae) is a long- lived perennial plant that is listed as Vunerable by the World Conservation Union citep{nicole-etal-11}. We use data collected by citet{nicole-etal-11} in 2001-2002 to build the IPM. 
 
-For the mean-field IPM, Nicols et al. had a model of the form
+If $N_t(x)$ denotes the density of indivduals of size $x$ in year $t$, then citet{nicole-etal-11} used an IPM of the form
 \[
 N_{t+1}(x)=\int_a^b s(y)G(y,x)+e(x)p(y)f(y)N_t(y)\,dy
 \]
-where $s(y)$ is the probability of surviving to the next year for individuals of size $y$, $G(y,x)dy$ is the infinitesimal probability that a surviving individual of size $y$ is size $x$ in the next year, $p(y)$ is the probability an individual of an individual size $y$ flowers, $f(y)$ is the mean number of germinating offspring produced by an individual of size $y$, and $e(x)$ is the infinitesimal probability of an offspring is of size $x$ at the time of the annual census. *PROVIDE brief description of the model selection choices*. The figure below shows the data and fits for $s(y)$, $G(y,x)$, $p(x)$ and $f(x)$.
+where $s(y)$ is the probability of surviving to the next year for individuals of size $y$, $G(y,x)dy$ is the infinitesimal probability that a surviving individual of size $y$ is size $x$ in the next year, $p(y)$ is the probability an individual of an individual size $y$ flowers, $f(y)$ is the mean number of germinating offspring produced by an individual of size $y$, and $e(x)$ is the infinitesimal probability of an offspring is of size $x$ at the time of the annual census. 
+
+Consistent with citet{nicole-etal-11}, we used generalized linear models (GLMs) to select functional forms for each of the demographic kernels. Computation were performed using the GLM package for R citep{XX}. Specifically, we used logistic regression (i.e. a GLM with the binomial family) for determining $s(y)$ and $p(y)$, a GLM with the poisson family for modelling $f(y)$, and modeled the $e(y)$ using a normal distribution whose mean and variance where determined by the empirical distribution of germinants. For the growth kernel, linear regression determined the expected size of an individual in the next year and the actual size was assumed to be normally distributed about this mean. For more information, see citet{nicole-etal-11} and online supplement kernels.R. The figure below shows the data and fits for $s(y)$, $G(y,x)$, $p(x)$ and $f(x)$.
 
 ```{r}
 rm (list = ls ())
@@ -131,7 +133,7 @@ f=function(x)fecundity(x)*establishment.prob
 pf=function(x)1
 e=function(y)dnorm(y,mean=recruit.size.mean,sd=recruit.size.sd)
 par(mfrow=c(2,2),mar=c(4.5,4.5,1,1),cex.lab=1.5,cex.axis=1.5)
-plot(data$size,jitter(data$surv,factor=0.1),pch=21,bg=rgb(1,0,0,0.5),xlab="size x",ylab="survival probability s(x)")
+plot(data$size,jitter(data$surv,factor=0.1),pch=21,bg=rgb(1,0,0,0.5),xlab="size x",ylab="survival probability")
 lines(xs,Survival(xs),lwd=4,col="blue")
 image(xs,xs,t(outer(xs,xs,Growth)),xlab=expression(size[t]),ylab=expression(size[t+1]))
 points(data$size,data$sizeNext,pch=21,bg=rgb(0,0,1,0.5))
@@ -235,7 +237,7 @@ return(h)
 }
 ```
 
-The figure below illustrates how extinction probabilities $E_t(x)$ vary with size over a $100$ year time frame. Intuitively, this figure illustrates that the probability of extinction decreases with the size of individual initially founding the population, and extinction probabilities increase over time. Furthermore, this figure illustrates that $E_t(x)$ are approaching limiting extinction probabilities $E_{\infy}(x)$ which are less than one. This stems from the fact that the dominant eigenvalue of the mean-field IPM is greater than one. To estimate this asymptotic probability of extinction one can  iterate $\Psi$ until a tolerance condition is met e.g. $|E_{t+1}(x)-E_t(x)|\le \epsilon$ for all $x$.
+The figure below illustrates how extinction probabilities $E_t(x)$ vary with size over a $100$ year time frame. Intuitively, this figure illustrates that the probability of extinction decreases with the size of individual initially founding the population, and extinction probabilities increase over time. Furthermore, this figure illustrates that $E_t(x)$ are approaching limiting extinction probabilities $E_{\infty}(x)$ which are less than one. This stems from the fact that the dominant eigenvalue of the mean-field IPM is greater than one. To estimate this asymptotic probability of extinction one can  iterate $\Psi$ until a tolerance condition is met e.g. $|E_{t+1}(x)-E_t(x)|\le \epsilon$ for all $x$.
 
 ```{r}
 T=100
@@ -250,7 +252,6 @@ lines(xs,h,type="l",xlab="size",ylab="asymptotic extinction probability",lwd=5,x
 
 To scale things up to an entire population, recall that for a population initially in state $\s_0$, the extinction probability at time $t$ is $E_t^{\s_0}$. For example, the figure below illustrates how the extinction probabilities over time vary for a population with initially $100$ individuals of the smallest size $\alpha$ versus a population with $5$ or $6$ individuals of the largest size $\beta$. This figure suggests that, from the extinction risk perspective, about $5$ or $6$ large individuals are equivalent to $100$ small individuals.
 
-Alternatively, we can use the actual population data from 2001 to see how extinction risk over different time frames, $5$ or $50$ years, depends on the size of a random subpopulation. This figure illustrates that $\log$ extinction risk decreases linearly with population size where the variation around this mean trend stems from the random sampling of individuals.
 
 ```{r}
 #Inputs: N vector of length $n$ which specifies the initial number of individuals in each size bin, and T the length of the time to look things over.
@@ -278,9 +279,13 @@ N=rep(0,n)
 N[50]=5
 out3=PVA(N,T)
 out=cbind(out1,out2,out3)
+par(cex.lab=1.25,cex.axis=1.25)
 matplot(0:T,out,typ="l",lwd=3,bty="n",xlab="time t",ylab="probability of extinction by year t")
 legend("topleft",c("100 small","6 large","5 large"),lty=1:3,col=1:3,lwd=3,bty="n")
 ```
+
+Alternatively, we can use the actual population data from 2001 to see how extinction risk over different time frames, $5$ or $50$ years, depends on the size of a random subpopulation. This figure illustrates that $\log$ extinction risk decreases linearly with population size where the variation around this mean trend stems from the random sampling of individuals.
+
 
 
 ```{r}
@@ -305,6 +310,7 @@ temp2[i]=out[T2+1]
 stuff=cbind(stuff,temp)
 stuff2=cbind(stuff2,temp2)
 }
+par(cex.lab=1.25,cex.axis=1.25)
 boxplot(log10(stuff),notch=FALSE,names=sample.sizes,col="white",range=0,xlab="population size",ylab=expression(paste(log[10]," extinction probability")),ylim=c(min(log10(stuff2)),max(log10(stuff))))
 boxplot(log10(stuff2),notch=FALSE,names=sample.sizes,col="pink",range=0,add=TRUE)
 legend("bottomleft",c("in 5 years","in 50 years"),pch=22,pt.bg=c("pink","white"),cex=1.25,bty="n")
