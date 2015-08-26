@@ -114,38 +114,38 @@ Using moment generating functionals and under suitable technical hypotheses, Har
 
 
 
-### Sensitivity Formulas
 
-**I corrected the formula below, but it will be much harder to explain and illustrate how to generally implement. Consequently, I am planning on removing this section**
-
-To examine the sensitivity of the extinction probability $E_t(x)$ to a parameter $\alpha$ in an individual-based IPM such as the slope or intercept of the logistic regression for a survival function, the chain rule implies that 
-\[
-\frac{\partial E_{t+1} }{\partial \alpha}(x)=\frac{\partial\Psi}{\partial \alpha}(E_t)(x)+\frac{\partial \Psi}{\partial h}(E_t)(x)\frac{\partial E_t}{\partial \alpha}(x)
-\]
-We can use this equation to inductively find these sensitivities as $\frac{\partial E_0}{\partial \alpha}(x)=0$ for all $x$. 
 
 ## An Illustration with an Endangered Plant Species
 
-To illustrate how these general methods can be applied to a data set, we develop an individual-based IPM based on **add details about the endangered plant species and the work of Nicols et al. Mention reducing survival by 10% for illustrative purposes**. 
+To illustrate how these general methods can be applied to a data set, we develop an individual-based IPM based on **add details about the endangered plant species and the work of Nicols et al. Mention reducing survival by 5% for illustrative purposes**. 
 
 For the mean-field IPM, Nicols et al. had a model of the form 
 \[
-N_{t+1}(x)=\int_a^b s(y)G(y,x)+e(x)f(y)N_t(y)\,dy
+N_{t+1}(x)=\int_a^b s(y)G(y,x)+e(x)p(y)f(y)N_t(y)\,dy
 \]
-where $s(x)$ is the probability of surviving to the next year for individuals of size $y$, $G(y,x)dy$ is the infinitesimal probability that a surviving individual of size $x$ is size $y$ in the next year, $f(x)$ is the mean number of offspring produced by an individual of size $x$, and $e(x)$ is the infinitesimal probability of an offspring is of size $x$ at the time of the annual census. *PROVIDE brief description of the model selection choices*. 
+where $s(y)$ is the probability of surviving to the next year for individuals of size $y$, $G(y,x)dy$ is the infinitesimal probability that a surviving individual of size $y$ is size $x$ in the next year, $p(y)$ is the probability an individual of an individual size $y$ flowers, $f(y)$ is the mean number of germinating offspring produced by an individual of size $y$, and $e(x)$ is the infinitesimal probability of an offspring is of size $x$ at the time of the annual census. *PROVIDE brief description of the model selection choices*. The figure below shows the data and fits for $s(y)$, $G(y,x)$, $p(x)$ and $f(x)$.
 
-The following code loads the functions for the mean field IPM: 
 ```{r}
 rm (list = ls ())
 load("IPMs.Rdata")
 g=function(y,x)Growth(y,x)
 s=function(x)Survival(x)
-f=function(x)f.fecundity(x)*establishment.prob
+f=function(x)fecundity(x)*establishment.prob
 pf=function(x)1
 e=function(y)dnorm(y,mean=recruit.size.mean,sd=recruit.size.sd) 
+par(mfrow=c(2,2),mar=c(4.5,4.5,1,1),cex.lab=1.5,cex.axis=1.5)
+plot(data$size,jitter(data$surv,factor=0.1),pch=21,bg=rgb(1,0,0,0.5),xlab="size x",ylab="survival probability s(x)")
+lines(xs,Survival(xs),lwd=4,col="blue")
+image(xs,xs,t(outer(xs,xs,Growth)),xlab=expression(size[t]),ylab=expression(size[t+1]))
+points(data$size,data$sizeNext,pch=21,bg=rgb(0,0,1,0.5))
+plot(data$size,jitter(data$fec.flower,factor=0.1),pch=21,bg=rgb(1,0,0,0.5),xlab="size",ylab="flowering")
+lines(xs,flowering(xs),lwd=4,col="blue")
+plot(size.temp,seed.temp,pch=21,bg=rgb(1,0,0,0.5),bty="n",xlab="size",ylab="fecundity")
+lines(xs,fecundity(xs),lwd=2)
 ```
 
-The kernels $s(x)$, $G(y,x)$, and $e(x)$ provide us with all the information that the individual-based IPMs requires for probabilistic updating individuals for survival, growth, and size at first census. The fecundity kernel $f(y)$, however, only specifies the mean number of offspring produced, but for an individual-based IPM, we need the distribution of the number of offspring produced by an individual. Fortunately, when using GLMs for the fecundity data, this extra information comes for free. For example, the fecundity data was modeled using a Poisson family for the GLM.  In which case, the mean number $f(x)$ of offspring also specifies the distribution. More generaly, one might use multi-parameter distributions such as a zero inflated poisson or a negative binomial in which case parameters beyond the mean are needed to specify the distribution of offspring number. 
+The kernels $s(x)$, $G(y,x)$, $p(x)$ and $e(x)$ provide us with all the information that the individual-based IPMs requires for probabilistic updating individuals for survival, growth, flowering or not, and size at first census. The fecundity kernel $f(y)$, however, only specifies the mean number of offspring produced, but for an individual-based IPM, we need the distribution of the number of offspring produced by an individual. Fortunately, when using GLMs for the fecundity data, this extra information comes for free. For example, the fecundity data was modeled using a Poisson family for the GLM.  In which case, the mean number $f(x)$ of offspring also specifies the distribution. More generaly, one might use multi-parameter distributions such as a zero inflated poisson or a negative binomial in which case parameters beyond the mean are needed to specify the distribution of offspring number. 
 
 
 ### Deriving the pgf $\Psi$
@@ -159,31 +159,30 @@ to get that
 \Psi=\Psi_g \times \Psi_f.
 \]
 
+When the random variables are identically, distributed, the following generalization of this fundamental property of pgfs will be useful:
+
+>The pgf for a sum of $N$ indepenendent, identically distributed random variables $X_i$ is the composition of the pgf for $N$ with the pgf for the $X_i$.
+
+
 For the pgf $\Psi_g$ for survival and growth, $\Psi_g(h)(x)$ corresponds to integrating $h^\s$ over all possible contributions $\s$ from an individual of size $x$ surviving and growing. These contributions are of two types: $\s=\emptyset$ when the individual ies,  and $\s=(1,y)$ when the individual survives and grows to size $y$. The first event occurs with probability $1-s(x)$ and the infinitesimal probability of the second event is $s(x)G(y,x)dy$. As $h^\s=1$ when $\s=\emptyset$ and $h^\s=h(y)$ when $\s=(1,y)$, integrating over all possible contributions due to survival and growth yields 
 \[
 \Psi_{g}(h)(x)=(1-s(x))\times 1 + s(x)\int h(y)G(y,x)dy.
 \]
 
-For the pgf $\Psi_f$ corresponding to contributions due to fecundity, $\Psi_f(h)(x)$ is given by integrating $h^\s$ over all possible states $\s$ corresponding to the offspring produced by an individual of size $x$.  To write this down, we can take advantage of the fact that the reproductive contribution of an individual of size $x$ corresponds to a Poisson number of offspring with mean $f(x)$ whose sizes are drawn *independently* from the same offspring distribution. To make use of this observation, we can condition on the number of offspring an individual has. Lets say our individual of size $x$ has $N$ offspring. Then its contribution is a sum of $N$ independent random variables taking values of the form $\s=(1,y)$. The pgf $\Psi_{kid}$ associated with one of these contributions is given by 
+For the pgf $\Psi_f$ corresponding to contributions due to fecundity, $\Psi_f(h)(x)$ is given by integrating $h^\s$ over all possible states $\s$ corresponding to the offspring produced by an individual of size $x$.  To write this down, we apply the second fundamental property of pgfs twice. We begin by conditioning on the event that an individual of size $x$ flowers. On this event, the individual produces a Poisson number $N$ of offspring with mean $f(x)$. The sie of each of these offspring is drawn independentally from the common offspring distribution $e(y)dy$. Hence, the contribution of a flowering individual of size $x$ is the sum of $N$ indendent random variables with distribution $e(y)dy$. By the second fundamental property of pgfs, we need to take the composition of the pgf for $N$, namely $\phi(x,\cdot)$, with the pgf for a single offspring, namely 
 \[
-\Psi_{kid}(h)(x)=\int h(y)e(y)dy
+\Psi_e(h)(x)=\int h(y)e(y)dy.
 \]
-as $h^{{1,y}}(x)=h(y)$ and $e(y)dy$ is the infinitesimal probability of an offspring being of size $y$. Since there are $N$ kids independent of one another, the pgf for this sum is given by the product of the pgfs:
+Thus, we get the pgf associated with a flowering individual is 
 \[
-\Psi_{N\,kids}(h)(x)=\left(\int h(y)e(y)dy\right)^N.
+\Psi_{flower}(h)(x)=\phi(x,\int h(y)e(y)dy)
 \]
-Finally, to get $\Psi_f$, we can sum over all possible number of kids weighted by their probabilities:
+To get the pgf for flowering and non-flowering contributions to fecundity, we observe that fecundity contributions of an individual of size $x$ is given by the "sum" of a bernoulli number of flowering individuals where the probability of success is $p(x)$. Namely, we need to compose the pgf of a Bernoulli, which is $\theta(s)=1-p(x)+p(x)s$ where $s$ is the dummy variable, with the pgf of a flowering individual. This composition yields
 \[
-\Psi_f(h)(x)=\sum \frac{\exp(-f(x))f(x)^N}{N!} \Psi_{kid}(h)(x)^N.
+\Psi_f (h)(x)=\theta(\Psi_{flower}(h)(x))=1-p(x)+p(s)\phi(x,\int h(y)e(y)dy)
 \]
-As the pgf for a Poisson distribution with mean $f(x)$ is
-\[
-\phi_x(s)=\sum_N \exp(-f(x))\frac{(f(x)s)^N}{N!}=\exp(f(x)(s-1))
-\]
-we get  
-\[
-\Psi_f(h)(x)=\phi(x, \Psi_{kid}(h)(x))=\phi(x,\int h(y)e(y)dy).
-\]
+
+
 Putting together the two pieces, we get the desired pgf $\Psi$:
 \[
 \Psi(h)(x)=\left((1-s(x))\times 1 + s(x)\int h(y)G(y,x)dy\right)\phi(x,\int h(y)e(y)dy).
@@ -193,13 +192,13 @@ We note that this argument works did not rely on the form of the offspring pgf $
 
 ### Numerically Implementing and Utilizing $\Psi$
 
-To create this probability generating functional numerically, we discretize the size interval $[\alpha,\beta]$ using $n$ equal sized intervals of width $dx=(\beta-\alpha)/n$. To use the midpoint rule to approximate the integrals, we created a vector $xs$ corresponding to the midpoints of these intervales. Using this vector we discretized the survival function as a vector $s.vec=s(xs)$, the growth kernel as a matrix using the outer product $g.mat=outer(xs,xs,g)$, the fecudity function as a vector $f.vec=f(xs)$, and the offspring size distribution as a vector $e.vec=e(xs)$. 
+To create this probability generating functional numerically, we discretize the size interval $[\alpha,\beta]$ using $n$ equal sized intervals of width $dx=(\beta-\alpha)/n$. To use the midpoint rule to approximate the integrals, we created a vector $xs$ corresponding to the midpoints of these intervales. Using this vector we discretized the survival function as a vector $s.vec=s(xs)$, the growth kernel as a matrix using the outer product $g.mat=outer(xs,xs,g)$, the probability of flowering function as a vector $p.vec=p(xs)$, the fecudity function as a vector $f.vec=f(xs)$, and the offspring size distribution as a vector $e.vec=e(xs)$. 
 
 For the previously described methods to work, it is critical that column sums for growth and the sum of offspring size distribution vector equal one i.e. the columns are probability vectors. For most IPMs, this will not occur automatically due to individuals being evicted from the size interval $[\alpha,\beta]$. There are a variety of ways to handle this issue (Ref). As the  offspring size vectors nearly summed to one, we simply renormalized it so that it summed to one. For the growth matrix, we treated eviction as mortality to be consistent with the model developed by Nicoles et al. To do this, we took one minus the column sums and substracted them from the survival vector and then normalized the column sums so that they added to one. When taking the product of survival and growth, the mean-field IPM is unaffected by this change. 
 
 Using these discretized demographic components and the pgf $\phi$ for fecunidy, we get the discretized pgf $\Psi$ is given by 
 \[
-\Psi_{discrete}(h)=s.vec\circ (g.mat^T\, h)+1-s.vec)\circ phi(xs,e.vec^T\,h)
+\Psi_{discrete}(h)=s.vec\circ (g.mat^T\, h)+1-s.vec)\circ(1-p.vec+p.vec\circ phi(xs,e.vec^T\,h))
 \]
 where $h$ corresponds to a discretized function i.e. a vector of length $n$, $^T$ denotes the transpose of a matrix or vector,  and $\circ$ denotes element by element multiplication. 
 
@@ -207,8 +206,9 @@ where $h$ corresponds to a discretized function i.e. a vector of length $n$, $^T
 n=100 # number of bins
 xs=seq(alpha,2*beta,length=n)
 dx=xs[2]-xs[1]
-s.vec=s(xs)*0.9
+s.vec=s(xs)*0.95
 e.vec=e(xs)*dx
+flowering.vec=as.numeric(flowering(xs))
 e.vec=e.vec/sum(e.vec)
 g.mat=outer(xs,xs,g)*dx
 q.evict=1-colSums(g.mat) 
@@ -217,7 +217,7 @@ g.mat=g.mat%*%diag(1/(1-q.evict))
 s.vec=(1-q.evict)*s.vec
 phi=function(x,s)exp(f(x)*(s-1))
 Psi=function(h){
-	h.new=(s.vec*(t(g.mat)%*%h)+1-s.vec)*(phi(xs,e.vec%*%h))
+	h.new=(s.vec*(t(g.mat)%*%h)+1-s.vec)*(1-flowering.vec+flowering.vec*phi(xs,e.vec%*%h))
 	return(h.new)
 }
 Psi.iterate=function(T){
@@ -255,6 +255,8 @@ lines(xs,h,type="l",xlab="size",ylab="asymptotic extinction probability",lwd=5,x
 
 To scale things up to an entire population, recall that for a population initially in state $\s_0$, the extinction probability at time $t$ is $E_t^{\s_0}$. For example, the figure below illustrates how the extinction probabilities over time vary for a population with initially $100$ individuals of the smallest size $\alpha$ versus a population with $5$ or $6$ individuals of the largest size $\beta$. This figure suggests that, from the extinction risk perspective, about $5$ or $6$ large individuals are equivalent to $100$ small individuals. 
 
+Alternatively, we can use the actual population data from 2001 to see how extinction risk over different time frames, $5$ or $50$ years, depends on the size of a random subpopulation. This figure illustrates that $\log$ extinction risk decreases linearly with population size where the variation around this mean trend stems from the random sampling of individuals. 
+
 ```{r}
 #Inputs: N vector of length $n$ which specifies the initial number of individuals in each size bin, and T the length of the time to look things over.
 #Output:a vector of length T+1 corresponding to the probabilities of extinction by time t or sooner
@@ -266,6 +268,10 @@ PVA=function(N,T){
 	}
 	return(output)
 }
+```
+
+
+```{r,cache=FALSE}
 T=75
 N=rep(0,n)
 N[1]=100
@@ -280,3 +286,79 @@ out=cbind(out1,out2,out3)
 matplot(0:T,out,typ="l",lwd=3,bty="n",xlab="time t",ylab="probability of extinction by year t")
 legend("topleft",c("100 small","6 large","5 large"),lty=1:3,col=1:3,lwd=3,bty="n")
 ```
+
+
+```{r,cache=FALSE}
+sizes=data$size[1:400] # empirical data
+T=51
+T2=5
+sample.sizes=5*(1:5)
+no.samples=500
+stuff=c()
+stuff2=c()
+temp=numeric(no.samples)
+temp2=temp
+for(j in 1:length(sample.sizes)){
+for(i in 1:no.samples){
+sampling=sample(sizes,size=sample.sizes[j])
+out2=hist(sampling,breaks=xs,plot=FALSE)
+N=c(0,out2$counts)
+out=PVA(N,T)
+temp[i]=out[T+1]
+temp2[i]=out[T2+1]
+}
+stuff=cbind(stuff,temp)
+stuff2=cbind(stuff2,temp2)
+}
+boxplot(log10(stuff),notch=FALSE,names=sample.sizes,col="white",range=0,xlab="population size",ylab=expression(paste(log[10]," extinction probability")),ylim=c(min(log10(stuff2)),max(log10(stuff))))
+boxplot(log10(stuff2),notch=FALSE,names=sample.sizes,col="pink",range=0,add=TRUE)
+legend("bottomleft",c("in 5 years","in 50 years"),pch=22,pt.bg=c("pink","white"),cex=1.25,bty="n")
+```
+
+
+
+
+
+
+
+
+## Discussion
+
+
+## Extra stuff
+
+To write this down, we appl of the second fundamental property of pgfs twic we can take advantage of the fact that the reproductive contribution of an individual of size $x$ corresponds to a Poisson number of offspring with mean $f(x)$ whose sizes are drawn *independently* from the same offspring distribution. To make use of this observation, we can condition on the number of offspring an individual has. Lets say our individual of size $x$ has $N$ offspring. Then its contribution is a sum of $N$ independent random variables taking values of the form $\s=(1,y)$. The pgf $\Psi_{kid}$ associated with one of these contributions is given by 
+\[
+\Psi_{kid}(h)(x)=\int h(y)e(y)dy
+\]
+as $h^{{1,y}}(x)=h(y)$ and $e(y)dy$ is the infinitesimal probability of an offspring being of size $y$. Since there are $N$ kids independent of one another, the pgf for this sum is given by the product of the pgfs:
+\[
+\Psi_{N\,kids}(h)(x)=\left(\int h(y)e(y)dy\right)^N.
+\]
+Finally, to get $\Psi_f$, we can sum over all possible number of kids weighted by their probabilities:
+\[
+\Psi_f(h)(x)=\sum \frac{\exp(-f(x))f(x)^N}{N!} \Psi_{kid}(h)(x)^N.
+\]
+As the pgf for a Poisson distribution with mean $f(x)$ is
+\[
+\phi_x(s)=\sum_N \exp(-f(x))\frac{(f(x)s)^N}{N!}=\exp(f(x)(s-1))
+\]
+we get  
+\[
+\Psi_f(h)(x)=\phi(x, \Psi_{kid}(h)(x))=\phi(x,\int h(y)e(y)dy).
+\]
+Putting together the two pieces, we get the desired pgf $\Psi$:
+\[
+\Psi(h)(x)=\left((1-s(x))\times 1 + s(x)\int h(y)G(y,x)dy\right)\phi(x,\int h(y)e(y)dy).
+\]
+We note that this argument works did not rely on the form of the offspring pgf $\phi$. Hence, we can use the same expression for alternative offspring distributions as illustrate later. 
+
+### Sensitivity Formulas
+
+**I corrected the formula below, but it will be much harder to explain and illustrate how to generally implement. Consequently, I am planning on removing this section**
+
+To examine the sensitivity of the extinction probability $E_t(x)$ to a parameter $\alpha$ in an individual-based IPM such as the slope or intercept of the logistic regression for a survival function, the chain rule implies that 
+\[
+\frac{\partial E_{t+1} }{\partial \alpha}(x)=\frac{\partial\Psi}{\partial \alpha}(E_t)(x)+\frac{\partial \Psi}{\partial h}(E_t)(x)\frac{\partial E_t}{\partial \alpha}(x)
+\]
+We can use this equation to inductively find these sensitivities as $\frac{\partial E_0}{\partial \alpha}(x)=0$ for all $x$. 

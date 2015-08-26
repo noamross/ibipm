@@ -79,15 +79,40 @@ points(data$size,data$sizeNext,pch=21,bg=rgb(0,0,1,0.5))
 # Should be doing a zero-inflated poisson but keeping it simple for now.
 # See http://www.ats.ucla.edu/stat/r/dae/zipoisson.htm
 
-model.fecundity=glm(fec.seed~size,data=data,family=poisson())
-f.fecundity=function(x)predict(model.fecundity,data.frame('size'=x),type="response")
-
-#plot the seed data and the fit
-
-#pdf("Week5-D.pdf")
-plot(data$size,data$fec.seed,pch=21,bg=rgb(1,0,0,0.5),bty="n",xlab="size",ylab="fecundity")
-lines(xs,f.fecundity(xs),lwd=2)
+# model.fecundity=glm(fec.seed~size,data=data,family=poisson())
+# f.fecundity=function(x)predict(model.fecundity,data.frame('size'=x),type="response")
+#
+# #plot the seed data and the fit
+#
+# #pdf("Week5-D.pdf")
+# plot(data$size,data$fec.seed,pch=21,bg=rgb(1,0,0,0.5),bty="n",xlab="size",ylab="fecundity")
+# lines(xs,f.fecundity(xs),lwd=2)
 #dev.off()()
+
+# alternative model with flowering probability & poisson for flowering individuals
+model.flowering=glm(fec.flower~size,data=data,family=binomial)
+flowering=function(x)predict(model.flowering,data.frame('size'=x),type="response")
+
+# plotting
+
+plot(data$size,jitter(data$fec.flower,factor=0.1),pch=21,bg=rgb(1,0,0,0.5))
+lines(xs,flowering(xs),lwd=4,col="blue")
+
+# poisson on individuals that flowered
+
+who=which(data$fec.flower==1)
+seed.temp=data$fec.seed[who]
+size.temp=data$size[who]
+model.fecundity=glm(seed.temp~size.temp,family=poisson)
+
+fecundity=function(x)exp(model.fecundity$coefficients[1]+model.fecundity$coefficients[2]*x)
+
+#plottng
+
+plot(size.temp,seed.temp,pch=21,bg=rgb(1,0,0,0.5))
+lines(xs,fecundity(xs),lwd=4,col="blue")
+
+
 
 # estimate probability of seed establishment
 establishment.prob=sum(is.na(data$size))/sum(data$fec.seed,na.rm=TRUE)
@@ -95,72 +120,72 @@ establishment.prob=sum(is.na(data$size))/sum(data$fec.seed,na.rm=TRUE)
 recruit.size.mean=mean(data$sizeNext[is.na(data$size)])
 recruit.size.sd=sd(data$sizeNext[is.na(data$size)])
 # put together the fecundity function
-Fecundity=function(y,x){ establishment.prob*dnorm(y,mean=recruit.size.mean,sd=recruit.size.sd)*f.fecundity(x)
+Fecundity=function(y,x){ establishment.prob*dnorm(y,mean=recruit.size.mean,sd=recruit.size.sd)*fecundity(x)
   }
 
 
 
-###############
-# The Entire Kernel
-################
-
-K=function(y,x)Survival(x)*Growth(y,x)+Fecundity(y,x)
-
-#####################################
-# Discretizing the IPM
-#######################################
-
-# parameters
-
-n=101   # subdivisions
-
-
-#  create discretized size vector
-# create a Gauss quadrature version
-# http://www.damtp.cam.ac.uk/lab/people/sd/lectures/nummeth98/integration.htm
-
-xs=seq(alpha,beta,length=n) # recall alpha and beta are min/max sizes
-dx=xs[2]-xs[1] # dx increment in sizes
-xs.left=xs[-n]+(1/2-sqrt(3)/6)*dx
-xs.right=xs[-n]+(1/2+sqrt(3)/6)*dx
-IPM.left=(outer(xs.left,xs.left,K)*dx)
-IPM.right=(outer(xs.right,xs.right,K)*dx)
-IPM=(IPM.left+IPM.right)/2
-
-
-#plot kernel
-#pdf("Week5-E.pdf")
-image(xs[-n],xs[-n],IPM)
-#dev.off()()
-
-
-#############################################
-# analyze IPM with the usual matrix machinery
-#############################################
-out=eigen(IPM)
-lambda=Re(out$values[1])
-v=Re(out$vectors[,1])
-v=v/sum(v)
-w=Re(eigen(t(IPM))$vectors[,1])
-w=w/sum(v*w)
-
-#pdf("Week5-F.pdf")
-par(cex.axis=1.5,cex.lab=1.5,mar=c(4,4,1,4))
-plot(xs[-n],v,type="l",ylab="stable size distribution",xlab="size",lwd=3,col="black")
-par(new=TRUE)
-plot(xs[-n],w,type="l",yaxt="n",xlab="",ylab="",lwd=3,col="red")
-axis(4)
-mtext("reproductive values",side=4,line=3,cex=1.5)
-legend("top",c("stable size","reproductive values"),col=c("black","red"),lwd=3,bty="n",cex=1.5)
-#dev.off()()
-
-
-S=w%o%v
-E=S*IPM/lambda
-
-#pdf("Week5-G.pdf")
-image(xs[-n],xs[-n],E/dx^2,xlab="size at t",ylab="size at t+1")
-contour(xs[-n],xs[-n],E/dx^2,add=TRUE)
-#dev.off()()
+# ###############
+# # The Entire Kernel
+# ################
+#
+# K=function(y,x)Survival(x)*Growth(y,x)+Fecundity(y,x)
+#
+# #####################################
+# # Discretizing the IPM
+# #######################################
+#
+# # parameters
+#
+# n=101   # subdivisions
+#
+#
+# #  create discretized size vector
+# # create a Gauss quadrature version
+# # http://www.damtp.cam.ac.uk/lab/people/sd/lectures/nummeth98/integration.htm
+#
+# xs=seq(alpha,beta,length=n) # recall alpha and beta are min/max sizes
+# dx=xs[2]-xs[1] # dx increment in sizes
+# xs.left=xs[-n]+(1/2-sqrt(3)/6)*dx
+# xs.right=xs[-n]+(1/2+sqrt(3)/6)*dx
+# IPM.left=(outer(xs.left,xs.left,K)*dx)
+# IPM.right=(outer(xs.right,xs.right,K)*dx)
+# IPM=(IPM.left+IPM.right)/2
+#
+#
+# #plot kernel
+# #pdf("Week5-E.pdf")
+# image(xs[-n],xs[-n],IPM)
+# #dev.off()()
+#
+#
+# #############################################
+# # analyze IPM with the usual matrix machinery
+# #############################################
+# out=eigen(IPM)
+# lambda=Re(out$values[1])
+# v=Re(out$vectors[,1])
+# v=v/sum(v)
+# w=Re(eigen(t(IPM))$vectors[,1])
+# w=w/sum(v*w)
+#
+# #pdf("Week5-F.pdf")
+# par(cex.axis=1.5,cex.lab=1.5,mar=c(4,4,1,4))
+# plot(xs[-n],v,type="l",ylab="stable size distribution",xlab="size",lwd=3,col="black")
+# par(new=TRUE)
+# plot(xs[-n],w,type="l",yaxt="n",xlab="",ylab="",lwd=3,col="red")
+# axis(4)
+# mtext("reproductive values",side=4,line=3,cex=1.5)
+# legend("top",c("stable size","reproductive values"),col=c("black","red"),lwd=3,bty="n",cex=1.5)
+# #dev.off()()
+#
+#
+# S=w%o%v
+# E=S*IPM/lambda
+#
+# #pdf("Week5-G.pdf")
+# image(xs[-n],xs[-n],E/dx^2,xlab="size at t",ylab="size at t+1")
+# contour(xs[-n],xs[-n],E/dx^2,add=TRUE)
+# #dev.off()()
 
 save.image("IPMs.Rdata")
