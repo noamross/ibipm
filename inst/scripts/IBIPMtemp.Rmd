@@ -122,7 +122,7 @@ N_{t+1}(x)=\int_a^b s(y)G(y,x)+e(x)p(y)f(y)N_t(y)\,dy
 \]
 where $s(y)$ is the probability of surviving to the next year for individuals of size $y$, $G(y,x)dy$ is the infinitesimal probability that a surviving individual of size $y$ is size $x$ in the next year, $p(y)$ is the probability an individual of an individual size $y$ flowers, $f(y)$ is the mean number of germinating offspring produced by an individual of size $y$, and $e(x)$ is the infinitesimal probability of an offspring is of size $x$ at the time of the annual census. 
 
-Consistent with citet{nicole-etal-11}, we used generalized linear models (GLMs) to select functional forms for each of the demographic kernels. Computation were performed using the GLM package for R citep{XX}. Specifically, we used logistic regression (i.e. a GLM with the binomial family) for determining $s(y)$ and $p(y)$, a GLM with the poisson family for modelling $f(y)$, and modeled the $e(y)$ using a normal distribution whose mean and variance where determined by the empirical distribution of germinants. For the growth kernel, linear regression determined the expected size of an individual in the next year and the actual size was assumed to be normally distributed about this mean. For more information, see citet{nicole-etal-11} and online supplement kernels.R. The figure below shows the data and fits for $s(y)$, $G(y,x)$, $p(x)$ and $f(x)$.
+Consistent with citet{nicole-etal-11}, we used generalized linear models (GLMs) to select functional forms for each of the demographic kernels. Computation were performed using the GLM package for R citep{R-15}. Specifically, we used logistic regression (i.e. a GLM with the binomial family) for determining $s(y)$ and $p(y)$, a GLM with the poisson family for modelling $f(y)$, and modeled the $e(y)$ using a normal distribution whose mean and variance where determined by the empirical distribution of germinants. For the growth kernel, linear regression determined the expected size of an individual in the next year and the actual size was assumed to be normally distributed about this mean. For more information, see citet{nicole-etal-11} and online supplement kernels.R. The figure below shows the data and fits for $s(y)$, $G(y,x)$, $p(x)$ and $f(x)$.
 
 ```{r}
 rm (list = ls ())
@@ -156,7 +156,7 @@ to get that
 \Psi=\Psi_g \times \Psi_f.
 \]
 
-When the random variables are identically, distributed, the following generalization of this fundamental property of pgfs will be useful:
+When the random variables are identically, distributed, we have the following generalization of this fundamental property of pgfs:
 
 >The pgf for a sum of $N$ indepenendent, identically distributed random variables $X_i$ is the composition of the pgf for $N$ with the pgf for the $X_i$.
 
@@ -187,7 +187,7 @@ Putting together the two pieces, we get the desired pgf $\Psi$:
 We note that this argument works did not rely on the form of the offspring pgf $\phi$. Hence, we can use the same expression for alternative offspring distributions as illustrate later.
 
 
-### Numerically Implementing and Utilizing $\Psi$
+### Numerically Implementing and Using the pgf $\Psi$
 
 To create this probability generating functional numerically, we discretize the size interval $[\alpha,\beta]$ using $n$ equal sized intervals of width $dx=(\beta-\alpha)/n$. To use the midpoint rule to approximate the integrals, we created a vector $xs$ corresponding to the midpoints of these intervales. Using this vector we discretized the survival function as a vector $s.vec=s(xs)$, the growth kernel as a matrix using the outer product $g.mat=outer(xs,xs,g)$, the probability of flowering function as a vector $p.vec=p(xs)$, the fecudity function as a vector $f.vec=f(xs)$, and the offspring size distribution as a vector $e.vec=e(xs)$.
 
@@ -250,7 +250,7 @@ h=AE()
 lines(xs,h,type="l",xlab="size",ylab="asymptotic extinction probability",lwd=5,xlim=c(alpha,beta))
 ```
 
-To scale things up to an entire population, recall that for a population initially in state $\s_0$, the extinction probability at time $t$ is $E_t^{\s_0}$. For example, the figure below illustrates how the extinction probabilities over time vary for a population with initially $100$ individuals of the smallest size $\alpha$ versus a population with $5$ or $6$ individuals of the largest size $\beta$. This figure suggests that, from the extinction risk perspective, about $5$ or $6$ large individuals are equivalent to $100$ small individuals.
+To scale things up to an entire population, recall that for a population initially in state $\s_0$, the extinction probability at time $t$ is $E_t^{\s_0}$. For example, the figure below illustrates how the extinction probabilities over time vary for a population with initially $100$ individuals of the smallest size $\alpha$ versus a population with $5$ or $6$ individuals of the largest size $\beta$. This figure suggests that, from the extinction risk perspective, about $5$ or $6$ large individuals are equivalent to $100$ small individuals. These types of comparisons may be particularly useful when trying to assess whether planting germinates or adults are more effective for establishment success. 
 
 
 ```{r}
@@ -284,7 +284,7 @@ matplot(0:T,out,typ="l",lwd=3,bty="n",xlab="time t",ylab="probability of extinct
 legend("topleft",c("100 small","6 large","5 large"),lty=1:3,col=1:3,lwd=3,bty="n")
 ```
 
-Alternatively, we can use the actual population data from 2001 to see how extinction risk over different time frames, $5$ or $50$ years, depends on the size of a random subpopulation. This figure illustrates that $\log$ extinction risk decreases linearly with population size where the variation around this mean trend stems from the random sampling of individuals.
+Alternatively, we can use the data from 2001 to see how extinction risk over different time frames depends on the size and composition of the population. Specifically, in the figure below, we computed extinction risk over $5$ and $50$ year periods for $100$ random samples (per sample size) of $2001$ size distribution. Expectedly, we see that $\log$ extinction risk decreases, on average, linearly with the sample size and is, on average, greater for the 50 year period than the 5 year period. However, for smaller sample sizes, there is overlap in the distributions of extinction times for $5$ and $50$ year time frames. This overlap stems from  samples of mostly large individuals being more likely to persist at least $50$ years than samples of mostly small indviduals persisting at least $5$ years. Interstingly, variation in the extinction times across samples is consistently greater over the $5$ year period than the $50$ year period. 
 
 
 
@@ -335,7 +335,7 @@ extensions and future challenges:
 
 3. accounting for density dependent feedbacks in a tractable way - no longer can use the very tractable pgf machinery, could try using standard Markov chain tools but this will suffer from a course of dimensionality
 
-
+4. others?
 
 
 
