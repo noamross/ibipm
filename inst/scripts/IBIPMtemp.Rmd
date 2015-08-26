@@ -329,7 +329,12 @@ Paragraph on recommendations and basic guidelines for putting together this mach
 
 extensions and future challenges:
 
-1. Temporally varying environments - relatively straightforward to implement; perhaps outline the idea. 
+1.  IPMs are used extensively to study the effects of fluctuating environmental conditions on population demography and life history evolution \citep{childs-etal-04,dahlgren-ehrlen-11,rees-ellner-09}. While the methods described here have focused on constant environmental conditions, they are easily extended to fluctuating environments. In particular, $\Psi_t$ is the pgf associated with year $t$, then the probabilities of extinction are given by 
+\[
+\Psi_0(\Psi_1(\dots \Psi_t(h_0)))
+\]
+where $h_0$ as before is the zero function. A key thing to notice in this expression is the composition is in the reverse order of what might do for iterating a mean-field IPM model. However, the justification for this ordering for single type branching procsses can be found in Chapter XX of \citet{}, and the same reasoning applies to the infinite dimensional case. While we know of no formal proof, in the case of a stationary environment, there should be the following limit theorem: the asymptotic extinction probabilities are strictly less than one if and only if the stochastic growth rate (aka dominant Lyapunov exponent) of the mean-field, stochastic IPM is positive. 
+
 
 2. Multi-dimensional state variables (e.g. location and size) as these involve approximiating higher-dimensional integrals which are notoriously difficult to do
 
