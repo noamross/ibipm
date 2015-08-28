@@ -1,0 +1,101 @@
+\def\cprime{$'$}
+\begin{thebibliography}{15}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Athreya and Ney(2004)]{athreya-ney-04}
+K.~B. Athreya and P.~E. Ney.
+\newblock \emph{Branching processes}.
+\newblock Dover Publications Inc., Mineola, NY, 2004.
+
+\bibitem[Caswell(2001)]{caswell-01}
+H.~Caswell.
+\newblock \emph{Matrix Population Models}.
+\newblock Sinauer, Sunderland, Massachuesetts, 2001.
+
+\bibitem[Childs et~al.(2004)Childs, Rees, Rose, Grubb, and
+  Ellner]{childs-etal-04}
+D.Z. Childs, M.~Rees, K.E. Rose, P.J. Grubb, and S.P. Ellner.
+\newblock Evolution of size--dependent flowering in a variable environment:
+  construction and analysis of a stochastic integral projection model.
+\newblock \emph{Proceedings of the Royal Society of London. Series B:
+  Biological Sciences}, 271\penalty0 (1537):\penalty0 425--434, 2004.
+
+\bibitem[Easterling et~al.(2000)Easterling, Ellner, and
+  Dixon]{easterling-etal-00}
+M.R. Easterling, S.P. Ellner, and P.M. Dixon.
+\newblock Size-specific sensitivity: applying a new structured population
+  model.
+\newblock \emph{Ecology}, 81:\penalty0 694--708, 2000.
+
+\bibitem[Ellner and Schreiber(In press)]{tpb-12}
+S.~P. Ellner and S.~J. Schreiber.
+\newblock Temporally variable dispersal and demography can accelerate the
+  spread of invading species.
+\newblock \emph{Theoretical Population Biology}, In press.
+
+\bibitem[Ellner and Rees(2006)]{ellner-rees-06}
+S.P. Ellner and M.~Rees.
+\newblock Integral projection models for species with complex demography.
+\newblock \emph{American Naturalist}, 167:\penalty0 410--428, 2006.
+
+\bibitem[Harris(1963)]{harris-63}
+T.E. Harris.
+\newblock \emph{The theory of branching processes}.
+\newblock Springer-Verlag, 1963.
+
+\bibitem[Jongejans et~al.(2011)Jongejans, Shea, Skarpaas, Kelly, and
+  Ellner]{jongejans-etal-11}
+E.~Jongejans, K.~Shea, O.~Skarpaas, D.~Kelly, and S.~Ellner.
+\newblock The importance of individual and environmental variation for the
+  spread of invasive species: a spatial integral projection model.
+\newblock \emph{Ecology}, 92:\penalty0 86--97, 2011.
+
+\bibitem[Merow et~al.(2014)Merow, Dahlgren, Metcalf, Childs, Evans, Jongejans,
+  Record, Rees, Salguero-G{\'o}mez, and McMahon]{merow-etal-14}
+C.~Merow, J.P. Dahlgren, C.J.E. Metcalf, D.Z. Childs, M.E.K. Evans,
+  E.~Jongejans, S.~Record, M.~Rees, R.~Salguero-G{\'o}mez, and S.M. McMahon.
+\newblock Advancing population ecology with integral projection models: a
+  practical guide.
+\newblock \emph{Methods in Ecology and Evolution}, 5:\penalty0 99--110, 2014.
+
+\bibitem[Metcalf et~al.(2013)Metcalf, McMahon, Salguero-G\'{o}mez, and
+  Jongejans]{metcalf-etal-13}
+C.J.E. Metcalf, S.M. McMahon, R.~Salguero-G\'{o}mez, and E.~Jongejans.
+\newblock Ipmpack: an r package for integral projection models.
+\newblock \emph{Methods in Ecology and Evolution}, 4:\penalty0 195--200, 2013.
+
+\bibitem[Nicole et~al.(2011)Nicole, Dahlgren, Vivat, Till-Bottraud, and
+  Ehrl\'{e}n]{nicole-etal-11}
+F.~Nicole, J.P. Dahlgren, A.~Vivat, I.~Till-Bottraud, and J.~Ehrl\'{e}n.
+\newblock Interdependent effects of habitat quality and climate on population
+  growth of an endangered plant.
+\newblock \emph{Journal of Ecology}, 99:\penalty0 1211--1218, 2011.
+
+\bibitem[{R Core Team}(2015)]{R-15}
+{R Core Team}.
+\newblock \emph{R: A Language and Environment for Statistical Computing}.
+\newblock R Foundation for Statistical Computing, Vienna, Austria, 2015.
+\newblock URL \url{http://www.R-project.org/}.
+
+\bibitem[Ramula et~al.(2009)Ramula, Rees, and Buckley]{ramula-etal-09}
+S.~Ramula, M.~Rees, and Y.M. Buckley.
+\newblock Integral projection models perform better for small demographic data
+  sets than matrix population models: a case study of two perennial herbs.
+\newblock \emph{Journal of Applied Ecology}, 46:\penalty0 1048--1053, 2009.
+
+\bibitem[Rees and Ellner(2009)]{rees-ellner-09}
+M.~Rees and S.P. Ellner.
+\newblock Integral projection models for populations in temporally varying
+  environments.
+\newblock \emph{Ecological Monographs}, 79:\penalty0 575--594, 2009.
+
+\bibitem[Rees et~al.(2014)Rees, Childs, and Ellner]{rees-etal-14}
+M.~Rees, D.Z. Childs, and S.P. Ellner.
+\newblock Building integral projection models: a user's guide.
+\newblock \emph{Journal of Animal Ecology}, 83:\penalty0 528--545, 2014.
+
+\end{thebibliography}
