@@ -1,5 +1,5 @@
 \def\cprime{$'$}
-\begin{thebibliography}{25}
+\begin{thebibliography}{26}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -34,6 +34,12 @@ D.Z. Childs, M.~Rees, K.E. Rose, P.J. Grubb, and S.P. Ellner.
   construction and analysis of a stochastic integral projection model.
 \newblock \emph{Proceedings of the Royal Society of London. Series B:
   Biological Sciences}, 271\penalty0 (1537):\penalty0 425--434, 2004.
+
+\bibitem[Coulson(2012)]{coulson-12}
+Tim Coulson.
+\newblock Integral projections models, their construction and use in posing
+  hypotheses in ecology.
+\newblock \emph{Oikos}, 121\penalty0 (9):\penalty0 1337--1350, 2012.
 
 \bibitem[Dahlgren and Ehrl\'{e}n(2011)]{dahlgren-ehrlen-11}
 J.P. Dahlgren and J.~Ehrl\'{e}n.

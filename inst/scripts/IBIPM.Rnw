@@ -28,18 +28,18 @@
 \section*{Introduction}
 Computations of extinction probabilities or likelihoods of establishment success lie on opposing sides of a theoretician's coin and have been used to address theoretical and practical issues in conservation biology, restoration ecology, biological invasions and population genetics. Risks of extinction or establishment failure stem from populations consisting of a finite number of individuals, each of which faces a non-zero risk of mortality on any given day. These extinction risks are shaped, in part, by the size and composition of a population whose individuals may differ in age, size, geographical location, or other important characteristics influencing demography. When population structure is finite-dimensional (i.e. a finite number of age classes, stages, geographical locations), multi-type branching processes serve as the stochastic counterpart of matrix models and, consequently, are used extensively in stochastic demography~\citep{harris-63,athreya-ney-04,caswell-01,haccou-etal-05}. These stochastic models have used to understand fixation probabilities of beneficial alleles~\citep{patwa-wahl-08},evolutionary emmergence of pathogens~\citep{antia-etal-03,ptrb-13}, extinction risk of small populations~\citep{boyce-92,gosselin-lebreton-00,fujiwara-caswell-01,erickson-etal-15}, and establishment success in heterogenous environments~\citep{haccou-iwasa-96,haccou-vatunin-03,amnat-09b}.
 
-When collecting demographic data, one commonly makes continuous measurements (e.g. mass, length, geographical location) about individuals, as well as discrete measurements. Integral projection models (IPMs) allow one to account for this continuous population structure~\citep{easterling-etal-00}.These IPMs correspond to infinite-dimensional matrix models which are numerically approximated by finite-dimensional matrix models. Consequently, many of the standard demographic concepts and methods for matrix models (e.g. stable state distributions, reproductive values, life table response experiments, sensitivity analysis) extend to IPMs~\citep{easterling-etal-00,rees-ellner-09,metcalf-etal-13,rees-etal-14,merow-etal-14}.
+To parameterize matrix models or mutli-type branching procsess, individuals must be discretely categorized into a finite number of types. However, when collecting demographic data, researchers commonly makes continuous measurements (e.g. mass, length, geographical location) about individuals, as well as discrete measurements. Integral projection models (IPMs) allow one to account for this continuous population structure~\citep{easterling-etal-00}.These IPMs can be viewed as infinite-dimensional matrix models which are numerically approximated by finite-dimensional matrix models. Consequently, many of the standard demographic concepts and methods for matrix models (e.g. stable state distributions, reproductive values, life table response experiments, sensitivity analysis) extend to IPMs~\citep{easterling-etal-00,rees-ellner-09,coulson-12,metcalf-etal-13,rees-etal-14,merow-etal-14}.
 
-Here, we describe individual-based counterparts of IPMs by making use of the theory of continuous-state branching processes~\citep{harris-63}. We present a new analytical method for computing extinction probabilities for these individual-based IPMs. These methods are easily implemented numerically and circumvent running individual-based simulations to examine how extinction probabilities depend on continuous or discrete population structure. We illustrate the application of these methods with an individual-based IPM of the endangered alpine plant \emph{Dracocephalum ausriacum} based on a mean-field IPM developed by \citet{nicole-etal-11}.
+Here, we describe individual-based counterparts of IPMs using continuous-state branching processes~\citep{harris-63}. We present an analytical method for computing extinction probabilities for these individual-based IPMs. As these methods are easily implemented numerically, they circumvent the need to use individual-based simulations and allow one to efficiently study how extinction probabilities depend on continuous or discrete population structure. We illustrate the application of these methods with an individual-based IPM of the endangered alpine plant \emph{Dracocephalum ausriacum} using a mean-field IPM developed by \citet{nicole-etal-11}.
 
 
 \section*{The General Models and Methods}
 
 
 \subsection*{The Individual Based IPM}
-We consider an individual-based model where the set of all possible individual states (e.g. age, size, geographical location, etc.) lies in a compact metric space $X$. For example, for the standard size-structured IPM, $X=[a,b]$ corresponds to the range of sizes measured in the field. For models with a mixture of age and size structure, $X$ could be given by $\{1,\dots,T\}\times [a,b]$ where $T$ corresponds to the maximal age of an individual.
+We consider an individual-based model where the set of all possible individual states (e.g. age, size, geographical location, etc.) lies in a compact metric space $X$. For the standard size-structured IPM, $X=[a,b]$ corresponds to the range of sizes measured in the field. For models with a mixture of age and size structure, $X$ could be given by $\{1,\dots,T\}\times [a,b]$ where $T$ corresponds to the maximal age of an individual.
 
-Following \citet{harris-63},  we consider finite populations in which the state of the population at any point of the time is characterized by the different states $(x_1,x_2,\dots, x_k)$  of individuals within the population and how many individuals there are of each these states $(n_1,n_2,\dots, n_k)$. Specifically, if there $n_1$ individuals in state $x_1$, $n_2$ individuals in state $x_2$,..., $n_k$ individuals in state $x_k$, then the state of the population is given by $\s=(n_1,n_2,\dots, n_k; x_1,x_2,\dots, x_k)$. The set of all possible population states is
+Following \citet{harris-63},  we consider finite populations in which the state of the population at any point of the time is characterized by the different states $(x_1,x_2,\dots, x_k)$  of individuals within the population and the number of individuals in each state $(n_1,n_2,\dots, n_k)$. Specifically, if there $n_1$ individuals in state $x_1$, $n_2$ individuals in state $x_2$,..., $n_k$ individuals in state $x_k$, then the state of the population is given by $\s=(n_1,n_2,\dots, n_k; x_1,x_2,\dots, x_k)$. The set of all possible population states is
 \[
 \S= \{(\n,\x)=(n_1,\dots, n_k, x_1\dots , x_k): k,n_i\in \N, x_i \in X\} \cup \{0\}
 \]
@@ -51,17 +51,17 @@ The update rule for an individual in state $x$ is given by a probability measure
 \[
 \P[\s_1\in A| \s_0 =(1,x)]=\int_A m(x,d\s)
 \]
-where the left hand side reads ``the probability the population state lies $A$ at time $t=1$ after initially having only one individual in state $x$." If the population state is currently $\s_t=(n_1,\dots,n_k,x_1,\dots,x_k)$, then the state $\s_{t+1}$ is determined as follows:
+where the left hand side reads ``the probability the population state lies $A$ at time $1$ after initially having only one individual in state $x$ at time $0$." If the population state is currently $\s_t=(n_1,\dots,n_k,x_1,\dots,x_k)$, then the state $\s_{t+1}$ is determined as follows:
 \begin{enumerate}
-\item for each of the $n_1$ individuals in state $x_1$, randomly and independently choose the number of replacement individuals from distribution $m(x_1,d\,\s)$.
-\item repeat step 1. for the states $x_2,\dots, x_k$.
+\item for each of the $n_1$ individuals in state $x_1$, randomly and independently choose the number of replacement individuals from distribution $m(x_1,d\,\s)$,
+\item repeat step (1) for the states $x_2,\dots, x_k$, and
 \item determine the new population state $\s_{t+1}$ by identifying the states of all individuals and counting the total number of individuals in each of these states.
 \end{enumerate}
-This iterative algorithm can be used to create individual based simulations of the individual based IPM. As with any branching process, stochastic realizations of this process, with probability one, either go to extinction in finite time, or the population size grows without bound.
+This iterative algorithm can be used to create individual based simulations of the individual based IPM. As with any branching process, stochastic realizations of this process, with probability one, either go to extinction in finite time, or the population size grows without bound. This latter event is typically interpreted as a population becoming established and persisting.
 
 \subsection*{Probability generating functionals and extinction probabilities}
 
-We can characterize the probabilistic state of the system using probability generating functionals $\Psi$ (pgfs). Unlike moment generating functionals as used by \citet{harris-63}, the pgfs allow us to compute how extinction probabilities change in time as well as compute asymptotic extinction probabilities.
+We can characterize the probabilistic state of the system using probability generating functionals $\Psi$ (pgfs). Unlike moment generating functionals as used by \citet{harris-63}, the pgfs allow us to directly compute how extinction probabilities change in time as well as compute asymptotic extinction probabilities.
 
 To define the pgf $\Psi$, we introduce the following notation: given a continuous function $h:X\to\R$ and $\s\in \S$, let
 \[
@@ -73,16 +73,16 @@ h^\s=
 \end{array}
 \right.
 \]
-THe probability generation functional is defined by
+The probability generation functional is defined by
 \begin{equation}\label{*}
 \Psi(h)(x)=\int h^\s \,m(x,d\s).
 \end{equation}
 $\Psi(h)(x)$ corresponds to the expected value of $h^\s$ due to the contributions of individuals in the next time step from an individual in state $x$. This expected value requires integrating over all possible populations states in the next time step.
 
 The utility of $\Psi$ for computing extinction probabilities follows from two facts. First, the definition of $\Psi$ implies that if $h_0$ is the zero function (i.e. $h_0(x)=0$ for all $x$), then
-\[
+\begin{equation}\label{star}
 \Psi(h_0)(x)=\int 1 \,m(d\s,x)= \P[\s_1=0|\s_0=(1,x)]
-\]
+\end{equation}
 is the probability the population goes extinct in one time step given that initially it consisted of one individual is state $x$. For the second fact, define
 \[
 \Psi^t(h)=\underbrace{\Psi(\Psi(\dots \Psi}_{\mbox{$t$ times}}(h)\dots))
@@ -91,7 +91,7 @@ to be the $t$-fold composition of $\Psi$ with itself. We claim that
 \begin{equation}\label{**}
 \Psi^t(h_0)(x)=\P[\s_t=0|\s_0=(1,x)]=:E_t(x)
 \end{equation}
-is the probability of extinction by time $t$ given that the population initially consisted of one individual in state $x$. To verfiy this claim, we argue by induction. The first fact about pgfs implies that equation \eqref{**} holds for $t=1$. Now suppose that equation \eqref{**} holds for $t$, we will show it holds for $t+1$.  On the event that $\s_1=(n_1,\dots,n_k,x_1,\dots,x_k)$ is the population state at time $1$, extinction occurs by time $t+1$ only if each of the lineages of the $n_1+\dots +n_k$ individuals go extinct in the next $t$ time steps. As the fates of these lineages are independent of one another, it follows that
+is the probability of extinction by time $t$ given that the population initially consisted of one individual in state $x$. To verfiy this claim, we argue by induction. Equation~\ref{star} implies that equation \eqref{**} holds for $t=1$. Now suppose that equation \eqref{**} holds for $t$, we will show it holds for $t+1$.  On the event that $\s_1=(n_1,\dots,n_k,x_1,\dots,x_k)$ is the population state at time $1$, extinction occurs by time $t+1$ only if each of the lineages of the $n_1+\dots +n_k$ individuals go extinct in the next $t$ time steps. As the fates of these lineages are independent of one another, it follows that
 \[
 \begin{aligned}
 \P[s_{t+1}=0|\s_0=(1,x),\s_1=(n_1,\dots,n_k,x_1,\dots,x_k)]&= \prod_{i=1}^k \P[\s_t=0|\s_0=(1,x_i)]^{n_i}\\
@@ -105,16 +105,16 @@ E_t(x)=\P[s_{t+1}=0|\s_0=(1,x)]=\int [\Psi^t(h_0)]^\s \,m(d\s,x)
 which, by definition, equals $\Psi^{t+1}(h_0)(x)$ as claimed.
 
 Equation \eqref{**} can be used to compute extinction probabilities iteratively. Furthermore, as individuals update independent of one another, the probability of the population going extinct by time $t$ for any initial condition $\s=(n_1,\dots,n_k,x_1,\dots,x_k)$ equals
-\[
+\begin{equation}{starstar}
 \P[\s_t=0|\s_0=\s]=E_t^\s.
-\]
+\end{equation}
 These analytic expressions allow us to efficiently compute extinction probabilities by constructing a numerical approximation of the pgf $\Psi$ and iterating it with an initial condition of a zero vector which corresponds to the numerical approximation of the zero function.
 
 As $E_0(x)\le E_1(x),\le E_2(x)\dots$ for any $x\in X$ and $E_t(x)\le 1$ for all $t$, there is a well defined limit corresponding to the probability of eventual extinction:
 \[
 E_\infty(x):=\lim_{t\to\infty} E_t(x).
 \]
-Using moment generating functionals and suitable technical hypotheses, \citet{harris-63} showed that $E_\infty(x)<1$ for all $x$ if the dominant eigenvalue of the mean-field IPM is greater than one, and $E_\infty(x)=1$ for all $x$ otherwise.
+Using moment generating functionals with suitable technical hypotheses, \citet{harris-63} showed that $E_\infty(x)<1$ for all $x$ if the dominant eigenvalue of the mean-field IPM is greater than one, and $E_\infty(x)=1$ for all $x$ otherwise.
 
 \section*{An Illustration with an Endangered Plant Species}
 
@@ -122,11 +122,11 @@ We illustrate these general methods for an individual-based IPM  for the endange
 
 If $N_t(x)$ denotes the density of individuals of size $x$ in year $t$, then \citet{nicole-etal-11} used an IPM of the form
 \[
-N_{t+1}(x)=\int_a^b s(y)G(y,x)+e(x)p(y)f(y)N_t(y)\,dy
+N_{t+1}(x)=\int_a^b \left[ s(y)G(y,x)+e(x)p(y)f(y)N_t(y)\right]\,dy
 \]
 where $s(y)$ is the probability of surviving to the next year for individuals of size $y$, $G(y,x)dy$ is the infinitesimal probability that a surviving individual of size $y$ is size $x$ in the next year, $p(y)$ is the probability that an individual of size $y$ flowers, $f(y)$ is the mean number of offspring produced by an individual of size $y$, and $e(x)$ is the infinitesimal probability of an offspring is of size $x$ at the time of the annual census.
 
-Following \citet{nicole-etal-11}, we used generalized linear models (GLMs) to select functional forms for each of the demographic kernels. Computations were performed using the GLM package for R \citep{R-15}. Specifically, we used logistic regression (i.e. a GLM with the binomial family) for determining $s(y)$ and $p(y)$, a GLM with the Poisson family for modelling $f(y)$, and modeled  $e(y)$ using a normal distribution whose mean and variance where determined by the empirical distribution of germinants. For the growth kernel, linear regression determined the expected size of an individual in the next year and the actual size was assumed to be normally distributed about this mean. Figure 1 shows the data and fits for $s(y)$, $G(y,x)$, $p(x)$ and $f(x)$.
+Following \citet{nicole-etal-11}, we used generalized linear models (GLMs) to select functional forms for each of the demographic kernels. Computations were performed using the GLM package for R \citep{R-15}. Specifically, we used logistic regression (i.e. a GLM with the binomial family) for determining $s(y)$ and $p(y)$, a GLM with the Poisson family for modelling $f(y)$, and modeled  $e(y)$ using a normal distribution whose mean and variance where determined by the empirical distribution of germinants. For the growth kernel, linear regression determined the expected size of an individual in the next year and the actual size was assumed to be normally distributed about this mean. The variance of this normal distribution, for simplicity, was assumed to be independent of the current size of an individual. Figure 1 shows the data and fits for $s(y)$, $G(y,x)$, $p(x)$ and $f(x)$.
 
 
 
@@ -193,9 +193,9 @@ Putting together the two pieces, we get the desired pgf $\Psi$:
 
 \subsection*{Numerically Implementing and Using the pgf $\Psi$}
 
-To approximate $\Psi$ numerically, we discretize the size interval $[\alpha,\beta]$ using $n$ equal sized intervals of width $dx=(\beta-\alpha)/n$. To use the midpoint rule to approximate the integrals, we created a vector $xs$ corresponding to the midpoints of these intervals. Using this vector we discretized the survival function as a vector $s.vec=s(xs)$, the growth kernel as a matrix using the outer product $g.mat=outer(xs,xs,g)$, the probability of flowering function as a vector $p.vec=p(xs)$, the fecundity function as a vector $f.vec=f(xs)$, and the offspring size distribution as a vector $e.vec=e(xs)$.
+To approximate $\Psi$ numerically, we discretize the size interval $[0,2b]$ using $n$ equal sized intervals of width $dx=(2b)/n$. To use the midpoint rule to approximate the integrals, we created a vector $xs$ corresponding to the midpoints of these intervals. Using this vector we discretized the survival function as a vector $s.vec=s(xs)$, the growth kernel as a matrix using the outer product $g.mat=outer(xs,xs,g)$, the probability of flowering function as a vector $p.vec=p(xs)$, the fecundity function as a vector $f.vec=f(xs)$, and the offspring size distribution as a vector $e.vec=e(xs)$.
 
-For the previously described methods to work, it is critical that column sums for $g.mat$ and the sum of $e.vec$ equal one. For most IPMs, this will not occur automatically due to individuals being evicted from the size interval $[\alpha,\beta]$. There are a variety of ways to handle this issue~\citep{williams-etal-12}. As the  offspring size vectors nearly summed to one, we simply re-normalized it so that it summed to one. For the growth matrix, we treated eviction as mortality to be consistent with \citet{nicole-etal-11}. To do this, we took one minus the column sums and subtracted them from the survival vector and then normalized the column sums so that they added to one. When taking the product of survival and growth, the mean-field IPM is unaffected by this change.
+For the previously described methods to work, it is critical that column sums for $g.mat$ and the sum of $e.vec$ equal one. For most IPMs, this will not occur automatically due to individuals being evicted from the size interval $[0,2b]$. There are a variety of ways to handle this issue~\citep{williams-etal-12}. As the  offspring size vectors nearly summed to one, we simply re-normalized it so that it summed to one. For the growth matrix, we treated eviction as mortality to be consistent with \citet{nicole-etal-11}. To do this, we took one minus the column sums and subtracted them from the survival vector and then normalized the column sums so that they added to one. When taking the product of survival and growth, the mean-field IPM is unaffected by this change.
 
 Using these discretized demographic components and the pgf $\phi(x,s)=\exp(-f(x)(s-1))$ for fecundity, we get the discretized pgf $\Psi$ is given by
 \[
@@ -254,7 +254,7 @@ return(output)
 @
 
 
-Iterating $\Psi$ yields how extintion probabilities $E_t(x)$ vary with time, as illustrated in Figure 2. Intuitively, this figure illustrates that the probability of extinction decreases with the size of individual initially founding the population, and that extinction probabilities increase over time. Furthermore, the $E_t(x)$ over time are approaching limiting extinction probabilities $E_{\infty}(x)$ which are less than one. This stems from the fact that the dominant eigenvalue of the mean-field IPM is greater than one. To estimate this asymptotic probability of extinction we  iterated $\Psi$ until a tolerance condition is met e.g. $|E_{t+1}(x)-E_t(x)|\le 0.0001$ for all $x$ (see think black curve in Figure 2).
+Iterating $\Psi$ yields how extintion probabilities $E_t(x)$ vary with time, as illustrated in Figure 2. Intuitively, this figure illustrates that the probability of extinction decreases with the size of individual initially founding the population, and that extinction probabilities increase over time. Furthermore, the $E_t(x)$ over time are approaching limiting extinction probabilities $E_{\infty}(x)$ which are less than one. This stems from the fact that the dominant eigenvalue of the mean-field IPM is greater than one. To estimate this asymptotic probability of extinction we  iterated $\Psi$ until a tolerance condition is met e.g. $|E_{t+1}(x)-E_t(x)|\le 0.0001$ for all $x$ (see thick gray curve in Figure 2).
 
 
 
@@ -264,14 +264,14 @@ out=Psi.iterate(T)
 times=c(1,5,10,25,30,40)+1
 par(cex.lab=1.25,cex.axis=1.25)
 matplot(xs,t(out[times,]),xlim=c(alpha,beta),type="l",lty=1,xlab="size",ylab="extinction probabilities",bty="n",lwd=2)
-legend("topright",c(as.character(times-1),expression(Inf)),col=c(1:length(times),"black"),lty=1,lwd=c(rep(2,length(times)),5),bty="n")
+legend("topright",c(as.character(times-1),expression(Inf)),col=c(1:length(times),rgb(0,0,0,0.5)),lty=1,lwd=c(rep(2,length(times)),5),bty="n")
 # adding the asymptotic extinction probability
 h=AE()
-lines(xs,h,type="l",lwd=5,xlim=c(alpha,beta))
+lines(xs,h,type="l",lwd=5,xlim=c(alpha,beta),col=rgb(0,0,0,0.5))
 #legend("topleft","A",bty="n",cex=1.25)
 @
 
-To scale things up to an entire population initially in state $\s_0$, recall that the extinction probability at time $t$ is $E_t^{\s_0}$. Figure illustrates how the extinction probabilities over time vary for a population with initially $100$ individuals of the smallest size $\alpha$ (i.e. $\s_0=(\alpha,100)$) versus a population with $5$ or $6$ individuals of the  size $\beta/2$ (i.e $\s_0=(\beta/2,5)$ or $(\beta/2,6)$. Figure 2 suggests that, from the extinction risk perspective, about $5$ or $6$ larger individuals are equivalent to $100$ of the smallest individuals. These types of comparisons may be particularly useful when trying to assess whether planting small or larger individuals are more effective for establishment success.
+To scale things up to an entire population initially in state $\s_0$, recall that the extinction probability at time $t$ is $E_t^{\s_0}$. Figure illustrates how the extinction probabilities over time vary for a population with initially $100$ individuals of the smallest size $\alpha$ (i.e. $\s_0=(\alpha,100)$) versus a population with $5$ or $6$ individuals of the  size $\beta/2$ (i.e $\s_0=(\beta/2,5)$ or $(\beta/2,6)$. Figure 2 suggests that, from the extinction risk perspective, about $6$ larger individuals are equivalent to $100$ of the smallest individuals. These types of comparisons may be particularly useful when trying to assess whether planting small or larger individuals are more effective for establishment success.
 
 <<IBIPM-plots3, fig.width=6, fig.height=4,echo=FALSE,fig.cap="Extinction probabilities as a function of time for populations of different sizes and compositions.">>=
 T=75
@@ -291,21 +291,23 @@ legend("topleft",c("100 small","6 large","5 large"),lty=1:3,col=1:3,lwd=3,bty="n
 legend("topright","B",bty="n",cex=1.25)
 @
 
-We also used the data from $2001$ to see how extinction risk over different time frames depends on the size and composition of the population. Specifically, we computed extinction risk over $5$ and $50$ year periods for $100$ random samples (per sample size) of $2001$ size distribution (Figure 3). This figure illustrates that $\log$ extinction risk decreases, on average, linearly with the sample size and is, on average, greater for the $50$ year period than the $5$ year period. However, for smaller sample sizes, there is overlap in the distributions of extinction times for the $5$ and $50$ year time frames. This overlap stems from  samples of mostly large individuals being more likely to persist at least $50$ years than samples of mostly small individuals persisting at least $5$ years. Interestingly, variation in the extinction times across samples is consistently greater over the $5$ year period than the $50$ year period.
+We also used the data from $2001$ to see how extinction risk over different time frames depends on the size and composition of the population. Specifically, for different population sizes $N$, we randomly sampled $N$ individuals from the 2001 data and computed extinction risk of this sampled population over $5$ and $50$ year periods (Figure 3). For population size, we considered $500$ random samples of size $N$. Figure 3A illustrates that $\log$ extinction risk decreases, on average, linearly with the sample size and is, on average, greater for the $50$ year period than the $5$ year period. However, for smaller sample sizes, there is overlap in the distributions of extinction times for the $5$ and $50$ year time frames. This overlap stems from  samples of mostly large individuals being more likely to persist at least $50$ years than samples of mostly small individuals persisting at least $5$ years. Interestingly, variation in the extinction times across samples is consistently greater over the $5$ year period than the $50$ year period. Figure 3B illustrates that mean size of an individual within the population has a strong negative correlation with (log) extinction probability, and the slope of this correlation is steeper over shorter time frames than longer time frames.
 
 
 
 
-<<IBIPM-plots4,cache=TRUE, fig.width=6, fig.height=4,echo=FALSE,fig.cap="Extinction probabilities for populations of different sizes sampled for the $2001$ size distribution data. For each population size $N$, extinction probablities by year $5$ and year $50$ were calculated for $500$ samples of size $N$.">>=
+<<IBIPM-plots4,cache=TRUE, fig.width=7, fig.height=4,echo=FALSE,fig.cap="Extinction probabilities for populations of different sizes sampled for the $2001$ size distribution data. For each population size $N$, extinction probablities by year $5$ and year $50$ were calculated for $500$ samples of size $N$. In A, extinction probability is plotted as a box plot for different population sizes and different time frames. In B, extinction probability is plotted against the mean size of an individual for a population size $N=25$.">>=
 sizes=data$size[1:400] # empirical data
 T=51
 T2=5
 sample.sizes=5*(1:5)
 no.samples=500
 stuff=c()
+mean.size=c()
 stuff2=c()
 temp=numeric(no.samples)
 temp2=temp
+temp3=temp
 for(j in 1:length(sample.sizes)){
 for(i in 1:no.samples){
 sampling=sample(sizes,size=sample.sizes[j])
@@ -314,19 +316,27 @@ N=c(0,out2$counts)
 out=PVA(N,T)
 temp[i]=out[T+1]
 temp2[i]=out[T2+1]
+temp3[i]=mean(sampling)
 }
 stuff=cbind(stuff,temp)
 stuff2=cbind(stuff2,temp2)
+mean.size=cbind(mean.size,temp3)
 }
-par(cex.lab=1.25,cex.axis=1.25)
-boxplot(log10(stuff),notch=FALSE,names=sample.sizes,col="white",range=0,xlab="population size",ylab=expression(paste(log[10]," extinction probability")),ylim=c(min(log10(stuff2)),max(log10(stuff))))
+par(cex.lab=1.25,cex.axis=1.25,mfrow=c(1,2),mar=c(4.5,4.5,1,1))
+boxplot(log10(stuff),notch=FALSE,names=sample.sizes,col="lightgray",range=0,xlab="population size",ylab=expression(paste(log[10]," extinction probability")),ylim=c(min(log10(stuff2)),max(log10(stuff))))
 boxplot(log10(stuff2),notch=FALSE,names=sample.sizes,col="pink",range=0,add=TRUE)
 legend("bottomleft",c("in 5 years","in 50 years"),pch=22,pt.bg=c("pink","white"),cex=1.25,bty="n")
+legend("topright","A",bty="n",cex=1.25)
+par(mar=c(4.5,2.25,1,2.25))
+i=5;plot(mean.size[,i],log10(stuff[,i]),ylim=c(min(log10(stuff2[,i])),max(log10(stuff[,i]))),xlab="mean size of an individual",ylab="",pch=20,col="lightgray");points(mean.size[,i],log10(stuff2[,i]),pch=20,col="pink")
+legend("bottomleft",c("in 5 years","in 50 years"),pch=c(20,20),col=c("pink","lightgray"),cex=1.25,bty="n")
+legend("topright","B",bty="n",cex=1.25)
+legend("center","population size = 25",bty="n",cex=1.25)
 @
 
 \section*{Recommendations, Extensions, and Future Challenges}
 
-To implement the methods presented here, there are two main steps. First, one needs to identify the main demographic processes of the population, the order in which these processes occur relative to the censuses used for data collection, and develop the statistical models for the each of the demographic processes. \citet{rees-etal-14} and \citet{merow-etal-14} provide excellent reviews on the philosophical and methodological issues associated with this step for mean-field IPMs. Unlike these mean-field IPMs, individual-based IPMs require complete distributional information associated with fecundity. As with other areas of stochastic demography, the shapes, not just the means, of these distributions may have significant effects on the likelihood of extinction or establishment success. Hence, it is best to examine several options (e.g. Poisson versus negative Binomial versus zero-inflated distributions) to identify which distribution does a better job of describing the fecundity data. As in all areas of modeling, if there is signficant uncertainity about the ``best'' model , then perform the analyses with each of the alternative fecundity distributions to identify the sensitivity of predictions of extinction risk to these alternatives.
+To implement the methods presented here, there are two main steps. First, one needs to identify the main demographic processes of the population, the order in which these processes occur relative to the censuses used for data collection, and develop the statistical models for the each of the demographic processes. \citet{rees-etal-14} and \citet{merow-etal-14} provide excellent reviews on the philosophical and methodological issues associated with this step for mean-field IPMs. Typically, whenever a study has sufficient data for constructing the mean-field IPM, there is no need to collect any additional data to build the individual-based IPM.  Rather, the individual-based IPMs make use of the complete distributional information associated with fecundity. As with other areas of stochastic demography, the shapes, not just the means, of these distributions may have significant effects on the likelihood of extinction or establishment success. Hence, it is best to examine several options (e.g. Poisson versus negative Binomial versus zero-inflated distributions) to identify which distribution does a better job of describing the fecundity data. As in all areas of modeling, if there is signficant uncertainity about the ``best'' model , then perform the analyses with each of the alternative fecundity distributions to identify the sensitivity of predictions of extinction risk to these alternatives.
 
 The second step, the focus of this paper, involves constructing the probability generating functional $\Psi$. For the uninitiated, this step may be intimidating. However, there are a three basic principles that simplify this construction. First, while this pgf $\Psi$ takes functions to functions, one shoud focus on writing down $\Psi(h)(x)$ which involves understanding the contributions of a single individual of size $x$ to the next census. Second, one can often can break up these contributions into a sum of independent contributions, find the pgfs associated with these simpler contributions, and then use the two fundamental properities of pgfs to ``stitch" together $\Psi$. Third, the distributions used to describe the number of offspring produced by an individual typically involve random variables (e.g. Poisson, negative binomial) for which their associated pgf is well-known and can be found easily e.g. Wikipedia. Finally, whenever in doubt, find a collaborator that you trust to put the pieces together correctly.
 
@@ -340,6 +350,9 @@ where $h_0$, as before, is the zero function. Note that the composition here is 
 Despite this relatively straightforward extension to temporally variable environments, many challenges remain. From the computational perspective, finding the efficient methods to deal with multi-dimensional states variables (e.g. size and location, or multi-dimensional traits) continues to be a challenge, as it is for mean-field IPMs. While the analytical methods presented here cover multi-dimensional state variables, their numerical implementation involves approximating mutli-dimensional integrals which can be computationally expensive. From the analytical perspecitve, accounting for temporal correlations in individual growth or reproductive rates (e.g. individuals that grew larger than expected in one year being more likely to grow larger than expected in the next year) or correlations among individuals are particularly important challenges as strong correlations likely have large effects on extinction risk.
 Finally, and perhaps most importantly, the  manners in which size-structured demography may shape extinction risk for real-world population remains to be understand. One might hope that by applying these methods to the many data sets for which IPMs have been developed, as well as future data sets, might provide a computationally efficient means to explore how size-structure for populations differing in their evolutionary history and environmental context influences their vulnerability to extinction.
 
+% Acknowldegements: Thanks to Jacob Moore for several excellent suggestions including the addition of Figure 3B.
+
 \bibliography{seb}
+
 
 \end{document}
