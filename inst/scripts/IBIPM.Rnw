@@ -105,7 +105,7 @@ E_t(x)=\P[s_{t+1}=0|\s_0=(1,x)]=\int [\Psi^t(h_0)]^\s \,m(d\s,x)
 which, by definition, equals $\Psi^{t+1}(h_0)(x)$ as claimed.
 
 Equation \eqref{**} can be used to compute extinction probabilities iteratively. Furthermore, as individuals update independent of one another, the probability of the population going extinct by time $t$ for any initial condition $\s=(n_1,\dots,n_k,x_1,\dots,x_k)$ equals
-\begin{equation}{starstar}
+\begin{equation}\label{starstar}
 \P[\s_t=0|\s_0=\s]=E_t^\s.
 \end{equation}
 These analytic expressions allow us to efficiently compute extinction probabilities by constructing a numerical approximation of the pgf $\Psi$ and iterating it with an initial condition of a zero vector which corresponds to the numerical approximation of the zero function.
@@ -181,7 +181,7 @@ Thus, we get the pgf associated with a flowering individual is
 \]
 To get the pgf for flowering and non-flowering contributions to fecundity, we observe that fecundity contributions of an individual of size $x$ is given by the sum of a Bernoulli number of flowering individuals where the probability of success is $p(x)$. By the \textbf{Fundamental Property 2}, we need to compose the pgf of a Bernoulli, which is $\theta(s)=1-p(x)+p(x)s$ where $s$ is the dummy variable, with the pgf of a flowering individual. This composition yields
 \[
-\Psi_f (h)(x)=\theta(\Psi_{flower}(h)(x))=1-p(x)+p(s)\phi(x,\int h(y)e(y)dy).
+\Psi_f (h)(x)=\theta(\Psi_{flower}(h)(x))=1-p(x)+p(x)\phi(x,\int h(y)e(y)dy).
 \]
 
 
