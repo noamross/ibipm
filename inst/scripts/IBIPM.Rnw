@@ -195,7 +195,7 @@ Putting together the two pieces, we get the desired pgf $\Psi$:
 
 To approximate $\Psi$ numerically, we discretize the size interval $[0,2b]$ using $n$ equal sized intervals of width $dx=(2b)/n$. To use the midpoint rule to approximate the integrals, we created a vector $xs$ corresponding to the midpoints of these intervals. Using this vector we discretized the survival function as a vector $s.vec=s(xs)$, the growth kernel as a matrix using the outer product $g.mat=outer(xs,xs,g)$, the probability of flowering function as a vector $p.vec=p(xs)$, the fecundity function as a vector $f.vec=f(xs)$, and the offspring size distribution as a vector $e.vec=e(xs)$.
 
-For the previously described methods to work, it is critical that column sums for $g.mat$ and the sum of $e.vec$ equal one. For most IPMs, this will not occur automatically due to individuals being evicted from the size interval $[0,2b]$. There are a variety of ways to handle this issue~\citep{williams-etal-12}. As the  offspring size vectors nearly summed to one, we simply re-normalized it so that it summed to one. For the growth matrix, we treated eviction as mortality to be consistent with \citet{nicole-etal-11}. To do this, we took one minus the column sums and subtracted them from the survival vector and then normalized the column sums so that they added to one. When taking the product of survival and growth, the mean-field IPM is unaffected by this change.
+For the previously described methods to work, it is critical that column sums for $g.mat$ and the sum of $e.vec$ equal one. For most IPMs, this will not occur automatically due to individuals being evicted from the size interval $[0,2b]$. There are a variety of ways to handle this issue~\citep{williams-etal-12}. As the  offspring size vectors nearly summed to one, we simply re-normalized it so that it summed to one. For the growth matrix, we treated eviction as mortality which is consistent with most eviction events corresponding to growing to a negative size. To do this, we took one minus the column sums and subtracted them from the survival vector and then normalized the column sums so that they added to one. When taking the product of survival and growth, the mean-field IPM is unaffected by this change.
 
 Using these discretized demographic components and the pgf $\phi(x,s)=\exp(-f(x)(s-1))$ for fecundity, we get the discretized pgf $\Psi$ is given by
 \[
@@ -331,7 +331,7 @@ par(mar=c(4.5,2.25,1,2.25))
 i=5;plot(mean.size[,i],log10(stuff[,i]),ylim=c(min(log10(stuff2[,i])),max(log10(stuff[,i]))),xlab="mean size of an individual",ylab="",pch=20,col="lightgray");points(mean.size[,i],log10(stuff2[,i]),pch=20,col="pink")
 legend("bottomleft",c("in 5 years","in 50 years"),pch=c(20,20),col=c("pink","lightgray"),cex=1.25,bty="n")
 legend("topright","B",bty="n",cex=1.25)
-legend("center","population abundance = 25",bty="n",cex=1.25)
+legend("center","population abundance\n            = 25",bty="n",cex=1.25)
 @
 
 \section*{Recommendations, Extensions, and Future Challenges}
