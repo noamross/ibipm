@@ -258,7 +258,7 @@ Iterating $\Psi$ yields how extinction probabilities $E_t(x)$ vary with time, as
 
 
 
-<<IBIPM-plots2, fig.width=6, fig.height=4,echo=FALSE,fig.cap="Extintion probabilities for a population consisting of a single individual of size $x$. Different curves corresond to extintion in different number of years.">>=
+<<IBIPM-plots2, fig.width=6, fig.height=4,echo=FALSE,fig.cap="Extinction probabilities for a population consisting of a single individual of size $x$. Different curves correspond to extinction in different number of years.">>=
 T=100
 out=Psi.iterate(T)
 times=c(1,5,10,25,30,40)+1
