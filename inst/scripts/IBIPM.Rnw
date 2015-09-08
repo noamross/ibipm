@@ -18,6 +18,7 @@
 \begin{document}
 \bibliographystyle{plainnat}
 
+
 \title[Extinction in Individual-based IPMs]{Individual-based Integral Projection Models: The role of size-structure on
   extinction risk and establishment success}
 \author{Sebastian J. Schreiber and Noam Ross}
