@@ -24,6 +24,10 @@
 \author{Sebastian J. Schreiber and Noam Ross}
 \address{Department of Evolution and Ecology, One Shields Avenue, University of California, Davis, California 95616}
 \email{sschreiber@ucdavis.edu}
+\address{Current Address: Department of Environmental Science and Policy, University of California, Davis, California 95616}
+\address{Address effective October 1, 2015: EcoHealth Alliance,
+460 West 34th Street – 17th floor, New York, NY 10001  }
+\email{noam.ross@gmail.com }
 \maketitle{}
 
 \section*{Introduction}
@@ -119,17 +123,7 @@ Using moment generating functionals with suitable technical hypotheses, \citet{h
 
 \section*{An Illustration with an Endangered Plant Species}
 
-We illustrate these general methods using an individual-based IPM for the endangered alpine plant, the Austrian Dragonhead (\emph{D. austriacum L.,Lamiaceae}). \emph{D. ausriacum} is a long-lived perennial plant that is listed as Vulnerable by the World Conservation Union.  This illustrative model is an individual-based counterpart of an IPM developed by \citet{nicole-etal-11} for this plant, based on a subset of their data.
-
-In the model, the state $x$ of an individual is the size which corresponds to the logarithm of the product of plant height and number of stems. If $N_t(x)$ denotes the density of individuals of size $x$ in year $t$, then \citet{nicole-etal-11} used an IPM of the form
-\[
-N_{t+1}(x)=\int_a^b \left[ s(y)G(y,x)+e(x)p(y)f(y)N_t(y)\right]\,dy
-\]
-where $s(y)$ is the probability of surviving to the next year for individuals of size $y$, $G(y,x)dy$ is the infinitesimal probability that a surviving individual of size $y$ is size $x$ in the next year, $p(y)$ is the probability that an individual of size $y$ flowers, $f(y)$ is the mean number of offspring produced by an individual of size $y$, and $e(x)$ is the infinitesimal probability of an offspring is of size $x$ at the time of the annual census.
-
-Following \citet{nicole-etal-11}, we used generalized linear models (GLMs) to select functional forms for each of the demographic kernels. Computations were performed using the GLM package for R \citep{R-15}. Specifically, we used logistic regression (i.e. a GLM with the binomial family) for determining $s(y)$ and $p(y)$, a GLM with the Poisson family for modelling $f(y)$, and modeled $e(y)$ using a normal distribution whose mean and variance where determined by the empirical distribution of germinants. For the growth kernel, linear regression determined the expected size of an individual in the next year and the actual size was assumed to be normally distributed about this mean. The variance of this normal distribution, for simplicity, was assumed to be independent of the current size of an individual. Figure 1 shows the data and fits for $s(y)$, $G(y,x)$, $p(x)$ and $f(x)$.
-
-
+We illustrate these general methods using an individual-based IPM for the endangered alpine plant, the Austrian Dragonhead (\emph{D. austriacum L.,Lamiaceae}). \emph{D. ausriacum} is a long-lived perennial plant that is listed as Vulnerable by the World Conservation Union.  This illustrative model is an individual-based counterpart of an IPM developed by \citet{nicole-etal-11} for this plant and \textbf{is based on a subset of their data distributed at the 2012 IPM workshop at the annual meeting of the Ecological Society of America.}
 
 <<boring-plots, fig.width=7, fig.height=5,echo=FALSE,fig.cap="The demographic kernels for Austrian Dragonhead with the corresponding data from Nicole et al. (2011).">>=
 rm (list = ls ())
@@ -149,6 +143,18 @@ lines(xs,flowering(xs),lwd=4,col="blue")
 plot(size.temp,seed.temp,pch=21,bg=rgb(1,0,0,0.5),bty="n",xlab="size",ylab="fecundity")
 lines(xs,fecundity(xs),lwd=2)
 @
+
+In the model, the state $x$ of an individual is the size which corresponds to the logarithm of the product of plant height and number of stems. If $N_t(x)$ denotes the density of individuals of size $x$ in year $t$, then \citet{nicole-etal-11} used an IPM of the form
+\[
+N_{t+1}(x)=\int_a^b \left[ s(y)G(y,x)+e(x)p(y)f(y)N_t(y)\right]\,dy
+\]
+where $s(y)$ is the probability of surviving to the next year for individuals of size $y$, $G(y,x)dy$ is the infinitesimal probability that a surviving individual of size $y$ is size $x$ in the next year, $p(y)$ is the probability that an individual of size $y$ flowers, $f(y)$ is the mean number of offspring produced by an individual of size $y$, and $e(x)$ is the infinitesimal probability of an offspring is of size $x$ at the time of the annual census.
+
+Following \citet{nicole-etal-11}, we used generalized linear models (GLMs) to select functional forms for each of the demographic kernels. Computations were performed using the GLM package for R \citep{R-15}. Specifically, we used logistic regression (i.e. a GLM with the binomial family) for determining $s(y)$ and $p(y)$, a GLM with the Poisson family for modelling $f(y)$, and modeled $e(y)$ using a normal distribution whose mean and variance where determined by the empirical distribution of germinants. For the growth kernel, linear regression determined the expected size of an individual in the next year and the actual size was assumed to be normally distributed about this mean. The variance of this normal distribution, for simplicity, was assumed to be independent of the current size of an individual. Figure 1 shows the data and fits for $s(y)$, $G(y,x)$, $p(x)$ and $f(x)$.
+
+
+
+
 
 The kernels $s(x)$, $G(y,x)$, $p(x)$ and $e(x)$ provide us with all the information that the individual-based IPMs requires for probabilistic updating individuals for survival, growth, flowering or not, and size of germinating individuals at first census. The fecundity kernel $f(y)$, however, only specifies the mean number of offspring produced, but for an individual-based IPM, we need the distribution of the number of offspring produced by an individual. Fortunately, this information is built into the structure of the GLMs, based on the assumptions in our model choice. For example, the fecundity data was modeled using a Poisson family for the GLM.  In which case, the mean number $f(x)$ of offspring also specifies the distribution. More generally, one might use multi-parameter distributions such as a zero inflated Poisson or a negative binomial in which case parameters in addition to the mean are needed to specify the distribution of offspring number.
 
@@ -196,7 +202,7 @@ Putting together the two pieces, we get the desired pgf $\Psi$:
 
 To approximate $\Psi$ numerically, we discretize a larger size interval $[0,2b]$ using $n$ equal sized intervals of width $\Delta x=(2b)/n$. We used the larger size interval of $[0,2b]$ to minimize the effects of eviction (see below). To use the midpoint rule to approximate the integrals, we created a vector $\vec x$ corresponding to the midpoints of these intervals. Using this vector we discretized the survival function as a vector $\vec s=s(\vec s)$, the growth kernel as a matrix using the outer product $G$ of the growth kernel $g$ with $\vec x$, the probability of flowering function as a vector $\vec p=p(\vec x)$, the fecundity function as a vector $\vec f=f(\vec x)$, and the offspring size distribution as a vector $\vec e=e(\vec x)$.
 
-For the previously described methods to work, it is critical that column sums for $g.mat$ and the sum of $e.vec$ equal one. For most IPMs, this will not occur automatically due to individuals being evicted from the size interval $[0,2b]$. There are a variety of ways to handle this issue~\citep{williams-etal-12}. As the  offspring size vectors nearly summed to one, we simply re-normalized it so that it summed to one. For the growth matrix, we treated eviction as mortality which is consistent with most eviction events corresponding to growing to a negative size. To do this, we took one minus the column sums and subtracted them from the survival vector and then normalized the column sums so that they added to one. When taking the product of survival and growth, the mean-field IPM is unaffected by this change.
+For the previously described methods to work, it is critical that column sums for $G$ and the sum of $\vec e$ equal one. For most IPMs, this will not occur automatically due to individuals being evicted from the size interval $[0,2b]$. There are a variety of ways to handle this issue~\citep{williams-etal-12}. As the  offspring size vectors nearly summed to one, we simply re-normalized it so that it summed to one. For the growth matrix $G$, we treated eviction as mortality which is consistent with eviction events typically corresponding to growth to a negative size. To do this, we took one minus the column sums and subtracted them from the survival vector and then normalized the column sums so that they added to one. When taking the product of survival and growth, the mean-field IPM is unaffected by this change.
 
 Using these discretized demographic components and the pgf $\phi(x,s)=\exp(-f(x)(s-1))$ for fecundity, we get the discretized pgf $\Psi$ is given by
 \[
@@ -351,8 +357,8 @@ where $h_0$, as before, is the zero function. Note that the composition here is 
 Despite this relatively straightforward extension to temporally variable environments, many challenges remain. From the computational perspective, finding the efficient methods to deal with multi-dimensional states variables (e.g. size and location, or multi-dimensional traits) continues to be a challenge, as it is for mean-field IPMs. While the analytical methods presented here cover multi-dimensional state variables, their numerical implementation involves approximating mutli-dimensional integrals which can be computationally expensive. From the analytical perspective, accounting for temporal correlations in individual growth or reproductive rates (e.g. individuals that grew larger than expected in one year being more likely to grow larger than expected in the next year) or correlations among individuals are particularly important challenges as strong correlations likely have large effects on extinction risk.
 Finally, and perhaps most importantly, the  manners in which size-structured demography may shape extinction risk for real-world population remains to be understood. One might hope that by applying these methods to the many data sets for which IPMs have been developed, as well as future data sets, might provide a computationally efficient means to explore how size-structure for populations differing in their evolutionary history and environmental context influences their vulnerability to extinction.
 
-% Acknowledgements: Thanks to Jacob Moore for several excellent suggestions including the addition of Figure 4B.
-
+\vskip 0.1in
+\paragraph{\bf Acknowledgements.} We thanks Jacob Moore and William Cuello for providing comments on an earlier draft of this manuscript.
 \bibliography{seb}
 
 
