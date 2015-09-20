@@ -263,7 +263,7 @@ return(output)
 @
 
 
-Iterating $\Psi$ yields how extinction probabilities $E_t(x)$ vary with time, as illustrated in Figure 2. Intuitively, this figure illustrates that the probability of extinction decreases with the size of individual initially founding the population, and that extinction probabilities increase over time. Furthermore, the $E_t(x)$ over time are approaching limiting extinction probabilities $E_{\infty}(x)$ which always equals one. This stems from the fact that the dominant eigenvalue of the mean-field IPM is less than one. To estimate this asymptotic probability of extinction we  iterated $\Psi$ until a tolerance condition is met e.g. $|E_{t+1}(x)-E_t(x)|\le 0.0001$ for all $x$ (see thick gray curve in Figure~\ref{fig:extinction}).
+Iterating $\Psi$ yields how extinction probabilities $E_t(x)$ vary with time, as illustrated in Figure 2. Intuitively, this figure illustrates that the probability of extinction decreases with the size of individual initially founding the population, and that extinction probabilities increase over time. Furthermore, the $E_t(x)$ over time are approaching limiting extinction probabilities $E_{\infty}(x)$ which always equals one. This stems from the fact that the dominant eigenvalue of the mean-field IPM is less than one, consistent with the results of \citet{salguero-etal-12}. To estimate this asymptotic probability of extinction we  iterated $\Psi$ until a tolerance condition is met e.g. $|E_{t+1}(x)-E_t(x)|\le 0.0001$ for all $x$ (see thick gray curve in Figure~\ref{fig:extinction}).
 
 
 
