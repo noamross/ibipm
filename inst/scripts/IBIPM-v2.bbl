@@ -1,5 +1,5 @@
 \def\cprime{$'$}
-\begin{thebibliography}{26}
+\begin{thebibliography}{28}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -9,7 +9,7 @@
 \bibitem[Antia et~al.(2003)Antia, Regoes, Koella, and Bergstrom]{antia-etal-03}
 R.~Antia, R.R. Regoes, J.C. Koella, and C.T. Bergstrom.
 \newblock The role of evolution in the emergence of infectious diseases.
-\newblock \emph{Nature}, 426\penalty0 (6967):\penalty0 658--661, 2003.
+\newblock \emph{Nature}, 426:\penalty0 658--661, 2003.
 
 \bibitem[Athreya and Ney(2004)]{athreya-ney-04}
 K.~B. Athreya and P.~E. Ney.
@@ -33,13 +33,13 @@ D.Z. Childs, M.~Rees, K.E. Rose, P.J. Grubb, and S.P. Ellner.
 \newblock Evolution of size--dependent flowering in a variable environment:
   construction and analysis of a stochastic integral projection model.
 \newblock \emph{Proceedings of the Royal Society of London. Series B:
-  Biological Sciences}, 271\penalty0 (1537):\penalty0 425--434, 2004.
+  Biological Sciences}, 271:\penalty0 425--434, 2004.
 
 \bibitem[Coulson(2012)]{coulson-12}
 T.~Coulson.
 \newblock Integral projections models, their construction and use in posing
   hypotheses in ecology.
-\newblock \emph{Oikos}, 121\penalty0 (9):\penalty0 1337--1350, 2012.
+\newblock \emph{Oikos}, 121:\penalty0 1337--1350, 2012.
 
 \bibitem[Dahlgren and Ehrl\'{e}n(2011)]{dahlgren-ehrlen-11}
 J.P. Dahlgren and J.~Ehrl\'{e}n.
@@ -54,6 +54,12 @@ M.R. Easterling, S.P. Ellner, and P.M. Dixon.
   model.
 \newblock \emph{Ecology}, 81:\penalty0 694--708, 2000.
 
+\bibitem[Ellner and Schreiber(2012)]{tpb-12}
+S.~P. Ellner and S.~J. Schreiber.
+\newblock Temporally variable dispersal and demography can accelerate the
+  spread of invading species.
+\newblock \emph{Theoretical Population Biology}, 82:\penalty0 283--298, 2012.
+
 \bibitem[Erickson et~al.(in press)Erickson, Eager, Beston, and
   Diffendorfer]{erickson-etal-15}
 R.A. Erickson, J.C. Eager, E.A. amd~Stanton, J.A. Beston, and Thogmartin~W.E.
@@ -65,7 +71,7 @@ R.A. Erickson, J.C. Eager, E.A. amd~Stanton, J.A. Beston, and Thogmartin~W.E.
 \bibitem[Fujiwara and Caswell(2001)]{fujiwara-caswell-01}
 M.~Fujiwara and H.~Caswell.
 \newblock Demography of the endangered north atlantic right whale.
-\newblock \emph{Nature}, 414\penalty0 (6863):\penalty0 537--541, 2001.
+\newblock \emph{Nature}, 414:\penalty0 537--541, 2001.
 
 \bibitem[Gosselin and Lebreton(2000)]{gosselin-lebreton-00}
 F.~Gosselin and J.~Lebreton.
@@ -111,12 +117,13 @@ C.J.E. Metcalf, S.M. McMahon, R.~Salguero-G\'{o}mez, and E.~Jongejans.
 \newblock Ipmpack: an r package for integral projection models.
 \newblock \emph{Methods in Ecology and Evolution}, 4:\penalty0 195--200, 2013.
 
-\bibitem[Nicole et~al.(2011)Nicole, Dahlgren, Vivat, Till-Bottraud, and
-  Ehrl\'{e}n]{nicole-etal-11}
-F.~Nicole, J.P. Dahlgren, A.~Vivat, I.~Till-Bottraud, and J.~Ehrl\'{e}n.
-\newblock Interdependent effects of habitat quality and climate on population
-  growth of an endangered plant.
-\newblock \emph{Journal of Ecology}, 99:\penalty0 1211--1218, 2011.
+\bibitem[Metcalf et~al.(2014)Metcalf, McMahon, Salguero-Gomez, Jongejans, and
+  Merow]{IPMpack}
+C.J.E. Metcalf, S.M. McMahon, R.~Salguero-Gomez, E.~Jongejans, and C.~Merow.
+\newblock \emph{IPMpack: Builds and analyses Integral Projection Models
+  (IPMs).}, 2014.
+\newblock URL \url{http://CRAN.R-project.org/package=IPMpack}.
+\newblock R package version 2.1.
 
 \bibitem[Park et~al.(2013)Park, Loverdo, Schreiber, and Lloyd-Smith]{ptrb-13}
 M.~Park, C.~Loverdo, S.J. Schreiber, and J.O. Lloyd-Smith.
@@ -147,6 +154,14 @@ M.~Rees and S.P. Ellner.
 M.~Rees, D.Z. Childs, and S.P. Ellner.
 \newblock Building integral projection models: a user's guide.
 \newblock \emph{Journal of Animal Ecology}, 83:\penalty0 528--545, 2014.
+
+\bibitem[Salguero-G{\'o}mez et~al.(2012)Salguero-G{\'o}mez, Siewert, Casper,
+  and Tielb{\"o}rger]{salguero-etal-12}
+R.~Salguero-G{\'o}mez, W.~Siewert, B.B. Casper, and K.~Tielb{\"o}rger.
+\newblock A demographic approach to study effects of climate change in desert
+  plants.
+\newblock \emph{Philosophical Transactions of the Royal Society B: Biological
+  Sciences}, 367:\penalty0 3100--3114, 2012.
 
 \bibitem[Schreiber and Lloyd-Smith(2009)]{amnat-09b}
 S.J. Schreiber and J.O. Lloyd-Smith.
