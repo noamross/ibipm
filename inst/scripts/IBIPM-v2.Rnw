@@ -358,7 +358,7 @@ Despite this relatively straightforward extension to temporally variable environ
 Finally, and perhaps most importantly, the  manners in which size-structured demography may shape extinction risk for real-world population remains to be understood. One might hope that by applying these methods to the many data sets for which IPMs have been developed, as well as future data sets, might provide a computationally efficient means to explore how size-structure for populations differing in their evolutionary history and environmental context influences their vulnerability to extinction.
 
 \vskip 0.1in
-\paragraph{\bf Acknowledgements.} We thanks William Cuello, Eric Eager, Richard Erickson, and Jacob Moore for providing comments on an earlier draft of this manuscript.
+\paragraph{\bf Acknowledgements.} We thank William Cuello, Eric Eager, Richard Erickson, and Jacob Moore for providing comments on an earlier draft of this manuscript.
 \bibliography{seb}
 
 
