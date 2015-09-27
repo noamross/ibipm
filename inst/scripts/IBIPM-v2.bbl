@@ -1,5 +1,5 @@
 \def\cprime{$'$}
-\begin{thebibliography}{28}
+\begin{thebibliography}{30}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -59,6 +59,17 @@ S.~P. Ellner and S.~J. Schreiber.
 \newblock Temporally variable dispersal and demography can accelerate the
   spread of invading species.
 \newblock \emph{Theoretical Population Biology}, 82:\penalty0 283--298, 2012.
+
+\bibitem[Ellner and Rees(2006)]{ellner-rees-06}
+S.P. Ellner and M.~Rees.
+\newblock Integral projection models for species with complex demography.
+\newblock \emph{American Naturalist}, 167:\penalty0 410--428, 2006.
+
+\bibitem[Ellner and Rees(2007)]{ellner-rees-07}
+S.P. Ellner and M.~Rees.
+\newblock Stochastic stable population growth in integral projection models:
+  theory and application.
+\newblock \emph{Journal of Mathematical Biology}, 54:\penalty0 227--256, 2007.
 
 \bibitem[Erickson et~al.(in press)Erickson, Eager, Beston, and
   Diffendorfer]{erickson-etal-15}

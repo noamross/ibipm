@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99992 (TeX Live 2015) (preloaded format=xelatex 2015.5.24)  20 SEP 2015 16:48
+This is XeTeX, Version 3.14159265-2.6-0.99992 (TeX Live 2015) (preloaded format=xelatex 2015.5.24)  26 SEP 2015 20:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -196,14 +196,14 @@ Overfull \hbox (18.79999pt too wide) in paragraph at lines 204--205
  []
 
 
-Overfull \hbox (18.79999pt too wide) in paragraph at lines 212--212
+Overfull \hbox (18.79999pt too wide) in paragraph at lines 212--213
 [][] 
  []
 
 [6] [7]
 Package color Info: Redefining color shadecolor on input line 261.
 File: figure/extinction-1.pdf Graphic file (type QTm)
- <use  "figure/extinction-1.pdf" >
+ <use  "figure/extinction-1.pdf" > [8]
 Package color Info: Redefining color shadecolor on input line 271.
 File: figure/compare-1.pdf Graphic file (type QTm)
  <use  "figure/compare-1.pdf" >
@@ -211,21 +211,17 @@ Package color Info: Redefining color shadecolor on input line 281.
 File: figure/sampling-1.pdf Graphic file (type QTm)
 
 <use  "figure/sampling-1.pdf" >
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \vbox (badness 2142) has occurred while \output is active []
 
- [8]
-[9] [10]
-Underfull \vbox (badness 2894) has occurred while \output is active []
-
- [11]
-(./IBIPM-v2.bbl [12]
-Underfull \hbox (badness 5637) in paragraph at lines 122--127
+ [9]
+[10] [11] (./IBIPM-v2.bbl [12]
+Underfull \hbox (badness 5637) in paragraph at lines 133--138
 []\OT1/cmr/m/n/12 C.J.E. Met-calf, S.M. McMa-hon, R. Salguero-Gomez, E. Jonge-j
 ans, and C. Merow.
  []
 
 
-Underfull \hbox (badness 6445) in paragraph at lines 122--127
+Underfull \hbox (badness 6445) in paragraph at lines 133--138
 \OT1/cmr/m/it/12 IPM-pack: Builds and anal-y-ses In-te-gral Pro-jec-tion Mod-el
 s (IPMs).\OT1/cmr/m/n/12 , 2014.  URL
  []
@@ -234,12 +230,12 @@ s (IPMs).\OT1/cmr/m/n/12 , 2014.  URL
 Missing character: There is no – in font cmcsc10!
  [13] (./IBIPM-v2.aux) ) 
 Here is how much of TeX's memory you used:
- 2337 strings out of 493706
- 28354 string characters out of 6145769
- 91018 words of memory out of 5000000
- 5506 multiletter control sequences out of 15000+600000
+ 2343 strings out of 493706
+ 28486 string characters out of 6145769
+ 90087 words of memory out of 5000000
+ 5512 multiletter control sequences out of 15000+600000
  12843 words of font info for 50 fonts, out of 8000000 for 9000
  1489 hyphenation exceptions out of 8191
- 34i,8n,32p,1498b,317s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 34i,8n,32p,1498b,323s stack positions out of 5000i,500n,10000p,200000b,80000s
 
 Output written on IBIPM-v2.pdf (13 pages).
