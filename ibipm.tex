@@ -1,4 +1,53 @@
-\documentclass[12pt]{amsart}
+\documentclass[12pt]{amsart}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
 \usepackage{natbib}
 
 \def\N{\mathbb N}
@@ -15,6 +64,7 @@
 \textwidth 7in
 \oddsidemargin -0.25in
 \evensidemargin -0.25in
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
 \bibliographystyle{plainnat}
 
@@ -129,33 +179,18 @@ Using moment generating functionals with suitable technical hypotheses, \citet{h
 
 We illustrate these general methods using an individual-based IPM for the yellow-flowered perennial plant, Plateau Yellow Miner's Candle (\emph{Cryptantha flava}), of the borage family (\emph{Boraginaceae}). For populations growing along the Colorado Plateau, USA, \citet{salguero-etal-12} developed an IPM using data collected from 2004 to 2010. Here, we use a subset of this data available in an R package, IPMpack ~\citep{IPMpack}.
 
-<<components, fig.width=7, fig.height=5,echo=FALSE,fig.cap="The demographic kernels for Plateau Yellow Miner's Candle with the corresponding data from Salguero et al. 2012.">>=
-# run the R file which gets the stastical fits to the data
-# using GLMs
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 
-source("ipm.R")
 
-# Plot the kernels against the data
-par(mfrow = c(2, 2), mar = c(4.5, 4.5, 1, 1), cex.lab = 1.5, cex.axis = 1.5)
-# the survival kernel
-plot(cryptantha$size, jitter(cryptantha$surv, factor = 0.1), pch = 21,
-     bg = rgb(1, 0, 0, 0.5), xlab = "size x", ylab = "survival probability")
-lines(xs, Survival(xs), lwd = 4, col = "blue")
-# the growth kernel
-image(xs, xs, t(outer(xs, xs, Growth)), xlab = expression(size[t]),
-      ylab = expression(size[t + 1]))
-points(cryptantha$size, cryptantha$sizeNext, pch = 21,
-       bg = rgb(0, 0, 1, 0.5))
-# the flowering kernel
-plot(cryptantha$size, jitter(cryptantha$fec0, factor = 0.1),
-     pch = 21, bg = rgb(1, 0, 0, 0.5), xlab = "size", ylab = "flowering")
-lines(xs, Flowering(xs), lwd = 4, col = "blue")
-# the fecundity data
-plot(cryptantha$size[cryptantha$fec0 == 1],
-     cryptantha$fec1[cryptantha$fec0 == 1], pch = 21, bg = rgb(1, 0, 0, 0.5),
-     bty = "n", xlab = "size", ylab = "fecundity")
-lines(xs, Fecundity_flowered(xs),lwd=2)
-@
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loading required package: Matrix\\\#\# Loading required package: MASS\\\#\# Loading required package: nlme}}
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning in densfun(x, parm[1], parm[2], ...): NaNs produced}}\end{kframe}\begin{figure}
+\includegraphics[width=\maxwidth]{figure/components-1} \caption[The demographic kernels for Plateau Yellow Miner's Candle with the corresponding data from Salguero et al]{The demographic kernels for Plateau Yellow Miner's Candle with the corresponding data from Salguero et al. 2012.}\label{fig:components}
+\end{figure}
+
+
+\end{knitrout}
 
 In the model, the state $x$ of an individual is the size, which equals the total number of vegetative and flowering rosettes. If $N_t(x)$ denotes the density of individuals of size $x$ in year $t$, then \citet{salguero-etal-12} used an IPM of the form
 \[
@@ -220,93 +255,7 @@ Using these discretized demographic components and the pgf $\phi$ for fecundity,
 where $\vec h$ corresponds to a discretized function i.e. a vector of length $n$, $^T$ denotes the transpose of a matrix or vector,  and $\circ$ denotes element by element multiplication.
 
 
-<<main.IBIPM.code,echo=FALSE>>=
-#---------
-# Creating the discretized probability generating functional
-#---------
 
-# the discretization choices
-n <- 500  # number of bins
-xs <- seq(alpha, 2 * beta, length = n) # the x values
-dx <- xs[2] - xs[1] # delta x width
-
-# discretizing the survival, offspring size, and flowering functions
-s.vec <- Survival(xs)
-e.vec <- dgamma(xs, shape = coef(recruit.size)[1], rate = coef(recruit.size)[2]) * dx
-e.vec <- e.vec/sum(e.vec) # normalizing to add up to one
-flowering.vec <- as.numeric(Flowering(xs))
-
-# discretizing the growth kernel
-# need to make sure the columns add 
-# to one i.e. no eviction
-g.mat <- outer(xs, xs, Growth) * dx
-q.evict <- 1 - colSums(g.mat)
-g.mat <- g.mat %*% diag(1/(1 - q.evict))
-# Note: most of the eviction is from negative sized individuals
-s.vec <- (1 - q.evict) * s.vec
-
-
-# defining the probability generating function
-# for size dependennt offspring number distribution 
-phi <- function(x, s) exp(Fecundity(x) * (s - 1))
-
-
-# putting all the pieces together to create
-# the discretized pgf Phi which takes
-# in discretized functions (i.e. vectors)
-# taking values beween [0,1]
-# and returns the same. 
-
-Psi <- function(h) {
-    h.new <- (s.vec * (t(g.mat) %*% h) + 1 - s.vec) * (1 - flowering.vec + flowering.vec * phi(xs, e.vec %*% h))
-    return(h.new)
-}
-
-
-# The following function iterates
-# Psi for Tf time steps on the 
-# zero vector which yields
-# size dependent extinction probabilities
-# in a matrix where rows correspond
-# to time and columns correspond to size
-
-Psi.iterate <- function(Tf) {
-    hs <- matrix(0, Tf + 1, n)
-    for (t in 1:Tf) {
-        hs[t + 1, ] <- Psi(hs[t, ])
-    }
-    return(hs)
-}
-
-
-# A function for estimating asymptotic extinction probability
-# by iterating the pgf Psi on the zero function until 
-# changes between iterates have an L1 norm of less than the 
-# specified tolerance tol 
-
-AE <- function(tol = 1e-04) {
-    h <- rep(0, n)
-    diff <- 1
-    while (diff > tol) {
-        h.old <- h
-        h <- Psi(h)
-        diff <- sum(abs(h.old - h))
-    }
-    return(h)
-}
-
-# Inputs: N vector of length $n$ which specifies the initial number of individuals in each size bin, and T the length of
-# the time to look things over. Output:a vector of length T+1 corresponding to the probabilities of extinction by time t
-# or sooner
-PVA <- function(N, Tf) {
-    hs <- Psi.iterate(Tf)
-    output <- numeric(Tf + 1)
-    for (t in 1:(Tf + 1)) {
-        output[t] <- prod(hs[t, ]^N)
-    }
-    return(output)
-}
-@
 
 
 Iterating $\Psi$ yields how extinction probabilities $E_t(x)$ vary with time for a population initiated with a single individual (Figure~\ref{fig:extinction}). Intuitively, this figure illustrates that the probability of extinction decreases with the size of founding individual, and that extinction probabilities increase over time. Furthermore, $E_t(x)$ as $t$ increases are approaching limiting extinction probabilities $E_{\infty}(x)$ which always equals one (Figure~\ref{fig:extinction}A). This stems from the fact that the dominant eigenvalue of the mean-field IPM is less than one, consistent with the results of \citet{salguero-etal-12}. By increasing seed survivorship by a factor of three, the dominant eigenvalue of the mean-field IPM becomes greater than one and the asymptotic extinction probabilities become less than one (Figure~\ref{fig:extinction}B). We approximated these asymptotic extinction probabilities  by iterating $\Psi$ until the difference between $E_t$ and $E_{t+1}$ are below a specified error tolerance.
@@ -314,135 +263,33 @@ Iterating $\Psi$ yields how extinction probabilities $E_t(x)$ vary with time for
 
 
 
-<<extinction, fig.width=7, fig.height=4,echo=FALSE,fig.cap="Extinction probabilities for a population initially consisting of a single individual of size $x$. Different curves correspond to extinction occuring in $1,5,10,15$ or $20$ years. Asymptotic extinction probabilities are shown by the thick gray curve. In A, the extinction curves for the baseline individual-based IPM. In B, extinction curves are shown when seed surival is increased by a factor of three.">>=
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{figure}
+\includegraphics[width=\maxwidth]{figure/extinction-1} \caption[Extinction probabilities for a population initially consisting of a single individual of size ]{Extinction probabilities for a population initially consisting of a single individual of size $x$. Different curves correspond to extinction occuring in $1,5,10,15$ or $20$ years. Asymptotic extinction probabilities are shown by the thick gray curve. In A, the extinction curves for the baseline individual-based IPM. In B, extinction curves are shown when seed surival is increased by a factor of three.}\label{fig:extinction}
+\end{figure}
 
-# Using the Psi.iterate function to get size and year dependent
-# extinction probabilities for populations starting with a single
-# individual 
 
-Tf<- 100
-out <- Psi.iterate(Tf)
-times <- c(1, 5, 10, 15, 20) + 1
-
-par(cex.lab = 1.25, cex.axis = 1.25, mar = c(4.5, 4.5, 1, 1))
-layout(matrix(c(1,2),1,byrow=TRUE),widths = c(4,4))
-matplot(xs, t(out[times, ]), xlim = c(alpha, beta),type = "l", lty = 1,
-        xlab = "size x", ylab = "extinction probabilities", bty = "n", lwd = 2)
-h <- AE()
-lines(xs, h, type = "l", lwd = 5, xlim = c(alpha, beta), col = rgb(0, 0, 0, 0.5))
-legend("bottomleft","A",bty="n",cex=1.25)
-
-# The following code changes the mean fecundity
-# by a specified factor, writes down the 
-# appropriate new Phi pgf and computes 
-# size and year dependent extintion probabilities 
-# for comparative purposes. 
-
-increase.factor<-3
-phi2<-function(x,s)exp(increase.factor*Fecundity(x)*(s-1))
-
-Psi2<-function(h){
-  h.new<-(s.vec*(t(g.mat)%*%h)+1-s.vec)*(1-flowering.vec+flowering.vec*phi2(xs,e.vec%*%h))
-  return(h.new)
-}
-Psi2.iterate<-function(Tf){
-hs<-matrix(0,Tf+1,n)
-for(t in 1:T){
-hs[t+1,]<-Psi2(hs[t,])
-}
-return(hs)
-}
-# function for estimating asymptotic extinction probability
-AE2<-function(tol=0.001){
-h=rep(0,n)
-diff=1
-while(diff>tol){
-h.old<-h
-h<-Psi2(h)
-diff<-sum(abs(h.old-h))
-}
-return(h)
-}
-
-out<-Psi2.iterate(Tf)
-times<-c(1,5,10,15,20)+1
-matplot(xs,t(out[times,]),xlim=c(alpha,beta),type="l",lty=1,xlab="size x",ylab="extinction probabilities",bty="n",lwd=2)
-h<-AE2()
-lines(xs,h,type="l",lwd=5,xlim=c(alpha,beta),col=rgb(0,0,0,0.5))
-par(mar=c(0,0,0,0))
-legend("topright",c(as.character(times-1),expression(Inf)),col=c(1:length(times),rgb(0,0,0,0.5)),lty=1,lwd=c(rep(2,length(times)),5),bty="n")
-legend("bottomleft","B",bty="n",cex=1.25)
-@
+\end{knitrout}
 
 To scale things up to an entire population initially in state $\s_0$, recall that the extinction probability at time $t$ is $E_t^{\s_0}$. Figure~\ref{fig:compare} illustrates how the extinction probabilities over time vary for a population with initially $100$ individuals of the smallest size $x=1$ (i.e. $\s_0=(1;100)$) versus a population with $5$ or $8$ individuals of the largest size $x=60$ typically observed in the field (i.e $\s_0=(60;5)$ or $(60;8)$. Figure~\ref{fig:compare} suggests that, from the extinction risk perspective, about $6$ or $7$ larger individuals are equivalent to $100$ of the smallest individuals. These types of comparisons may be particularly useful when trying to assess whether planting small or larger individuals are more effective for establishment success.
 
-<<compare, fig.width=6, fig.height=4,echo=FALSE,fig.cap="Extinction probabilities as a function of time for populations with $100$ individuals of size $x=1$, and populations with $5$ or $8$ individuals of size $x=60$.">>=
-Tf <- 40
-N <- rep(0, n)
-N[1] <- 100
-out1 <- PVA(N, Tf)
-N <- rep(0, n)
-N[136] <- 8
-out2 <- PVA(N, Tf)
-N <- rep(0, n)
-N[136] <- 5
-out3 <- PVA(N, Tf)
-out <- cbind(out1, out2, out3)
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{figure}
+\includegraphics[width=\maxwidth]{figure/compare-1} \caption[Extinction probabilities as a function of time for populations with ]{Extinction probabilities as a function of time for populations with $100$ individuals of size $x=1$, and populations with $5$ or $8$ individuals of size $x=60$.}\label{fig:compare}
+\end{figure}
 
-par(cex.lab = 1.25, cex.axis = 1.25)
-matplot(0:Tf, out, typ = "l", lwd = 3, bty = "n", xlab = "time t",
-        ylab = "probability of extinction by year t")
-legend("topleft", c("100 small", "8 large", "5 large"), lty = 1:3, col = 1:3,
-       lwd = 3, bty = "n")
-@
+
+\end{knitrout}
 
 We also used the data to see how extinction risk over different time frames depends on the size and composition of the population. Specifically, for different founding population abundances $N$, we randomly sampled $N$ individuals from the data and computed extinction risk of this sampled population over $5$ and $10$ year periods (Figure~\ref{fig:sampling}). For each founding population abundance $N$, we considered $500$ random samples of size $N$. Figure~\ref{fig:sampling}A illustrates that, on average, $\log$ extinction risk decreases with the founding population size $N$ and is greater for the $10$ year period than the $5$ year period. For smaller founding popualation sizes $N$, there is substansial overlap in the distributions of extinction times for the $5$ and $10$ year time frames. This overlap stems from founding populations of mostly large individuals being more likely to persist at least $10$ years than founding populations of mostly small individuals persisting at least $5$ years. Consistent with this explanation, Figure~\ref{fig:sampling}B illustrates that mean size of an individual within a founding  population has a strong negative correlation with (log) extinction probability, and the slope of this correlation is steeper over shorter time frames than longer time frames.
 
-<<sampling,cache=TRUE, fig.width=7, fig.height=4,echo=FALSE,fig.cap="Extinction probabilities for founding populations of different abundance. For each founding population abundance $N$, $500$ samples consisting of $N$ randomly choosen individuals from the data set were used to create a founding population of $N$ individuals. Extinction probablities by year $5$ and year $10$ were calculated for each of these sample populations. In A, extinction probability is plotted as a box plot for different $N$ values. In B, extinction probability is plotted against the mean size of an individual for a population abundance $N=25$.">>=
-sizes <- cryptantha$size[which(cryptantha$size > 0 & cryptantha$size < beta)]  # empirical data
-T1 <- 5
-T2 <- 10
-sample.sizes <- 5 * (1:5)
-no.samples <- 500
-stuff <- c()
-mean.size <- c()
-stuff2 <- c()
-temp <- numeric(no.samples)
-temp2 <- temp
-temp3 <- temp
-for (j in 1:length(sample.sizes)) {
-    for (i in 1:no.samples) {
-        sampling <- sample(sizes, size = sample.sizes[j])
-        out2 <- hist(sampling, breaks = xs, plot = FALSE)
-        N <- c(0, out2$counts)
-        out <- PVA(N, T2)
-        temp[i] <- out[T1 + 1]
-        temp2[i] <- out[T2 + 1]
-        temp3[i] <- mean(sampling)
-    }
-    stuff <- cbind(stuff, temp)
-    stuff2 <- cbind(stuff2, temp2)
-    mean.size <- cbind(mean.size, temp3)
-}
-par(cex.lab = 1.25, cex.axis = 1.25, mfrow = c(1, 2), mar = c(4.5, 4.5, 1, 1))
-boxplot(log10(stuff), notch = FALSE, names = sample.sizes, col = "lightgray", range = 0,
-    xlab = "initial population abundance", ylab = expression(paste(log[10], " extinction probability")),
-    ylim = c(min(log10(c(stuff, stuff2))), max(c(log10(stuff), log10(stuff2)))))
-boxplot(log10(stuff2), notch = FALSE, names = sample.sizes, col = "pink", range = 0,
-    add = TRUE)
-legend("bottomleft", c("in 5 years", "in 10 years"), pch = 22, pt.bg = c("pink",
-    "white"), cex = 1.25, bty = "n")
-legend("topright", "A", bty = "n", cex = 1.25)
-par(mar = c(4.5, 2.25, 1, 2.25))
-i <- 5
-plot(mean.size[, i], log10(stuff[, i]), ylim = c(min(log10(c(stuff[, i], stuff2[,
-    i]))), max(log10(c(stuff2[, i], stuff[, i])))), xlab = "mean size of an individual",
-    ylab = "", pch = 20, col = "lightgray")
-points(mean.size[, i], log10(stuff2[, i]), pch = 20, col = "pink")
-legend("bottomleft", c("in 5 years", "in 10 years"), pch = c(20, 20), col = c("pink",
-    "lightgray"), cex = 1.25, bty = "n")
-legend("topright", "B", bty = "n", cex = 1.25)
-@
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{figure}
+\includegraphics[width=\maxwidth]{figure/sampling-1} \caption[Extinction probabilities for founding populations of different abundance]{Extinction probabilities for founding populations of different abundance. For each founding population abundance $N$, $500$ samples consisting of $N$ randomly choosen individuals from the data set were used to create a founding population of $N$ individuals. Extinction probablities by year $5$ and year $10$ were calculated for each of these sample populations. In A, extinction probability is plotted as a box plot for different $N$ values. In B, extinction probability is plotted against the mean size of an individual for a population abundance $N=25$.}\label{fig:sampling}
+\end{figure}
+
+
+\end{knitrout}
 
 \section*{Recommendations, Extensions, and Future Challenges}
 
