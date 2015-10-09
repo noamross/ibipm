@@ -232,9 +232,9 @@ Psi <- function(h) {
     h.new <- (s.vec * (t(g.mat) %*% h) + 1 - s.vec) * (1 - flowering.vec + flowering.vec * phi(xs, e.vec %*% h))
     return(h.new)
 }
-Psi.iterate <- function(T) {
-    hs <- matrix(0, T + 1, n)
-    for (t in 1:T) {
+Psi.iterate <- function(Tf) {
+    hs <- matrix(0, Tf + 1, n)
+    for (t in 1:Tf) {
         hs[t + 1, ] <- Psi(hs[t, ])
     }
     return(hs)
@@ -254,10 +254,10 @@ AE <- function(tol = 1e-04) {
 # Inputs: N vector of length $n$ which specifies the initial number of individuals in each size bin, and T the length of
 # the time to look things over. Output:a vector of length T+1 corresponding to the probabilities of extinction by time t
 # or sooner
-PVA <- function(N, T) {
-    hs <- Psi.iterate(T)
-    output <- numeric(T + 1)
-    for (t in 1:(T + 1)) {
+PVA <- function(N, Tf) {
+    hs <- Psi.iterate(Tf)
+    output <- numeric(Tf + 1)
+    for (t in 1:(Tf + 1)) {
         output[t] <- prod(hs[t, ]^N)
     }
     return(output)
@@ -271,8 +271,8 @@ Iterating $\Psi$ yields how extinction probabilities $E_t(x)$ vary with time for
 
 
 <<extinction, fig.width=7, fig.height=4,echo=FALSE,fig.cap="Extinction probabilities for a population initially consisting of a single individual of size $x$. Different curves correspond to extinction occuring in $1,5,10,15$ or $20$ years. Asymptotic extinction probabilities are shown by the thick gray curve. In A, the extinction curves for the baseline individual-based IPM. In B, extinction curves are shown when seed surival is increased by a factor of three.">>=
-T <- 100
-out <- Psi.iterate(T)
+Tf<- 100
+out <- Psi.iterate(Tf)
 times <- c(1, 5, 10, 15, 20) + 1
 
 par(cex.lab = 1.25, cex.axis = 1.25, mar = c(4.5, 4.5, 1, 1))
@@ -284,36 +284,36 @@ lines(xs, h, type = "l", lwd = 5, xlim = c(alpha, beta), col = rgb(0, 0, 0, 0.5)
 legend("bottomleft","A",bty="n",cex=1.25)
 
 
-increase.factor=3
-phi2=function(x,s)exp(increase.factor*Fecundity(x)*(s-1))
+increase.factor<-3
+phi2<-function(x,s)exp(increase.factor*Fecundity(x)*(s-1))
 
-Psi2=function(h){
-  h.new=(s.vec*(t(g.mat)%*%h)+1-s.vec)*(1-flowering.vec+flowering.vec*phi2(xs,e.vec%*%h))
+Psi2<-function(h){
+  h.new<-(s.vec*(t(g.mat)%*%h)+1-s.vec)*(1-flowering.vec+flowering.vec*phi2(xs,e.vec%*%h))
   return(h.new)
 }
-Psi2.iterate=function(T){
-hs=matrix(0,T+1,n)
+Psi2.iterate<-function(Tf){
+hs<-matrix(0,Tf+1,n)
 for(t in 1:T){
-hs[t+1,]=Psi2(hs[t,])
+hs[t+1,]<-Psi2(hs[t,])
 }
 return(hs)
 }
 # function for estimating asymptotic extinction probability
-AE2=function(tol=0.001){
+AE2<-function(tol=0.001){
 h=rep(0,n)
 diff=1
 while(diff>tol){
-h.old=h
-h=Psi2(h)
-diff=sum(abs(h.old-h))
+h.old<-h
+h<-Psi2(h)
+diff<-sum(abs(h.old-h))
 }
 return(h)
 }
 
-out=Psi2.iterate(T)
-times=c(1,5,10,15,20)+1
+out<-Psi2.iterate(Tf)
+times<-c(1,5,10,15,20)+1
 matplot(xs,t(out[times,]),xlim=c(alpha,beta),type="l",lty=1,xlab="size x",ylab="extinction probabilities",bty="n",lwd=2)
-h=AE2()
+h<-AE2()
 lines(xs,h,type="l",lwd=5,xlim=c(alpha,beta),col=rgb(0,0,0,0.5))
 par(mar=c(0,0,0,0))
 legend("topright",c(as.character(times-1),expression(Inf)),col=c(1:length(times),rgb(0,0,0,0.5)),lty=1,lwd=c(rep(2,length(times)),5),bty="n")
