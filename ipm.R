@@ -56,4 +56,4 @@ Fecundity <- function(x) {
 
 
 # Estimate mean recruit size and variation around that mean
-recruit.size <- fitdistr(cryptantha$sizeNext[is.na(cryptantha$size)], "gamma")
+recruit.size <- fitdist(cryptantha$sizeNext[is.na(cryptantha$size)],"gamma")
