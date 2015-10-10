@@ -9,6 +9,9 @@
 # for growing to size y given individual is of size x and has survived F[y,x] is the density of offsrping
 # of size y produced by individuals of size x
 
+library(Matrix)
+library(nlme)
+library(MASS)
 library(IPMpack)
 library(fitdistrplus)
 
