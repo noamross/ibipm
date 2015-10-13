@@ -9,7 +9,12 @@ This is a repository contains the code for:
 Models: The Role Of Size-Structure On Extinction Risk And Establishment
 Success
 
-`ibipm.Rnw` is an R-latex file of the manuscript
+`ibipm.Rnw` is an R-latex file of the manuscript.
+
+`ibipm.pdf` is the compiled manuscript.
 
 `ipm.R` contains the code for the IPM model described, and is sourced in
 `ibipm.Rnw`.
+
+`ibipm.R` contains the code used in `ipipm.Rnw`, extracted using `purl("ibipm.Rnw")`
+
