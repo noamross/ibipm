@@ -28,11 +28,13 @@
 \address{Address effective October 1, 2015: EcoHealth Alliance,
 460 West 34th Street – 17th floor, New York, NY 10001  }
 \email{noam.ross@gmail.com }
-\maketitle{}
 
 \begin{abstract}
 Matrix models or integral projection models (IPMs) are commonly used to study the dynamics of structured populations, where some discrete or continuous trait influences survival, growth, or reproduction. When the population's size is small, as is often the case for a threatened species or a potentially invasive species arriving in a novel habitat, the population's dynamics can be approximated by a branching process which serves as an individual-based counterparts to matrix models and IPMs. For discretely structured populations, the theory of multi-type branching processes provide analytic methods to compute how extinction risk changes over time and how it depends on the size and composition of the population. Building on prior work on continuous-state branching processes, we extend these analytic methods to individual-based models accounting for any mixture of discrete and continuous population structure. We illustrate how to numerically implement these methods using data from a short-lived desert shrub species \emph{Cryptantha flava}, and provide guidelines on applying these methods to other data sets.
 \end{abstract}
+
+\maketitle{}
+
 
 \section*{Introduction}
 Computations of extinction probabilities or likelihoods of establishment success lie on opposing sides of a theoretician's coin and have been used to address theoretical and practical issues in conservation biology, restoration ecology, biological invasions and population genetics. Risks of extinction or establishment failure stem from populations consisting of a finite number of individuals, each of which faces a non-zero risk of mortality on any given day. These extinction risks are shaped, in part, by the size and composition of a population whose individuals may differ in age, size, geographical location, or other important characteristics influencing demography. When population structure is finite-dimensional (e.g. a finite number of age classes, stages, geographical locations), multi-type branching processes can model these extinction risks and, thereby, serve as the stochastic, finite-population counterpart of matrix models~\citep{harris-63,athreya-ney-04,caswell-01,haccou-etal-05}. These stochastic models have been used successfully to address a diversity of questions concerning fixation probabilities of beneficial alleles~\citep{patwa-wahl-08}, evolutionary emergence of pathogens~\citep{antia-etal-03,ptrb-13}, extinction risk of small populations~\citep{boyce-92,gosselin-lebreton-00,fujiwara-caswell-01,erickson-etal-15}, and establishment success in heterogeneous environments~\citep{haccou-iwasa-96,haccou-vatunin-03,amnat-09b}.
@@ -237,7 +239,7 @@ e.vec <- e.vec/sum(e.vec) # normalizing to add up to one
 flowering.vec <- as.numeric(Flowering(xs))
 
 # discretizing the growth kernel
-# need to make sure the columns add 
+# need to make sure the columns add
 # to one i.e. no eviction
 g.mat <- outer(xs, xs, Growth) * dx
 q.evict <- 1 - colSums(g.mat)
@@ -247,7 +249,7 @@ s.vec <- (1 - q.evict) * s.vec
 
 
 # defining the probability generating function
-# for size dependennt offspring number distribution 
+# for size dependennt offspring number distribution
 phi <- function(x, s) exp(Fecundity(x) * (s - 1))
 
 
@@ -255,7 +257,7 @@ phi <- function(x, s) exp(Fecundity(x) * (s - 1))
 # the discretized pgf Phi which takes
 # in discretized functions (i.e. vectors)
 # taking values beween [0,1]
-# and returns the same. 
+# and returns the same.
 
 Psi <- function(h) {
     h.new <- (s.vec * (t(g.mat) %*% h) + 1 - s.vec) * (1 - flowering.vec + flowering.vec * phi(xs, e.vec %*% h))
@@ -264,7 +266,7 @@ Psi <- function(h) {
 
 
 # The following function iterates
-# Psi for Tf time steps on the 
+# Psi for Tf time steps on the
 # zero vector which yields
 # size dependent extinction probabilities
 # in a matrix where rows correspond
@@ -280,9 +282,9 @@ Psi.iterate <- function(Tf) {
 
 
 # A function for estimating asymptotic extinction probability
-# by iterating the pgf Psi on the zero function until 
-# changes between iterates have an L1 norm of less than the 
-# specified tolerance tol 
+# by iterating the pgf Psi on the zero function until
+# changes between iterates have an L1 norm of less than the
+# specified tolerance tol
 
 AE <- function(tol = 1e-04) {
     h <- rep(0, n)
@@ -318,7 +320,7 @@ Iterating $\Psi$ yields how extinction probabilities $E_t(x)$ vary with time for
 
 # Using the Psi.iterate function to get size and year dependent
 # extinction probabilities for populations starting with a single
-# individual 
+# individual
 
 Tf<- 100
 out <- Psi.iterate(Tf)
@@ -333,10 +335,10 @@ lines(xs, h, type = "l", lwd = 5, xlim = c(alpha, beta), col = rgb(0, 0, 0, 0.5)
 legend("bottomleft","A",bty="n",cex=1.25)
 
 # The following code changes the mean fecundity
-# by 3 and writes down the 
-# appropriate new Phi pgf and computes 
-# size and year dependent extintion probabilities 
-# for comparative purposes. 
+# by 3 and writes down the
+# appropriate new Phi pgf and computes
+# size and year dependent extintion probabilities
+# for comparative purposes.
 
 phi.plus=function(x,s) exp(3*Fecundity(x) * (s - 1))
 
@@ -366,7 +368,7 @@ return(h)
 
 out<-Psi.plus.iterate(Tf)
 times<-c(1,5,10,15,20)+1
-matplot(xs,t(out[times,]),xlim=c(alpha,beta),type="l",lty=1,xlab="size x",ylab="extinction probabilities",bty="n",lwd=2)
+matplot(xs,t(out[times,]),xlim=c(alpha,beta), ylim=c(0, 1), type="l",lty=1,xlab="size x",ylab="extinction probabilities",bty="n",lwd=2)
 h<-AE.plus()
 lines(xs,h,type="l",lwd=5,xlim=c(alpha,beta),col=rgb(0,0,0,0.5))
 par(mar=c(0,0,0,0))
