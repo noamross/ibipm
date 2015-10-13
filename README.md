@@ -16,5 +16,6 @@ Success
 `ipm.R` contains the code for the IPM model described, and is sourced in
 `ibipm.Rnw`.
 
-`ibipm.R` contains the code used in `ipipm.Rnw`, extracted using `purl("ibipm.Rnw")`
+`ibipm.R` contains the code used in `ipipm.Rnw`, extracted using `purl("ibipm.Rnw")`.
 
+`references.bib` contains the references used in the paper.
