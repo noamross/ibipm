@@ -1,6 +1,6 @@
 \documentclass[12pt]{amsart}
 \usepackage{natbib}
-
+\usepackage[nolists]{endfloat}
 \def\N{\mathbb N}
 \def\R{\mathbb R}
 \def\P{\mathbb P}
