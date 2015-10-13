@@ -24,10 +24,8 @@
 \author{Sebastian J. Schreiber and Noam Ross}
 \address{Department of Evolution and Ecology, One Shields Avenue, University of California, Davis, California 95616}
 \email{sschreiber@ucdavis.edu}
-\address{Current Address: Department of Environmental Science and Policy, University of California, Davis, California 95616}
-\address{Address effective October 1, 2015: EcoHealth Alliance,
-460 West 34th Street – 17th floor, New York, NY 10001  }
-\email{noam.ross@gmail.com }
+\address{EcoHealth Alliance, 460 West 34th Street – 17th floor, New York, NY 10001}
+\email{ross@ecohealthalliance.org}
 
 \begin{abstract}
 Matrix models or integral projection models (IPMs) are commonly used to study the dynamics of structured populations, where some discrete or continuous trait influences survival, growth, or reproduction. When the population's size is small, as is often the case for a threatened species or a potentially invasive species arriving in a novel habitat, the population's dynamics can be approximated by a branching process which serves as an individual-based counterparts to matrix models and IPMs. For discretely structured populations, the theory of multi-type branching processes provide analytic methods to compute how extinction risk changes over time and how it depends on the size and composition of the population. Building on prior work on continuous-state branching processes, we extend these analytic methods to individual-based models accounting for any mixture of discrete and continuous population structure. We illustrate how to numerically implement these methods using data from a short-lived desert shrub species \emph{Cryptantha flava}, and provide guidelines on applying these methods to other data sets.
