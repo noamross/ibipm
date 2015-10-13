@@ -1,6 +1,6 @@
 \documentclass[12pt]{amsart}
 \usepackage{natbib}
-
+\usepackage[nolists]{endfloat}
 \def\N{\mathbb N}
 \def\R{\mathbb R}
 \def\P{\mathbb P}
@@ -31,8 +31,8 @@
 %Matrix models or integral projection models (IPMs) are commonly used to study the dynamics of structured populations, where some discrete or continuous trait influences survival, growth, or reproduction. When the population's size is small, as is often the case for a threatened species or a potentially invasive species arriving in a novel habitat, the population's dynamics can be approximated by a branching process which serves as an individual-based counterparts to matrix models and IPMs. For discretely structured populations, the theory of multi-type branching processes provide analytic methods to compute how extinction risk changes over time and how it depends on the size and composition of the population. Building on prior work on continuous-state branching processes, we extend these analytic methods to individual-based models accounting for any mixture of discrete and continuous population structure. We illustrate how to numerically implement these methods using data from a short-lived desert shrub species \emph{Cryptantha flava}, and provide guidelines on applying these methods to other data sets.
 \begin{enumerate}
 \item  Matrix models or integral projection models (IPMs) are commonly used to study the dynamics of structured populations, where some discrete or continuous trait influences survival, growth, or reproduction. When the population's size is small, as is often the case for a threatened species or a potentially invasive species arriving in a novel habitat, extinction risk may be substantial due to demographic stochasticity.
-\item Branching processes, which are individual-based counterparts to matrix models and IPMs, allow one to quantify these risks of extinction. For discretely structured populations, the theory of multi-type branching processes provides analytic methods to compute how extinction risk changes over time and how it depends on the size and composition of the population. Building on prior work on continuous-state branching processes, we extend these analytic methods to individual-based models accounting for any mixture of discrete and continuous population structure.  
-\item The individual-based IPMs are defined by probabilistic update rules at the level of the individual which determine how each individual with a given trait value dies, changes trait value (e.g. grows in size), or produces individuals with the same or other trait values.  Probabilities of extinction are shown to be analytically determined by probability generating functionals associated with the individual-based IPMs. In particular, we present analytical expressions for how extinction probabilities change over time and depend on the initial abundance and initial trait distribution of the population.   We illustrate how to numerically implement these methods using data from a short-lived desert shrub species \emph{Cryptantha flava}, and provide a more general discussion of how to implement these methods to other data sets including those involving fluctuating environmental conditions. 
+\item Branching processes, which are individual-based counterparts to matrix models and IPMs, allow one to quantify these risks of extinction. For discretely structured populations, the theory of multi-type branching processes provides analytic methods to compute how extinction risk changes over time and how it depends on the size and composition of the population. Building on prior work on continuous-state branching processes, we extend these analytic methods to individual-based models accounting for any mixture of discrete and continuous population structure.
+\item The individual-based IPMs are defined by probabilistic update rules at the level of the individual which determine how each individual with a given trait value dies, changes trait value (e.g. grows in size), or produces individuals with the same or other trait values.  Probabilities of extinction are shown to be analytically determined by probability generating functionals associated with the individual-based IPMs. In particular, we present analytical expressions for how extinction probabilities change over time and depend on the initial abundance and initial trait distribution of the population.   We illustrate how to numerically implement these methods using data from a short-lived desert shrub species \emph{Cryptantha flava}, and provide a more general discussion of how to implement these methods to other data sets including those involving fluctuating environmental conditions.
 \item As most IPMs studies have the necessary data to parameterize individual-based IPMs, these methods provide a computationally efficient means to explore how continuously structured populations differing in their evolutionary history and environmental context may differ in their vulnerability to extinction.
 \end{enumerate}
 
@@ -139,7 +139,7 @@ We illustrate these general methods using an individual-based IPM for the yellow
 <<components, cache=FALSE, fig.width=7, fig.height=5, echo=FALSE, fig.cap="The demographic kernels for Plateau Yellow Miner's Candle with the corresponding data from Salguero et al. 2012.">>=
 # run the R file which fits GLMs to the Salguero et al. (2012) data
 source("ipm.R")
-
+library(viridis)
 # Plot the kernels against the data
 par(mfrow = c(2, 2), mar = c(4.5, 4.5, 1, 1), cex.lab = 1.5, cex.axis = 1.5)
 # the survival kernel
@@ -148,9 +148,9 @@ plot(cryptantha$size, jitter(cryptantha$surv, factor = 0.1), pch = 21,
 lines(xs, Survival(xs), lwd = 4, col = "blue")
 # the growth kernel
 image(xs, xs, t(outer(xs, xs, Growth)), xlab = expression(size[t]),
-      ylab = expression(size[t + 1]))
+      ylab = expression(size[t + 1]), col = inferno(24)[8:24])
 points(cryptantha$size, cryptantha$sizeNext, pch = 21,
-       bg = rgb(0, 0, 1, 0.5))
+       bg = rgb(0.2, 0.5, 1, 0.9))
 # the flowering kernel
 plot(cryptantha$size, jitter(cryptantha$fec0, factor = 0.1),
      pch = 21, bg = rgb(1, 0, 0, 0.5), xlab = "size", ylab = "flowering")
