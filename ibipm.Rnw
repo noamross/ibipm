@@ -443,22 +443,22 @@ for (j in 1:length(sample.sizes)) {
     mean.size <- cbind(mean.size, temp3)
 }
 par(cex.lab = 1.25, cex.axis = 1.25, mfrow = c(1, 2), mar = c(4.5, 4.5, 1, 1))
-boxplot(log10(stuff), notch = FALSE, names = sample.sizes, col = "lightgray", range = 0,
+boxplot(log10(stuff), notch = FALSE, names = sample.sizes, col = "gray60", range = 0,
     xlab = "initial population abundance", ylab = expression(paste(log[10], " extinction probability")),
     ylim = c(min(log10(c(stuff, stuff2))), max(c(log10(stuff), log10(stuff2)))))
-boxplot(log10(stuff2), notch = FALSE, names = sample.sizes, col = "pink", range = 0,
+boxplot(log10(stuff2), notch = FALSE, names = sample.sizes, col = "gray90", range = 0,
     add = TRUE)
-legend("bottomleft", c("in 10 years", "in 5 years"), pch = 22, pt.bg = c("pink",
-    "lightgray"), cex = 1.25, bty = "n")
+legend("bottomleft", c("in 10 years", "in 5 years"), pch = 22, pt.bg = c("gray90",
+    "gray60"), cex = 1.25, bty = "n")
 legend("topright", "A", bty = "n", cex = 1.25)
 par(mar = c(4.5, 2.25, 1, 2.25))
 i <- 5
 plot(mean.size[, i], log10(stuff[, i]), ylim = c(min(log10(c(stuff[, i], stuff2[,
     i]))), max(log10(c(stuff2[, i], stuff[, i])))), xlab = "mean size of an individual",
-    ylab = "", pch = 20, col = "lightgray")
-points(mean.size[, i], log10(stuff2[, i]), pch = 20, col = "pink")
-legend("bottomleft", c("in 10 years", "in 5 years"), pch = c(20, 20), col = c("pink",
-    "lightgray"), cex = 1.25, bty = "n")
+    ylab = "", pch = 21, bg = "gray60", col="gray20")
+points(mean.size[, i], log10(stuff2[, i]), pch = 21, bg = "gray90", col="gray20")
+legend("bottomleft", c("in 10 years", "in 5 years"), pch = c(21, 21), bg = c("gray90",
+    "gray60"), col=c("gray20", "gray20"), cex = 1.25, bty = "n")
 legend("topright", "B", bty = "n", cex = 1.25)
 @
 
