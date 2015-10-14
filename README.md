@@ -1,6 +1,8 @@
 [![](https://img.shields.io/packagist/l/doctrine/orm.svg)](https://github.com/noamross/ibipm/blob/master/LICENSE.md)
 [![](https://licensebuttons.net/l/by/3.0/80x15.png)](https://github.com/noamross/ibipm/blob/master/LICENSE.md)
 
+[![DOI](https://zenodo.org/badge/6023/noamross/ibipm.svg)](https://zenodo.org/badge/latestdoi/6023/noamross/ibipm)
+
 # Individual-Based Integral Projection Models
 
 This is a repository contains the code for:

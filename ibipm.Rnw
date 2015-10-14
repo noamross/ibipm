@@ -24,7 +24,7 @@
 \author{Sebastian J. Schreiber and Noam Ross}
 \address{Department of Evolution and Ecology, One Shields Avenue, University of California, Davis, California 95616}
 \email{sschreiber@ucdavis.edu}
-\address{EcoHealth Alliance, 460 West 34th Street – 17th floor, New York, NY 10001}
+\address{EcoHealth Alliance, 460 West 34th Street, 17th floor, New York, NY 10001}
 \email{ross@ecohealthalliance.org}
 
 \begin{abstract}
@@ -134,7 +134,7 @@ Using moment generating functionals with suitable technical hypotheses, \citet{h
 
 \section*{An Illustration with a short-lived perennial}
 
-We illustrate these general methods using an individual-based IPM for the yellow-flowered perennial plant, Plateau Yellow Miner's Candle (\emph{Cryptantha flava}), of the borage family (\emph{Boraginaceae}). For populations growing along the Colorado Plateau, USA, \citet{salguero-etal-12} developed an IPM using data collected from 2004 to 2010. Here, we use a subset of this data available in an R package, IPMpack ~\citep{IPMpack}.
+We illustrate these general methods using an individual-based IPM for the yellow-flowered perennial plant, Plateau Yellow Miner's Candle (\emph{Cryptantha flava}), of the borage family (\emph{Boraginaceae}). For populations growing along the Colorado Plateau, USA, \citet{salguero-etal-12} developed an IPM using data collected from 2004 to 2010. Here, we use a subset of this data available in an R package, IPMpack ~\citep{IPMpack}.  All code to for this example is archived at Zenodo~\citep{schreiber-ross-ibipm-code-2015}.
 
 <<components, cache=FALSE, fig.width=7, fig.height=5, echo=FALSE, fig.cap="The demographic kernels for Plateau Yellow Miner's Candle with the corresponding data from Salguero et al. 2012.">>=
 # run the R file which fits GLMs to the Salguero et al. (2012) data
