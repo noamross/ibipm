@@ -2,6 +2,12 @@
 # run the R file which fits GLMs to the Salguero et al. (2012) data
 source("ipm.R")
 
+# Establish a grid based on the range of sizes in the data
+alpha <- min(cryptantha$size, cryptantha$sizeNext, na.rm = TRUE)
+beta <- max(cryptantha$size, cryptantha$sizeNext, na.rm = TRUE)
+xs <- seq(alpha, beta, length = 100)
+
+library(viridis)
 # Plot the kernels against the data
 par(mfrow = c(2, 2), mar = c(4.5, 4.5, 1, 1), cex.lab = 1.5, cex.axis = 1.5)
 # the survival kernel
@@ -10,9 +16,9 @@ plot(cryptantha$size, jitter(cryptantha$surv, factor = 0.1), pch = 21,
 lines(xs, Survival(xs), lwd = 4, col = "blue")
 # the growth kernel
 image(xs, xs, t(outer(xs, xs, Growth)), xlab = expression(size[t]),
-      ylab = expression(size[t + 1]))
+      ylab = expression(size[t + 1]), col = inferno(24)[8:24], useRaster=TRUE)
 points(cryptantha$size, cryptantha$sizeNext, pch = 21,
-       bg = rgb(0, 0, 1, 0.5))
+       bg = rgb(0.2, 0.5, 1, 0.9))
 # the flowering kernel
 plot(cryptantha$size, jitter(cryptantha$fec0, factor = 0.1),
      pch = 21, bg = rgb(1, 0, 0, 0.5), xlab = "size", ylab = "flowering")
@@ -124,9 +130,9 @@ times <- c(1, 5, 10, 15, 20) + 1
 par(cex.lab = 1.25, cex.axis = 1.25, mar = c(4.5, 4.5, 1, 1))
 layout(matrix(c(1, 2), 1, byrow = TRUE), widths = c(4, 4))
 matplot(xs, t(out[times, ]), xlim = c(alpha, beta), type = "l", lty = 1, xlab = "size x", ylab = "extinction probabilities",
-    bty = "n", lwd = 2)
+    bty = "n", lwd = 2, col=rev(viridis(7)[2:6]))
 h <- AE()
-lines(xs, h, type = "l", lwd = 5, xlim = c(alpha, beta), col = rgb(0, 0, 0, 0.5))
+lines(xs, h, type = "l", lwd = 5, xlim = c(alpha, beta), col = viridis(7)[1])
 
 # The following code changes the mean fecundity
 # by a factor of 3,  defines the
@@ -168,12 +174,12 @@ out <- Psi.plus.iterate(Tf)
 times <- c(1, 5, 10, 15, 20) + 1
 matplot(xs, t(out[times, ]), xlim = c(alpha, beta), ylim = c(0, 1), type = "l",
         lty = 1, xlab = "size x", ylab = "extinction probabilities", bty = "n",
-        lwd = 2)
+        lwd = 2, col=rev(viridis(7)[2:6]))
 h <- AE.plus()
-lines(xs, h, type = "l", lwd = 5, xlim = c(alpha, beta), col = rgb(0, 0, 0, 0.5))
+lines(xs, h, type = "l", lwd = 5, xlim = c(alpha, beta), col = viridis(7)[1])
 par(mar = c(0, 0, 0, 0))
 legend("topright", c(as.character(times - 1), expression(Inf)),
-       col = c(1:length(times), rgb(0, 0, 0, 0.5)), lty = 1,
+       col = c(rev(viridis(7)[1:6])), lty = 1,
        lwd = c(rep(2, length(times)), 5), bty = "n")
 
 ## ----compare, fig.width=6, fig.height=4, echo=FALSE, fig.cap="Extinction probabilities as a function of time for populations with $100$ individuals of size $x=1$, and populations with $5$ or $8$ individuals of size $x=60$."----
@@ -191,9 +197,9 @@ out <- cbind(out1, out2, out3)
 
 par(cex.lab = 1.25, cex.axis = 1.25)
 matplot(0:Tf, out, typ = "l", lwd = 3, bty = "n", xlab = "time t",
-        ylab = "probability of extinction by year t")
-legend("topleft", c("100 small", "8 large", "5 large"), lty = 1:3, col = 1:3,
-       lwd = 3, bty = "n")
+        ylab = "probability of extinction by year t", col = viridis(4)[1:3])
+legend("topleft", c("100 small", "8 large", "5 large"), lty = 1:3, col = viridis(4)[1:3],
+       lwd = 3, bty = "n", seg.len = 6)
 
 ## ----sampling, cache=TRUE, fig.width=7, fig.height=4, echo=FALSE, fig.cap="Extinction probabilities for founding populations of different abundance. For each founding population abundance $N$, $500$ samples consisting of $N$ randomly choosen individuals from the data set were used to create a founding population of $N$ individuals. Extinction probablities by year $5$ and year $10$ were calculated for each of these sample populations. In A, extinction probability is plotted as a box plot for different $N$ values. In B, extinction probability is plotted against the mean size of an individual for a population abundance $N=25$."----
 sizes <- cryptantha$size[which(cryptantha$size > 0 & cryptantha$size < beta)]  # empirical data
@@ -222,21 +228,21 @@ for (j in 1:length(sample.sizes)) {
     mean.size <- cbind(mean.size, temp3)
 }
 par(cex.lab = 1.25, cex.axis = 1.25, mfrow = c(1, 2), mar = c(4.5, 4.5, 1, 1))
-boxplot(log10(stuff), notch = FALSE, names = sample.sizes, col = "lightgray", range = 0,
+boxplot(log10(stuff), notch = FALSE, names = sample.sizes, col = "gray60", range = 0,
     xlab = "initial population abundance", ylab = expression(paste(log[10], " extinction probability")),
     ylim = c(min(log10(c(stuff, stuff2))), max(c(log10(stuff), log10(stuff2)))))
-boxplot(log10(stuff2), notch = FALSE, names = sample.sizes, col = "pink", range = 0,
+boxplot(log10(stuff2), notch = FALSE, names = sample.sizes, col = "gray90", range = 0,
     add = TRUE)
-legend("bottomleft", c("in 5 years", "in 10 years"), pch = 22, pt.bg = c("pink",
-    "white"), cex = 1.25, bty = "n")
+legend("bottomleft", c("in 10 years", "in 5 years"), pch = 22, pt.bg = c("gray90",
+    "gray60"), cex = 1.25, bty = "n")
 legend("topright", "A", bty = "n", cex = 1.25)
 par(mar = c(4.5, 2.25, 1, 2.25))
 i <- 5
 plot(mean.size[, i], log10(stuff[, i]), ylim = c(min(log10(c(stuff[, i], stuff2[,
     i]))), max(log10(c(stuff2[, i], stuff[, i])))), xlab = "mean size of an individual",
-    ylab = "", pch = 20, col = "lightgray")
-points(mean.size[, i], log10(stuff2[, i]), pch = 20, col = "pink")
-legend("bottomleft", c("in 5 years", "in 10 years"), pch = c(20, 20), col = c("pink",
-    "lightgray"), cex = 1.25, bty = "n")
+    ylab = "", pch = 21, bg = "gray60", col="gray20")
+points(mean.size[, i], log10(stuff2[, i]), pch = 21, bg = "gray90", col="gray20")
+legend("bottomleft", legend=c("in 10 years", "in 5 years"), pch = c(21, 21), pt.bg = c("gray90",
+    "gray60"), cex = 1.25, bty = "n")
 legend("topright", "B", bty = "n", cex = 1.25)
 
