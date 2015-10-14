@@ -139,7 +139,10 @@ We illustrate these general methods using an individual-based IPM for the yellow
 <<components, cache=FALSE, fig.width=7, fig.height=5, echo=FALSE, fig.cap="The demographic kernels for Plateau Yellow Miner's Candle with the corresponding data from Salguero et al. 2012.">>=
 # run the R file which fits GLMs to the Salguero et al. (2012) data
 source("ipm.R")
-
+# Establish a grid based on the range of sizes in the data
+alpha <- min(cryptantha$size, cryptantha$sizeNext, na.rm = TRUE)
+beta <- max(cryptantha$size, cryptantha$sizeNext, na.rm = TRUE)
+xs <- seq(alpha, beta, length = 100)
 # Plot the kernels against the data
 par(mfrow = c(2, 2), mar = c(4.5, 4.5, 1, 1), cex.lab = 1.5, cex.axis = 1.5)
 # the survival kernel
@@ -442,8 +445,8 @@ boxplot(log10(stuff), notch = FALSE, names = sample.sizes, col = "lightgray", ra
     ylim = c(min(log10(c(stuff, stuff2))), max(c(log10(stuff), log10(stuff2)))))
 boxplot(log10(stuff2), notch = FALSE, names = sample.sizes, col = "pink", range = 0,
     add = TRUE)
-legend("bottomleft", c("in 5 years", "in 10 years"), pch = 22, pt.bg = c("pink",
-    "white"), cex = 1.25, bty = "n")
+legend("bottomleft", c("in 10 years", "in 5 years"), pch = 22, pt.bg = c("pink",
+    "lightgray"), cex = 1.25, bty = "n")
 legend("topright", "A", bty = "n", cex = 1.25)
 par(mar = c(4.5, 2.25, 1, 2.25))
 i <- 5
@@ -451,7 +454,7 @@ plot(mean.size[, i], log10(stuff[, i]), ylim = c(min(log10(c(stuff[, i], stuff2[
     i]))), max(log10(c(stuff2[, i], stuff[, i])))), xlab = "mean size of an individual",
     ylab = "", pch = 20, col = "lightgray")
 points(mean.size[, i], log10(stuff2[, i]), pch = 20, col = "pink")
-legend("bottomleft", c("in 5 years", "in 10 years"), pch = c(20, 20), col = c("pink",
+legend("bottomleft", c("in 10 years", "in 5 years"), pch = c(20, 20), col = c("pink",
     "lightgray"), cex = 1.25, bty = "n")
 legend("topright", "B", bty = "n", cex = 1.25)
 @
