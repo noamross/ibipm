@@ -154,7 +154,7 @@ plot(cryptantha$size, jitter(cryptantha$surv, factor = 0.1), pch = 21,
 lines(xs, Survival(xs), lwd = 4, col = "blue")
 # the growth kernel
 image(xs, xs, t(outer(xs, xs, Growth)), xlab = expression(size[t]),
-      ylab = expression(size[t + 1]), col = inferno(24)[8:24])
+      ylab = expression(size[t + 1]), col = inferno(24)[8:24], useRaster=TRUE)
 points(cryptantha$size, cryptantha$sizeNext, pch = 21,
        bg = rgb(0.2, 0.5, 1, 0.9))
 # the flowering kernel
