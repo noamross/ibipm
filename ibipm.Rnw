@@ -326,7 +326,7 @@ Iterating $\Psi$ yields how extinction probabilities $E_t(x)$ vary with time for
 
 
 
-<<extinction, cache=FALSE, fig.width=7, fig.height=4, echo=FALSE, fig.cap="Extinction probabilities for a population initially consisting of a single individual of size $x$. Different curves correspond to extinction occuring in $1, 5, 10, 15$ or $20$ years. Asymptotic extinction probabilities are shown by the thick gray curve. In A, the extinction curves for the baseline individual-based IPM. In B, extinction curves are shown when seed surival is increased by a factor of three.">>=
+<<extinction, cache=FALSE, fig.width=7, fig.height=4, echo=FALSE, fig.cap="Extinction probabilities for a population initially consisting of a single individual of size $x$. Different curves correspond to extinction occuring in $1, 5, 10, 15$ or $20$ years. Asymptotic extinction probabilities are shown by the thicker curve. In A, the extinction curves for the baseline individual-based IPM. In B, extinction curves for the case when seed surival is increased by a factor of three.">>=
 
 # Using the Psi.iterate function to get size- and year-dependent
 # extinction probabilities for populations starting with a single
