@@ -44,7 +44,7 @@
 \begin{enumerate}\linenumbers
 \item  Matrix models or integral projection models (IPMs) are commonly used to study the dynamics of structured populations, where discrete or continuous traits influence survival, growth, or reproduction. When a population's size is small, as is often the case for threatened species or potentially invasive species arriving in novel habitats, extinction risk may be substantial due to demographic stochasticity.
 \item Branching processes, which are individual-based counterparts to matrix models and IPMs, allow one to quantify these risks of extinction. For discretely structured populations, the theory of multi-type branching processes provides analytic methods to compute how extinction risk changes over time and how it depends on the size and composition of the population. Building on prior work on continuous-state branching processes, we extend these analytic methods to individual-based models accounting for any mixture of discrete and continuous population structure.
-\item The individual-based IPMs are defined by probabilistic update rules at the level of the individual which determine how each individual with a given trait value dies, changes trait value (e.g. grows in size), or produces individuals with the same or other trait values.  Probabilities of extinction are shown to be analytically determined by probability generating functionals associated with the individual-based IPMs. In particular, we present analytical expressions for how extinction probabilities change over time and depend on the initial abundance and trait distribution of the population.   We illustrate how to numerically implement these methods using data from the short-lived desert shrub species \emph{Cryptantha flava}, and provide a more general discussion of how to implement these methods to other data sets including those involving fluctuating environmental conditions.
+\item The individual-based IPMs are defined by probabilistic update rules at the level of the individual which determine how each individual with a given trait value dies, changes trait value (e.g. grows in size), or produces individuals with the same or other trait values.  Probabilities of extinction are shown to be analytically determined by probability-generating functionals associated with the individual-based IPMs. In particular, we present analytical expressions for how extinction probabilities change over time and depend on the initial abundance and trait distribution of the population.   We illustrate how to numerically implement these methods using data from the short-lived desert shrub species \emph{Cryptantha flava}, and provide a more general discussion of how to implement these methods to other data sets including those involving fluctuating environmental conditions.
 \item As most IPM studies have the necessary data to parameterize individual-based IPMs, these methods provide a computationally efficient means to explore how continuously structured populations differing in their evolutionary history and environmental context may differ in their vulnerability to extinction or ability to colonize new habitats.
 \end{enumerate}
 \end{quote}
@@ -89,11 +89,11 @@ where the left hand side reads ``the probability the population state lies in $A
 \end{enumerate}
 This iterative algorithm can be used to create individual based simulations of the individual based IPM. As with any branching process, stochastic realizations of this process, with probability one, either go to extinction in finite time, or the population abundance grows without bound. This latter event is typically interpreted as a population becoming established or persisting.
 
-\subsection*{Probability generating functionals and extinction probabilities}
+\subsection*{probability-generating functionals and extinction probabilities}
 
-We can characterize the probabilistic state of the system using probability generating functionals $\Psi$ (pgfs). Unlike moment generating functionals as used by \citet{harris-63}, the pgfs allow us to directly compute how extinction probabilities change in time as well as compute asymptotic extinction probabilities.
+We can characterize the probabilistic state of the system using probability-generating functionals $\Psi$ (pgfs). Unlike moment-generating functionals as used by \citet{harris-63}, the pgfs allow us to directly compute how extinction probabilities change in time as well as compute asymptotic extinction probabilities.
 
-To define the pgf $\Psi$, we introduce the following notation: given a continuous function $h:X\to\R$ and $\s\in \S$ (individuals' states $x_i$ are real numbers, and the stats $s$ is within all possible states $S$), let
+To define the pgf $\Psi$, we introduce the following notation: given a continuous function $h:X\to\R$ and $\s\in \S$ (individuals' states $x_i$ are real numbers, and the state $s$ is within all possible states $S$), let
 \[
 h^\s=
 \left\{
@@ -103,25 +103,29 @@ h^\s=
 \end{array}
 \right.
 \]
-The utility of this definition stems from the observation that if $h(x)$ corresponds to the probability that an individual of size $x$ dies and has no offspring over the next year, then $h^\s$ corresponds to the probability that a population in state $\s$ goes extinct in the next year. The probability generating functional is defined by
+The function $h(x)$ corresponds to the probability that an individual of size $x$ dies and has no offspring over the next year. $h^\s$ corresponds to the probability that a population in state $\s$ goes extinct in the next year. The corresponding probability-generating functional is defined by
+
 \begin{equation}\label{*}
 \Psi(h)(x)=\int h^\s \, m(x, d\s).
 \end{equation}
-$\Psi(h)(x)$ corresponds to the expected value of $h^\s$ due to the contributions of individuals in the next time step from an individual in state $x$. This expected value requires integrating over all possible populations states in the next time step.
+Given an individual in state $x$, $\Psi(h)(x)$ corresponds to the expected value of $h^\s$.  This requires integrating over all possible
+states $s$ the population may take on in the next time step, due to the different contributions an individual in state $x$ may contribute.
 
-The utility of $\Psi$ for computing extinction probabilities follows from two facts. First, the definition of $\Psi$ implies that if $h_0$ is the zero function (i.e. $h_0(x)=0$ for all $x$), then
+Two facts allow us to use $\Psi$ to calculate extinction probabilities. First, $\Psi(h_0)(x)$ is the probability the population goes extinct in one time step given that initially it consisted of one individual in state $x$. That is,
+
 \begin{equation}\label{star}
-\Psi(h_0)(x)=\int 1 \, m(x, d\s)= \P[\s_1=0|\s_0=(1;x)]
+\Psi(h_0)(x)=\int \times m(x, d\s)= \P[\s_1=0|\s_0=(1;x)]
 \end{equation}
-is the probability the population goes extinct in one time step given that initially it consisted of one individual in state $x$. For the second fact, define
+Secondly, the t-fold composition of $\Phi$ with itself, that is,
 \[
 \Psi^t(h)=\underbrace{\Psi(\Psi(\dots \Psi}_{\mbox{$t$ times}}(h)\dots))
 \]
-to be the $t$-fold composition of $\Psi$ with itself. We claim that
+is the probability of extinction by time $t$ given that the population initially consisted of one individual in state $x$.  That is, we claim that
 \begin{equation}\label{**}
 \Psi^t(h_0)(x)=\P[\s_t=0|\s_0=(1;x)]=:E_t(x)
 \end{equation}
-is the probability of extinction by time $t$ given that the population initially consisted of one individual in state $x$. To verify this claim, we argue by induction. Equation~\ref{star} implies that equation \eqref{**} holds for $t=1$. Now suppose that equation \eqref{**} holds at time $t$; we will show it holds at time $t+1$.  On the event that $\s_1=(n_1, \dots, n_k;x_1, \dots, x_k)$ is the population state at time $1$, extinction occurs by time $t+1$ only if each of the lineages of the $n_1+\dots +n_k$ individuals go extinct in the next $t$ time steps. As the fates of these lineages are independent of one another, it follows that
+
+To verify this claim, we argue by induction. Equation~\ref{star} implies that equation~\eqref{**} holds for $t=1$. Now suppose that equation \eqref{**} holds at time $t$; we will show it holds at time $t+1$.  On the event that $\s_1=(n_1, \dots, n_k;x_1, \dots, x_k)$ is the population state at time $1$, extinction occurs by time $t+1$ only if each of the lineages of the $n_1+\dots +n_k$ individuals go extinct in the next $t$ time steps. As the fates of these lineages are independent of one another, it follows that
 \[
 \begin{aligned}
 \P[s_{t+1}=0|\s_0=(1, x), \s_1=(n_1, \dots, n_k;x_1, \dots, x_k)]&= \prod_{i=1}^k \P[\s_{t+1}=0|\s_1=(1, x_i)]^{n_i}\\
@@ -144,7 +148,7 @@ As $E_0(x)\le E_1(x), \le E_2(x)\dots$ for any $x\in X$ and $E_t(x)\le 1$ for al
 \[
 E_\infty(x):=\lim_{t\to\infty} E_t(x).
 \]
-Using moment generating functionals with suitable technical hypotheses, \citet{harris-63} showed that $E_\infty(x)<1$ for all $x$ if the dominant eigenvalue of the mean-field IPM is greater than one, and $E_\infty(x)=1$ for all $x$ otherwise.
+Using moment-generating functionals with suitable technical hypotheses, \citet{harris-63} showed that $E_\infty(x)<1$ for all $x$ if the dominant eigenvalue of the mean-field IPM is greater than one, and $E_\infty(x)=1$ for all $x$ otherwise.
 
 \section*{An Illustration with a short-lived perennial}
 
@@ -247,7 +251,7 @@ where $\vec h$ corresponds to a discretized function i.e. a vector of length $n$
 
 <<main.IBIPM.code, cache=FALSE, echo=FALSE>>=
 #---------
-# Creating the discretized probability generating functional
+# Creating the discretized probability-generating functional
 #---------
 
 # the discretization choices
@@ -480,7 +484,7 @@ legend("topright", "B", bty = "n", cex = 1.25)
 
 To implement the methods presented here, there are two main steps. First, one needs to identify the main demographic processes of the population, the order in which these processes occur relative to the censuses used for data collection, and develop the statistical models for the each of the demographic processes. \citet{rees-etal-14} and \citet{merow-etal-14} provide excellent reviews on the philosophical and methodological issues associated with this step. Typically, whenever a study has sufficient data for constructing the mean-field IPM, there is no need to collect any additional data to build the individual-based IPM.  Unlike the mean-field IPMs, though, the individual-based IPMs make use of the complete distributional information associated with fecundity. As with other areas of stochastic demography, the shapes, not just the means, of these distributions may have significant effects on the likelihood of extinction or establishment success~\citep{nature-05}. Hence, it is best to examine several options (e.g. Poisson versus negative Binomial versus zero-inflated distributions) to identify which distribution does a better job of describing the fecundity data. As in all areas of modeling, if there is significant uncertainty about the ``best'' choice of the model, one should perform the analyses with each of the alternative fecundity distributions to identify the sensitivity of predictions of extinction risk to these alternatives.
 
-The second step, the focus of this paper, involves constructing the probability generating functional $\Psi$. For the uninitiated, this step may be intimidating. However, there are a three basic principles that simplify this construction. First, while this pgf $\Psi$ takes functions to functions, one should focus on writing down $\Psi(h)(x)$, which involves understanding the contributions of a single individual of size $x$ to the next census. Second, one can often can break up these contributions into a sum of independent contributions, find the pgfs associated with these simpler contributions, and then use the two fundamental properties of pgfs to ``stitch" together $\Psi$. Third, the distributions used to describe the number of offspring produced by an individual typically involve random variables (e.g. Poisson, negative binomial) for which the associated pgfs are well-known. Finally, whenever in doubt, find a collaborator that you trust to help put the pieces together correctly.
+The second step, the focus of this paper, involves constructing the probability-generating functional $\Psi$. For the uninitiated, this step may be intimidating. However, there are a three basic principles that simplify this construction. First, while this pgf $\Psi$ takes functions to functions, one should focus on writing down $\Psi(h)(x)$, which involves understanding the contributions of a single individual of size $x$ to the next census. Second, one can often can break up these contributions into a sum of independent contributions, find the pgfs associated with these simpler contributions, and then use the two fundamental properties of pgfs to ``stitch" together $\Psi$. Third, the distributions used to describe the number of offspring produced by an individual typically involve random variables (e.g. Poisson, negative binomial) for which the associated pgfs are well-known. Finally, whenever in doubt, find a collaborator that you trust to help put the pieces together correctly.
 
 
 For the individual-based models considered here, we assumed the environment remains constant over time. However, IPMs have and continue to be used to study the effects of fluctuating environmental conditions on population demography and life history evolution~\citep{childs-etal-04, dahlgren-ehrlen-11, rees-ellner-09}. The methods described here easily extended to fluctuating environments. Specifically, if $\Psi_t$ is the pgf of the individual-based IPM associated with year $t$, then the probability of extinction for a population initially in state $\s$ is
