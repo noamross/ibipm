@@ -89,7 +89,7 @@ where the left hand side reads ``the probability the population state lies in $A
 \end{enumerate}
 This iterative algorithm can be used to create individual based simulations of the individual based IPM. As with any branching process, stochastic realizations of this process, with probability one, either go to extinction in finite time, or the population abundance grows without bound. This latter event is typically interpreted as a population becoming established or persisting.
 
-\subsection*{probability-generating functionals and extinction probabilities}
+\subsection*{Probability-generating functionals and extinction probabilities}
 
 We can characterize the probabilistic state of the system using probability-generating functionals $\Psi$ (pgfs). Unlike moment-generating functionals as used by \citet{harris-63}, the pgfs allow us to directly compute how extinction probabilities change in time as well as compute asymptotic extinction probabilities.
 
@@ -103,24 +103,26 @@ h^\s=
 \end{array}
 \right.
 \]
-The function $h(x)$ corresponds to the probability that an individual of size $x$ dies and has no offspring over the next year. $h^\s$ corresponds to the probability that a population in state $\s$ goes extinct in the next year. The corresponding probability-generating functional is defined by
+
+If the function $h(x)$ is defined such that it corresponds to the probability that an individual of size $x$ dies and has no offspring over the next year, then $h^\s$ corresponds to the probability that a population in state $\s$ goes extinct in the next year. The corresponding probability-generating functional is defined by
 
 \begin{equation}\label{*}
 \Psi(h)(x)=\int h^\s \, m(x, d\s).
 \end{equation}
 Given an individual in state $x$, $\Psi(h)(x)$ corresponds to the expected value of $h^\s$.  This requires integrating over all possible
-states $s$ the population may take on in the next time step, due to the different contributions an individual in state $x$ may contribute.
+states $s$ that the population may take on in the next time step due to the different possible contributions of the individual in state $x$.
 
-Two facts allow us to use $\Psi$ to calculate extinction probabilities. First, $\Psi(h_0)(x)$ is the probability the population goes extinct in one time step given that initially it consisted of one individual in state $x$. That is,
+Two facts allow us to use $\Psi$ to calculate extinction probabilities. First, when $h_0$ is the zero function (i.e. $h_0(x)=0$ for all $x$), $\Psi(h_0)(x)$ is the probability the population goes extinct in one time step, given that initially it consisted of one individual in state $x$. That is,
 
 \begin{equation}\label{star}
-\Psi(h_0)(x)=\int \times m(x, d\s)= \P[\s_1=0|\s_0=(1;x)]
+\Psi(h_0)(x)=\int 1 \times m(x, d\s)= \P[\s_1=0|\s_0=(1;x)]
 \end{equation}
-Secondly, the t-fold composition of $\Phi$ with itself, that is,
+Secondly, we clam that the t-fold composition of $\Phi$ to $h_0$,
 \[
-\Psi^t(h)=\underbrace{\Psi(\Psi(\dots \Psi}_{\mbox{$t$ times}}(h)\dots))
+\Psi^t(h_0)=\underbrace{\Psi(\Psi(\dots \Psi}_{\mbox{$t$ times}}(h_0)\dots))
 \]
-is the probability of extinction by time $t$ given that the population initially consisted of one individual in state $x$.  That is, we claim that
+is the probability of extinction by time $t$ given that the population initially consisted of one individual in state $x$:
+
 \begin{equation}\label{**}
 \Psi^t(h_0)(x)=\P[\s_t=0|\s_0=(1;x)]=:E_t(x)
 \end{equation}
