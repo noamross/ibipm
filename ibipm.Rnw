@@ -502,5 +502,37 @@ Finally, and perhaps most importantly, the  manners in which size-structured dem
 \paragraph{\bf Acknowledgements.} We thank William Cuello, Eric Eager, Richard Erickson, Vadim Karatayev, and Jacob Moore for providing comments on an earlier draft of this manuscript.
 \bibliography{references}
 
+\newpage 
 
+\section*{Appendix: Extinction probabilities in a time varying environmnent}
+
+
+Let $m_0(x,d\s),m_1(x,d\s),m_2(x,d\s),\dots$ be a sequence of probability measures defining the population update rules at times $0,1,2,\dots.$. For each of these probability measures, define the pgf 
+\[
+\Phi_t(h)(x)=\int h^\s m_t(x,d\s)
+\]
+We claim that for $t\ge 0$ and $\tau\ge 0$
+\begin{equation}\label{claim}
+\Psi_{t}(\Psi_{t}(\dots \Psi_{t+\tau}(h_0)))(x)
+\end{equation}
+is the probability of extinction by time $t+\tau+1$ for a population consisting of one individual in state $x$ at time $t$. As before, we argue by induction on $\tau$. For $\tau=0$ and any $t\ge 0$, the definition of $\Psi_t$ implies 
+\begin{equation}\label{star}
+\Psi_t(h_0)(x)=\int 1\times m_t(x, d\s)= \P[\s_{t+1}=0|\s_t=(1;x)]
+\end{equation}
+Now suppose that equation \eqref{claim} holds for some $\tau\ge 0$ and all $t$; we will show it holds $\tau+1$ and all $t$. Fix $t\ge 0$ and $\tau \ge 0$. Assume $\s_t=(1;x)$.  On the event that $\s_{t+1}=(n_1, \dots, n_k;x_1, \dots, x_k)$ is the population state at time $t+1$, extinction occurs by time $t+\tau+1$ only if each of the lineages of the $n_1+\dots +n_k$ individuals go extinct in the next $\tau$ time steps. As the fates of these lineages are independent of one another, it follows that
+\[
+\begin{aligned}
+\P[s_{t+\tau+1}=0|\s_{t}=(1; x), \s_{t+1}=(n_1, \dots, n_k;x_1, \dots, x_k)]&= \prod_{i=1}^k \P[\s_{t+\tau+1}=0|\s_{t+1}=(1; x_i)]^{n_i}\\
+&=\prod_{i=1}^k\left(\Psi_{t+1}(\Psi_{t+2}(\dots \Psi_{t+1+\tau}(h_0)))(x_i)\right)^{n_i}\\
+&=\Psi_{t+1}(\Psi_{t+2}(\dots \Psi_{t+\tau+1}(h_0)))^{(n_1, \dots, n_k;x_1, \dots, x_k)}
+\end{aligned}
+\]
+where the second equality follows from our inductive hypothesis. By the law of total probability and conditioning over all possible states at time $t+1$, we get
+\[
+\begin{aligned}
+\P[s_{t+\tau+2}=0|\s_t=(1;x)]&=\int \Psi_{t+1}(\Psi_{t+2}(\dots \Psi_{t+\tau+1}(h_0)))^{\s} \, m_t(d\s, x)\\
+&=\Psi_{t}(\Psi_{t+1}(\dots \Psi_{t+\tau+1}(h_0)))(x)
+\end{aligned}
+\]
+which completes the inductive proof. 
 \end{document}
