@@ -73,7 +73,7 @@ Here, we describe individual-based counterparts of IPMs using continuous-state b
 
 
 \subsection*{The Individual Based IPM}
-We consider an individual-based model where the set of all possible individual states (e.g. age, size, geographical location, etc.) lies in a compact metric space $X$. For a standard size-structured IPM, $X=[a, b]$ corresponds to the range of sizes measured in the field where $a$ is the minimal size and $b$ is the maximal size. For models with a mixture of age and size structure, $X$ could be given by $\{1, \dots, T\}\times [a, b]$ where $T$ corresponds to the maximal age of an individual.
+We consider an individual-based model where the set of all possible individual states (e.g. age, size, geographical location, etc.) lies in a compact metric space $X$. For a standard size-structured IPM, $X=[a, b]$ corresponds to the range of sizes measured in the field where $a$ is the minimal size and $b$ is the maximal size. For models with a mixture of age and size structure, $X$ could be given by $\{1, \dots, T\}\times [a, b]$ where $T$ corresponds to the maximal age of an individual. For spatially structured populations, $X=[a,b]$ may correspond to locations along a transect or $X=[a,b]\times [c,d]$ may correspond latitude and longitude coordinates of individuals. 
 
 Following \citet{harris-63},  we consider finite populations in which the state of the population at any point in time is characterized by the different states $(x_1, x_2, \dots, x_k)$  of individuals within the population and the number of individuals in each state $(n_1, n_2, \dots, n_k)$. Specifically, if there $n_1$ individuals in state $x_1$, $n_2$ individuals in state $x_2$, ..., $n_k$ individuals in state $x_k$, then the state of the population is given by $\s=(n_1, n_2, \dots, n_k; x_1, x_2, \dots, x_k)$. The set of all possible population states is
 \[
@@ -101,7 +101,7 @@ This iterative algorithm can be used to create individual based simulations of t
 
 We can characterize the probabilistic state of the system using probability-generating functionals $\Psi$ (pgfs). Unlike moment-generating functionals as used by \citet{harris-63}, the pgfs allow us to directly compute how extinction probabilities change in time as well as compute asymptotic extinction probabilities.
 
-To define the pgf $\Psi$, we introduce the following notation: given a continuous function $h:X\to\R$ and $\s\in \S$ (individuals' states $x_i$ are real numbers, and the state $s$ is within all possible states $S$), let
+To define the pgf $\Psi$, we introduce some notation. To motivate this notation, suppose $h(x)$ equals the probability that an individual of size $x$ dies and has no offspring over the next year. If the current popoulatio state is$\s=(x_1,\dots,x_k;n_1,\dots,n_k)$, then independence of individuals implies that $\prod_{i=1}^kh(x)^{n_i}$ is the probability that population goes extinct by the next time step i.e. all inividuals die and have no offspring. With this motivation in mind, given \emph{any} continuous function $h:X\to\R$ and population state $\s\in\S$, define 
 \[
 h^\s=
 \left\{
@@ -112,13 +112,11 @@ h^\s=
 \right.
 \]
 
-If the function $h(x)$ is defined such that it corresponds to the probability that an individual of size $x$ dies and has no offspring over the next year, then $h^\s$ corresponds to the probability that a population in state $\s$ goes extinct in the next year. The corresponding probability-generating functional is defined by
-
+The probability-generating functional $\Psi$ is defined by
 \begin{equation}\label{*}
-\Psi(h)(x)=\int h^\s \, m(x, d\s).
+\Psi(h)(x)=\int h^\s \, m(x, d\s)
 \end{equation}
-Given an individual in state $x$, $\Psi(h)(x)$ corresponds to the expected value of $h^\s$.  This requires integrating over all possible
-states $s$ that the population may take on in the next time step due to the different possible contributions of the individual in state $x$.
+and corresponds to the expected value of $h^{\s_1}$ where $\s_1$ is the population state at time $1$, given the population initially consisted of a single individual in state $x$. This expectation requires integrating over all possible states $s$ that the population may take on in the next time step due to the different possible contributions of the individual in state $x$.
 
 Two facts allow us to use $\Psi$ to calculate extinction probabilities. First, when $h_0$ is the zero function (i.e. $h_0(x)=0$ for all $x$), $\Psi(h_0)(x)$ is the probability the population goes extinct in one time step, given that initially it consisted of one individual in state $x$. That is,
 
@@ -127,7 +125,7 @@ Two facts allow us to use $\Psi$ to calculate extinction probabilities. First, w
 \end{equation}
 Secondly, we clam that the t-fold composition of $\Phi$ to $h_0$,
 \[
-\Psi^t(h_0)=\underbrace{\Psi(\Psi(\dots \Psi}_{\mbox{$t$ times}}(h_0)\dots))
+\Psi^t(h_0)(x)=\underbrace{\Psi(\Psi(\dots \Psi}_{\mbox{$t$ times}}(h_0)\dots))(x)
 \]
 is the probability of extinction by time $t$ given that the population initially consisted of one individual in state $x$:
 
@@ -135,14 +133,14 @@ is the probability of extinction by time $t$ given that the population initially
 \Psi^t(h_0)(x)=\P[\s_t=0|\s_0=(1;x)]=:E_t(x)
 \end{equation}
 
-To verify this claim, we argue by induction. Equation~\ref{star} implies that equation~\eqref{**} holds for $t=1$. Now suppose that equation \eqref{**} holds at time $t$; we will show it holds at time $t+1$.  On the event that $\s_1=(n_1, \dots, n_k;x_1, \dots, x_k)$ is the population state at time $1$, extinction occurs by time $t+1$ only if each of the lineages of the $n_1+\dots +n_k$ individuals go extinct in the next $t$ time steps. As the fates of these lineages are independent of one another, it follows that
+To verify this claim, we argue by induction. Equation~\eqref{star} implies that equation~\eqref{**} holds for $t=1$. Now suppose that equation \eqref{**} holds at time $t$; we will show it holds at time $t+1$.  On the event that $\s_1=(n_1, \dots, n_k;x_1, \dots, x_k)$ is the population state at time $1$, extinction occurs by time $t+1$ only if each of the lineages of the $n_1+\dots +n_k$ individuals go extinct in the next $t$ time steps. As the fates of these lineages are independent of one another, it follows that
 \[
 \begin{aligned}
 \P[s_{t+1}=0|\s_0=(1, x), \s_1=(n_1, \dots, n_k;x_1, \dots, x_k)]&= \prod_{i=1}^k \P[\s_{t+1}=0|\s_1=(1, x_i)]^{n_i}\\
 &=\prod_{i=1}^k\left(\Psi^t(h_0)(x_i)\right)^{n_i}=\Psi^t(h_0)^{\s_1}
 \end{aligned}
 \]
-where the second equality follows from our inductive hypothesis. By the law of total probability
+where the second equality follows from our inductive hypothesis. By the law of total probability, we can integrate the conditional probabilities of extinction over all possible population states at time $t=1$ (i.e. $\s_1$) to get
 \[
 E_{t+1}(x)=\P[s_{t+1}=0|\s_0=(1;x)]=\int [\Psi^t(h_0)]^\s \, m(d\s, x)
 \]
