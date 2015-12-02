@@ -513,13 +513,13 @@ Let $m_0(x,d\s),m_1(x,d\s),m_2(x,d\s),\dots$ be a sequence of probability measur
 \]
 for any continous function $h:X\to\R$. We claim that for $t\ge 0$ and $\tau\ge 0$
 \begin{equation}\label{claim}
-\Psi_{t}(\Psi_{t}(\dots \Psi_{t+\tau}(h_0)))(x)
+\Psi_{t}(\Psi_{t+1}(\dots \Psi_{t+\tau}(h_0)))(x)
 \end{equation}
 is the probability of extinction by time $t+\tau+1$ for a population consisting of one individual in state $x$ at time $t$. As before, we argue by induction on $\tau$. For $\tau=0$ and any $t\ge 0$, the definition of $\Psi_t$ implies 
 \begin{equation}\label{star}
 \Psi_t(h_0)(x)=\int 1\times m_t(x, d\s)= \P[\s_{t+1}=0|\s_t=(1;x)].
 \end{equation}
-Now suppose that equation \eqref{claim} holds for some $\tau\ge 0$ and all $t$; we will show it holds $\tau+1$ and all $t$. Fix $t\ge 0$ and assume $\s_t=(1;x)$.  On the event that $\s_{t+1}=(n_1, \dots, n_k;x_1, \dots, x_k)$ is the population state at time $t+1$, extinction occurs by time $t+\tau+1$ only if each of the lineages of the $n_1+\dots +n_k$ individuals go extinct in the next $\tau$ time steps. As the fates of these lineages are independent of one another, it follows that
+Now suppose that equation \eqref{claim} holds for some $\tau\ge 0$ and all $t$; we will show it holds $\tau+1$ and all $t$. Fix $t\ge 0$ and assume $\s_t=(1;x)$.  On the event that $\s_{t+1}=(n_1, \dots, n_k;x_1, \dots, x_k)$ is the population state at time $t+1$, extinction occurs by time $t+\tau+2$ only if each of the lineages of the $n_1+\dots +n_k$ individuals go extinct in the next $\tau+1$ time steps. As the fates of these lineages are independent of one another, it follows that
 \[
 \begin{aligned}
 \P[\s_{t+\tau+2}=0|\s_{t}=(1; x), \s_{t+1}=(n_1, \dots, n_k;x_1, \dots, x_k)]&= \prod_{i=1}^k \P[\s_{t+\tau+2}=0|\s_{t+1}=(1; x_i)]^{n_i}\\
@@ -530,9 +530,9 @@ Now suppose that equation \eqref{claim} holds for some $\tau\ge 0$ and all $t$; 
 where the second equality follows from our inductive hypothesis that \eqref{claim} holds for $\tau$ and any $t$. By the law of total probability and conditioning over all possible states at time $t+1$, we get
 \[
 \begin{aligned}
-\P[s_{t+\tau+2}=0|\s_t=(1;x)]&=\int \Psi_{t+1}(\Psi_{t+2}(\dots \Psi_{t+\tau+1}(h_0)))^{\s} \, m_t(d\s, x)\\
-&=\Psi_{t}(\Psi_{t+1}(\dots \Psi_{t+\tau+1}(h_0)))(x)
+\P[s_{t+\tau+2}=0|\s_t=(1;x)]&=\int \Psi_{t+1}(\Psi_{t+2}(\dots \Psi_{t+\tau+1}(h_0)))^{\s} \, m_t(x,d\s)\\
+&=\Psi_{t}(\Psi_{t+1}(\dots \Psi_{t+\tau+1}(h_0)))(x).
 \end{aligned}
 \]
-which completes the inductive proof. 
+As $t\ge 0$ was arbritary, this completes the inductive proof. 
 \end{document}
