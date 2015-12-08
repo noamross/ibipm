@@ -73,7 +73,7 @@ Here, we describe individual-based counterparts of IPMs using continuous-state b
 
 
 \subsection*{The Individual-Based IPM}
-We consider an individual-based model where the set of all possible individual states (e.g. age, size, geographical location, etc.) lies in a compact metric space $X$. For a standard size-structured IPM, $X=[a, b]$ corresponds to the range of sizes measured in the field where $a$ is the minimal size and $b$ is the maximal size. For models with a mixture of age and size structure, $X$ could be given by $\{1, \dots, T\}\times [a, b]$ where $T$ corresponds to the maximal age of an individual. For spatially structured populations, $X=[a,b]$ may correspond to locations along a transect or $X=[a,b]\times [c,d]$ may correspond latitude and longitude coordinates of individuals.
+We consider an individual-based model where the set of all possible individual states (e.g. age, size, geographical location, etc.) lies in a compact metric space $X$. For a standard size-structured IPM, $X=[a, b]$ corresponds to the range of sizes measured in the field where $a$ is the minimal size and $b$ is the maximal size. For models with a mixture of age and size structure, $X$ could be given by $\{1, \dots, T\}\times [a, b]$ where $T$ corresponds to the maximal age of an individual. For spatially structured populations, $X=[a,b]$ may correspond to locations along a transect or $X=[a,b]\times [c,d]$ may correspond to latitude and longitude coordinates of individuals.
 
 Following \citet{harris-63},  we consider finite populations in which the state of the population at any point in time is characterized by the different states $(x_1, x_2, \dots, x_k)$  of individuals within the population and the number of individuals in each state $(n_1, n_2, \dots, n_k)$. Specifically, if there $n_1$ individuals in state $x_1$, $n_2$ individuals in state $x_2$, ..., $n_k$ individuals in state $x_k$, then the state of the population is given by $\s=(n_1, n_2, \dots, n_k; x_1, x_2, \dots, x_k)$. The set of all possible population states is
 \[
@@ -116,27 +116,26 @@ The probability-generating functional $\Psi$ is defined by
 \begin{equation}\label{*}
 \Psi(h)(x)=\int h^\s \, m(x, d\s)
 \end{equation}
-and corresponds to the expected value of $h^{\s_1}$ where $\s_1$ is the population state at time $1$, given the population initially consisted of a single individual in state $x$. This expectation requires integrating over all possible states $s$ that the population may take on in the next time step due to the different possible contributions of the individual in state $x$.
+and corresponds to the expected value of $h^{\s_1}$ where $\s_1$ is the population state at time $1$, given the population initially consisted of a single individual in state $x$. This expectation requires integrating over all possible states $\s$ that the population may take on in the next time step due to the different possible contributions of the individual in state $x$. Appendix A describes how this definition of $\Psi$ simplies to the pgf for the classical multi-type branching processes. 
 
 Two facts allow us to use $\Psi$ to calculate extinction probabilities. First, when $h_0$ is the zero function (i.e., $h_0(x)=0$ for all $x$), $\Psi(h_0)(x)$ is the probability the population goes extinct in one time step, given that initially it consisted of one individual in state $x$. That is,
-
 \begin{equation}\label{star}
-\Psi(h_0)(x)=\int 1 \times m(x, d\s)= \P[\s_1=0|\s_0=(1;x)]
+\Psi(h_0)(x)=\int_{\{0\}} 1\times m(x, d\s)+\int_{\S\setminus \{0\}} 0\times m(x,d\s)= \P[\s_1=0|\s_0=(1;x)].
 \end{equation}
-Secondly, we claim that the t-fold composition of $\Phi$ to $h_0$,
+Secondly, we claim that the $t$-fold composition of $\Phi$ applied to $h_0$ and evaluated at the individual state $x$,
 \[
 \Psi^t(h_0)(x)=\underbrace{\Psi(\Psi(\dots \Psi}_{\mbox{$t$ times}}(h_0)\dots))(x)
 \]
 is the probability of extinction by time $t$ given that the population initially consisted of one individual in state $x$:
 
 \begin{equation}\label{**}
-\Psi^t(h_0)(x)=\P[\s_t=0|\s_0=(1;x)]=:E_t(x)
+\Psi^t(h_0)(x)=\P[\s_t=0|\s_0=(1;x)]=:E_t(x).
 \end{equation}
 
 To verify this claim, we argue by induction. Equation~\eqref{star} implies that equation~\eqref{**} holds for $t=1$. Now suppose that equation \eqref{**} holds at time $t$; we will show it holds at time $t+1$.  On the event that $\s_1=(n_1, \dots, n_k;x_1, \dots, x_k)$ is the population state at time $1$, extinction occurs by time $t+1$ only if each of the lineages of the $n_1+\dots +n_k$ individuals go extinct in the next $t$ time steps. As the fates of these lineages are independent of one another, it follows that
 \[
 \begin{aligned}
-\P[s_{t+1}=0|\s_0=(1, x), \s_1=(n_1, \dots, n_k;x_1, \dots, x_k)]&= \prod_{i=1}^k \P[\s_{t+1}=0|\s_1=(1, x_i)]^{n_i}\\
+\P[s_{t+1}=0|\s_0=(1; x), \s_1=(n_1, \dots, n_k;x_1, \dots, x_k)]&= \prod_{i=1}^k \P[\s_{t+1}=0|\s_1=(1; x_i)]^{n_i}\\
 &=\prod_{i=1}^k\left(\Psi^t(h_0)(x_i)\right)^{n_i}=\Psi^t(h_0)^{\s_1}
 \end{aligned}
 \]
@@ -368,6 +367,10 @@ matplot(xs, t(out[times, ]), xlim = c(alpha, beta), type = "l", lty = 1, xlab = 
     bty = "n", lwd = 2, col=rev(viridis(7)[2:6]))
 h <- AE()
 lines(xs, h, type = "l", lwd = 5, xlim = c(alpha, beta), col = viridis(7)[1])
+# adding the values from the individual based simulations
+load("extinction.Rdata")
+matplot(xs.temp,extinct.prob,add=TRUE,type="p",pch=21)
+
 
 # The following code changes the mean fecundity
 # by a factor of 3,  defines the
@@ -495,11 +498,11 @@ To implement the methods presented here, there are two main steps. First, one ne
 The second step, the focus of this paper, involves constructing the probability-generating functional $\Psi$. For the uninitiated, this step may be intimidating. However, there are a three basic principles that simplify this construction. First, while this pgf $\Psi$ takes functions to functions, one should focus on writing down $\Psi(h)(x)$, which involves understanding the contributions of a single individual of size $x$ to the next census. Second, one can often can break up these contributions into a sum of independent contributions, find the pgfs associated with these simpler contributions, and then use the two fundamental properties of pgfs to ``stitch" together $\Psi$. Third, the distributions used to describe the number of offspring produced by an individual typically involve random variables (e.g. Poisson, negative binomial) for which the associated pgfs are well-known. Finally, whenever in doubt, find a collaborator that you trust to help put the pieces together correctly.
 
 
-For the individual-based models considered here, we assumed the environment remains constant over time. However, IPMs have and continue to be used to study the effects of fluctuating environmental conditions on population demography and life history evolution~\citep{childs-etal-04, dahlgren-ehrlen-11, rees-ellner-09}. The methods described here easily extended to fluctuating environments. Specifically, if $\Psi_t$ is the pgf of the individual-based IPM associated with year $t$, then the probability of extinction by year $t+1$ for a population initially in state $\s$ is
+For the individual-based models considered here, we assumed the environment remains constant over time. However, IPMs have and continue to be used to study the effects of fluctuating environmental conditions on population demography and life history evolution~\citep{childs-etal-04, dahlgren-ehrlen-11, rees-ellner-09}. The methods described here easily extend to fluctuating environments. Specifically, if $\Psi_t$ is the pgf of the individual-based IPM associated with year $t$, then the probability of extinction by year $t+1$ for a population initially in state $\s$ is
 \[
 \Psi_0(\Psi_1(\dots \Psi_t(h_0)))^\s
 \]
-where $h_0$, as before, is the zero function (see Appendix for justification). Note that the composition here is in the reverse order of what one does when iterating the mean-field IPM model forward in time. While we know of no formal proof, in the case of a stationary environment with suitable technical assumptions, we conjecture the following limit theorem holds: the asymptotic extinction probabilities are strictly less than one if and only if the stochastic growth rate (aka dominant Lyapunov exponent) of the mean-field IPM is positive. For multi-type branching processes, \citet[Theorem 12]{athreya-karlin-71} proves this result under suitable technical hypotheses.
+where $h_0$, as before, is the zero function (see Appendix B for justification). Note that the composition here is in the reverse order of what one does when iterating the mean-field IPM model forward in time. While we know of no formal proof, in the case of a stationary and ergodic environment with suitable technical assumptions, we conjecture the following limit theorem holds: the asymptotic extinction probabilities are strictly less than one if and only if the stochastic growth rate (aka dominant Lyapunov exponent) of the mean-field IPM is positive. For multi-type branching processes, \citet[Theorem 12]{athreya-karlin-71} proved this result under suitable technical hypotheses.
 
 Despite this relatively straightforward extension to temporally variable environments, many challenges remain. From the computational perspective, finding the efficient methods to deal with multi-dimensional states variables (e.g. size and location, or multi-dimensional traits) continues to be a challenge, as it is for mean-field IPMs. While the analytical methods presented here cover multi-dimensional state variables, their numerical implementation involves approximating mutli-dimensional integrals which can be computationally expensive. From the analytical perspective, accounting for temporal correlations in individual growth or reproductive rates (e.g. individuals that grew larger than expected in one year being more likely to grow larger than expected in the next year) or correlations among individuals are particularly important challenges as strong correlations likely have large effects on extinction risk.
 Finally, and perhaps most importantly, the  manners in which size-structured demography may shape extinction risk for real-world population remains to be understood. One might hope that by applying these methods to the many data sets for which IPMs have been developed, as well as future data sets, might provide a computationally efficient means to explore how size-structure for populations differing in their evolutionary history and environmental context influences their vulnerability to extinction.
@@ -509,8 +512,19 @@ Finally, and perhaps most importantly, the  manners in which size-structured dem
 \bibliography{references}
 
 \newpage
+\section*{Appendix A: The pgf for multi-type branching processes}
+To see how this definition of $\Psi$ recovers the pgf for the classical multi-type branching processes (see, for example, \citet{caswell-01}),  assume there are $k$ individual states with $\S=\{1,2,\dots,k\}$. In this special case, functions $h:\S\to \R$ can be viewed as vectors: $h=(h(1),h(2),\dots,h(k))$. The probability update rules, $m(i,d\s)$, are determined by the probabilities $p(i;n_1,n_2,\dots,n_k)$ that an individual in state $i$ is ``replaced'' in the next time step by  $n_1$ individuals of type $1$, $n_2$ individuals of type $2$, $\dots$, $n_k$ individuals of type $k$. Then the pgf $\Psi$ is defined by
+\[
+\begin{aligned}
+\Psi(h)(i)&=\int h^\s m(x,d\s)\\
+&= \sum_{n_1,\dots,n_k} \prod_{i=1}^k h(i)^{n_i} p(i;n_1,n_2,\dots,n_k).
+\end{aligned}
+\]
+where the sum is taken over all $k$-tuples $n_1,n_2,\dots,n_k$ of non-negative integers. 
 
-\section*{Appendix: Extinction probabilities in a time varying environmnent}
+\newpage
+
+\section*{Appendix B: Extinction probabilities in a time varying environmnent}
 
 
 Let $m_0(x,d\s),m_1(x,d\s),m_2(x,d\s),\dots$ be a sequence of probability measures defining the population update rules at times $0,1,2,\dots.$ i.e. $\P[\s_{t+1}\in A| \s_t =(1;x)]=\int_A m_t(x, d\s)$ for any $A\subset \S$. For each of these probability measures, define the pgf
@@ -523,7 +537,7 @@ for any continous function $h:X\to\R$. We claim that for $t\ge 0$ and $\tau\ge 0
 \end{equation}
 is the probability of extinction by time $t+\tau+1$ for a population consisting of one individual in state $x$ at time $t$. As before, we argue by induction on $\tau$. For $\tau=0$ and any $t\ge 0$, the definition of $\Psi_t$ implies
 \begin{equation}\label{starstarstar}
-\Psi_t(h_0)(x)=\int 1\times m_t(x, d\s)= \P[\s_{t+1}=0|\s_t=(1;x)].
+\Psi_t(h_0)(x)=\int_{\{0\}} 1\times m_t(x, d\s)+\int_{\S\setminus \{0\}} 0\times m_t(x,d\s)= \P[\s_{t+1}=0|\s_t=(1;x)].
 \end{equation}
 Now suppose that equation \eqref{claim} holds for some $\tau\ge 0$ and all $t$; we will show it holds $\tau+1$ and all $t$. Fix $t\ge 0$ and assume $\s_t=(1;x)$.  On the event that $\s_{t+1}=(n_1, \dots, n_k;x_1, \dots, x_k)$ is the population state at time $t+1$, extinction occurs by time $t+\tau+2$ only if each of the lineages of the $n_1+\dots +n_k$ individuals go extinct in the next $\tau+1$ time steps. As the fates of these lineages are independent of one another, it follows that
 \[

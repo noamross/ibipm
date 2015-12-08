@@ -1,30 +1,22 @@
 # run the R file which fits GLMs to the Salguero et al. (2012) data
 source("ipm.R")
 
+
+simulator=function(x.start=100,Tf=10,reps=10){
 # min and maximum sizes
 x.min=alpha
 x.max=2*beta
 
-# initial population state (written as a vector of sizes)
+# store the final population state and population size
 
-x=c(beta,beta,beta,beta)
-
-# length of run 
-
-Tf=4
-
-# number of reps
-
-reps=1
-
-# store the final population sizes
-
-final=numeric(reps)
+final.state=list()
+final.n=numeric(reps)
 
 # run simulations
 
 for(i in 1:reps){
-t=-1
+t=0
+x=x.start
 while((t<Tf)&&(length(x)>0)){
   t=t+1
   # determine whether each individual survived: 0 - died; 1 -survived
@@ -40,12 +32,43 @@ while((t<Tf)&&(length(x)>0)){
   flowered=rbinom(length(x),size=1,prob=Flowering(x))
   # create an empty vector to hold all the offspring
   kids=c()
+  # determine the number of kids and their size
+  if(length(flowered)>0){
+    lambda=sum(Fecundity(x[flowered]))
+    number.kids=rpois(1,lambda=lambda)
+    if(number.kids>0){
+      kids=rgamma(number.kids, shape = coef(recruit.size)[1], rate = coef(recruit.size)[2])
+    }
+  }
   
   
   # pull out the non-zero sized individuals
   temp=which(sizes>0)
   x=sizes[temp]
-  print(x)
-  }
+  x=c(x,kids)
+}
+final.state[[i]]=x
+final.n[i]=length(x)
+}
+return(list(state=final.state,n=final.n))
 }
 
+
+# trying this out to recreate the 5 time step curve from Figure 2. 
+
+Tfs=c(1,10,20)
+l=length(Tfs)
+k=5 # number of size classes
+xs=seq(alpha,beta,length=k)
+extinct.prob=matrix(0,k,l)
+reps=1000
+for(j in 1:l){
+for(i in 1:k){
+  out=simulator(x=xs[i],Tf=Tfs[j],reps=reps)
+  extinct.prob[i,j]=length(which(out$n==0))/reps
+}
+}
+matplot(xs,extinct.prob,ylim=c(0,1))
+xs.temp=xs
+
+save(file="extinction.Rdata",extinct.prob,xs.temp)
