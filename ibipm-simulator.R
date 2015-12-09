@@ -4,8 +4,8 @@ source("ipm.R")
 
 simulator=function(x.start=100,Tf=10,reps=10){
 # min and maximum sizes
-x.min=alpha
-x.max=2*beta
+x.min=alpha*0
+x.max=3*beta
 
 # store the final population state and population size
 
@@ -24,17 +24,13 @@ while((t<Tf)&&(length(x)>0)){
   # determine growth of all individuals 
   sizes=rnorm(length(x),mean = predict(model.growth, data.frame(size = x), type = "response"),
         sd = sd(model.growth$residuals))
-  # kill off individuals that grew too large and non-survivors
-  temp=which(sizes>x.max)
-  sizes[temp]=0
-  sizes=sizes*survivors
   # find who flowered
   flowered=rbinom(length(x),size=1,prob=Flowering(x))
   # create an empty vector to hold all the offspring
   kids=c()
   # determine the number of kids and their size
   if(length(flowered)>0){
-    lambda=sum(Fecundity(x[flowered]))
+    lambda=sum(Fecundity(x[flowered]))*3
     number.kids=rpois(1,lambda=lambda)
     if(number.kids>0){
       kids=rgamma(number.kids, shape = coef(recruit.size)[1], rate = coef(recruit.size)[2])
@@ -42,10 +38,11 @@ while((t<Tf)&&(length(x)>0)){
   }
   
   
-  # pull out the non-zero sized individuals
-  temp=which(sizes>0)
+  # pull out the dead, too small, too large
+  temp=which((sizes>x.min)&(sizes<x.max)&(survivors==1))
   x=sizes[temp]
-  x=c(x,kids)
+  temp=which((kids>x.min)&(kids<x.max))
+  x=c(x,kids[temp])
 }
 final.state[[i]]=x
 final.n[i]=length(x)
@@ -54,21 +51,22 @@ return(list(state=final.state,n=final.n))
 }
 
 
-# trying this out to recreate the 5 time step curve from Figure 2. 
+# trying this out to recreate some of the curves from Figure 2. 
 
 Tfs=c(1,10,20)
 l=length(Tfs)
 k=5 # number of size classes
 xs=seq(alpha,beta,length=k)
 extinct.prob=matrix(0,k,l)
-reps=1000
+reps=10000
 for(j in 1:l){
 for(i in 1:k){
   out=simulator(x=xs[i],Tf=Tfs[j],reps=reps)
   extinct.prob[i,j]=length(which(out$n==0))/reps
+  print(k*(j-1)+i)
 }
 }
 matplot(xs,extinct.prob,ylim=c(0,1))
 xs.temp=xs
 
-save(file="extinction.Rdata",extinct.prob,xs.temp)
+save(file="extinction-v2.Rdata",extinct.prob,xs.temp)

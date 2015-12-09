@@ -262,8 +262,8 @@ where $\vec h$ corresponds to a discretized function i.e. a vector of length $n$
 #---------
 
 # the discretization choices
-n <- 500  # number of bins
-xs <- seq(alpha, 2 * beta, length = n) # the x values
+n <- 500*2  # number of bins
+xs <- seq(alpha*0, beta*3, length = n) # the x values
 dx <- xs[2] - xs[1] # delta x width
 
 # discretizing the survival, offspring size, and flowering functions
@@ -369,7 +369,7 @@ h <- AE()
 lines(xs, h, type = "l", lwd = 5, xlim = c(alpha, beta), col = viridis(7)[1])
 # adding the values from the individual based simulations
 load("extinction.Rdata")
-matplot(xs.temp,extinct.prob,add=TRUE,type="p",pch=21)
+matplot(xs.temp,extinct.prob,add=TRUE,type="p",pch=4,col="black")
 
 
 # The following code changes the mean fecundity
@@ -415,6 +415,10 @@ matplot(xs, t(out[times, ]), xlim = c(alpha, beta), ylim = c(0, 1), type = "l",
         lwd = 2, col=rev(viridis(7)[2:6]))
 h <- AE.plus()
 lines(xs, h, type = "l", lwd = 5, xlim = c(alpha, beta), col = viridis(7)[1])
+# adding the values from the individual based simulations
+load("extinction-v2.Rdata")
+matplot(xs.temp,extinct.prob,add=TRUE,type="p",pch=4,col="black")
+
 par(mar = c(0, 0, 0, 0))
 legend("topright", c(as.character(times - 1), expression(Inf)),
        col = c(rev(viridis(7)[1:6])), lty = 1,
