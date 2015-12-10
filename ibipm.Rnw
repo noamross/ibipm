@@ -262,9 +262,14 @@ where $\vec h$ corresponds to a discretized function i.e. a vector of length $n$
 #---------
 
 # the discretization choices
-n <- 500*2  # number of bins
-xs <- seq(alpha*0, beta*3, length = n) # the x values
-dx <- xs[2] - xs[1] # delta x width
+n <- 500  # number of x values
+x.min=alpha*0
+x.max=3*beta
+dx=(x.max-x.min)/n
+xs=seq(x.min+dx/2,x.max-dx/2,length=n)
+
+#xs <- seq(alpha*0, beta*3, length = n) # the x values
+#dx <- xs[2] - xs[1] # delta x width
 
 # discretizing the survival, offspring size, and flowering functions
 s.vec <- Survival(xs)
@@ -276,10 +281,10 @@ flowering.vec <- as.numeric(Flowering(xs))
 # need to make sure the columns add
 # to one, i.e. no eviction
 g.mat <- outer(xs, xs, Growth) * dx
-q.evict <- 1 - colSums(g.mat)
-g.mat <- g.mat %*% diag(1/(1 - q.evict))
+q.evict <- colSums(g.mat)
+g.mat <- g.mat %*% diag(1/q.evict)
 # Note: most of the eviction is from negative-sized individuals
-s.vec <- (1 - q.evict) * s.vec
+s.vec <- q.evict * s.vec
 
 
 # defining the probability generating function

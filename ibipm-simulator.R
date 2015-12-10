@@ -5,12 +5,14 @@ source("ipm.R")
 simulator=function(x.start=100,Tf=10,reps=10){
 # min and maximum sizes
 x.min=alpha*0
-x.max=3*beta
+x.max=beta*3
 
 # store the final population state and population size
+# and time
 
 final.state=list()
 final.n=numeric(reps)
+final.time=numeric(reps)
 
 # run simulations
 
@@ -25,12 +27,12 @@ while((t<Tf)&&(length(x)>0)){
   sizes=rnorm(length(x),mean = predict(model.growth, data.frame(size = x), type = "response"),
         sd = sd(model.growth$residuals))
   # find who flowered
-  flowered=rbinom(length(x),size=1,prob=Flowering(x))
-  # create an empty vector to hold all the offspring
+  flowered=rbinom(length(x),size=1,prob=as.numeric(Flowering(x)))
+  # create an empty vector to hold all the offsprings
   kids=c()
   # determine the number of kids and their size
   if(length(flowered)>0){
-    lambda=sum(Fecundity(x[flowered]))*3
+    lambda=sum(Fecundity(x[flowered]))
     number.kids=rpois(1,lambda=lambda)
     if(number.kids>0){
       kids=rgamma(number.kids, shape = coef(recruit.size)[1], rate = coef(recruit.size)[2])
@@ -46,8 +48,9 @@ while((t<Tf)&&(length(x)>0)){
 }
 final.state[[i]]=x
 final.n[i]=length(x)
+final.time[i]=t
 }
-return(list(state=final.state,n=final.n))
+return(list(state=final.state,n=final.n,time=final.time))
 }
 
 
@@ -58,15 +61,18 @@ l=length(Tfs)
 k=5 # number of size classes
 xs=seq(alpha,beta,length=k)
 extinct.prob=matrix(0,k,l)
-reps=10000
-for(j in 1:l){
+reps=1000
 for(i in 1:k){
-  out=simulator(x=xs[i],Tf=Tfs[j],reps=reps)
-  extinct.prob[i,j]=length(which(out$n==0))/reps
-  print(k*(j-1)+i)
+  out=simulator(x.start=xs[i],Tf=max(Tfs)+1,reps=reps)
+  for(j in 1:l){
+  extinct.prob[i,j]=length(which(out$time<=Tfs[j]))/reps
+  }
+  print(i)
 }
-}
+
+
+
 matplot(xs,extinct.prob,ylim=c(0,1))
 xs.temp=xs
 
-save(file="extinction-v2.Rdata",extinct.prob,xs.temp)
+save(file="extinction.Rdata",extinct.prob,xs.temp)
