@@ -39,7 +39,7 @@ while((t<Tf)&&(length(x)>0)){
   # determine growth of all individuals 
   sizes=rnorm(length(x),mean = predict(model.growth, data.frame(size = x), type = "response"),
         sd = sd(model.growth$residuals))
-  # find who flowered
+  # find who flowered. 
   temp=rbinom(length(x),size=1,prob=as.numeric(Flowering(x)))
   flowered=which(temp==1)
   # create an empty vector to hold all the offsprings

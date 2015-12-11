@@ -245,9 +245,9 @@ Using \textbf{Fundamental Property 1}, we muliply $\Psi_g$ and $\Psi_f$ to get $
 
 \subsection*{Numerically implementing and using the pgf $\Psi$}
 
-To approximate $\Psi$ numerically, we discretize a larger size interval $[a, 2b]$ using $n=500$ equal sized intervals of width $\Delta x=(2b-a)/n$. We used the larger size interval of $[a, 2b]$ to minimize the effects of eviction (see below). We created a vector $\vec x$ corresponding to the midpoints of these intervals. Using this vector we discretized the survival function as a vector $\vec s=s(\vec x)$, the growth kernel as a matrix using the outer product $G$ of the growth kernel $g$ with $\vec x$, the probability of flowering function as a vector $\vec p=p(\vec x)$, the fecundity function as a vector $\vec f=f(\vec x)$, and the offspring size distribution as a vector $\vec e=e(\vec x)$.
+To approximate $\Psi$ numerically, we discretize the size interval $[0, 2b]$ using $n=500$ equal sized intervals of width $\Delta x=2b/n$. We used the larger size interval of $[0, 2b]$, where $b$ is the size of the largest observed individual, to minimize the effects of eviction (see below). We created a vector $\vec x$ corresponding to the midpoints of these intervals. Using this vector we discretized the survival function as a vector $\vec s=s(\vec x)$, the growth kernel as a matrix using the outer product $G$ of the growth kernel $g$ with $\vec x$, the probability of flowering function as a vector $\vec p=p(\vec x)$, the fecundity function as a vector $\vec f=f(\vec x)$, and the offspring size distribution as a vector $\vec e=e(\vec x)$.
 
-For the previously described methods to work, it is critical that column sums for $G$ and the sum of $\vec e$ equal one. For most IPMs, this will not occur automatically due to individuals being evicted from the size interval $[a, 2b]$. There are a variety of ways to handle this issue~\citep{williams-etal-12}. As the offspring size vector nearly summed to one,  we simply re-normalized it so that it summed to one. For the growth matrix $G$, we treated eviction as mortality. To do this, we took one minus the column sums of $G$, subtracted these sums from the survival vector, and then normalized the column sums of $G$ so that they added to one. When taking the product of survival and growth, the resulting mean-field IPM is unaffected by these changes.
+For the previously described methods to work, it is critical that column sums for $G$ and the sum of $\vec e$ equal one. For most IPMs, this will not occur automatically due to individuals being evicted from the size interval $[0, 2b]$. There are a variety of ways to handle this issue~\citep{williams-etal-12}. As the offspring size vector nearly summed to one,  we simply re-normalized it so that it summed to one. For the growth matrix $G$, we treated eviction as mortality. To do this, we took one minus the column sums of $G$, subtracted these sums from the survival vector, and then normalized the column sums of $G$ so that they added to one. When taking the product of survival and growth, the resulting mean-field IPM is unaffected by these changes.
 
 Using these discretized demographic components and the pgf $\phi$ for fecundity, we get the discretized pgf $\Psi$, given by
 \[
@@ -263,7 +263,7 @@ where $\vec h$ corresponds to a discretized function i.e. a vector of length $n$
 
 # the discretization choices
 n <- 500  # number of x values
-x.min=alpha*0
+x.min=0
 x.max=beta*2
 dx=(x.max-x.min)/n
 xs=seq(x.min+dx/2,x.max-dx/2,length=n)
@@ -356,16 +356,16 @@ Iterating $\Psi$ yields how extinction probabilities $E_t(x)$ vary with time for
 
 
 
-<<extinction, cache=FALSE, fig.width=7, fig.height=4, echo=FALSE, fig.cap="Extinction probabilities for a population initially consisting of a single individual of size $x$. Different curves correspond to extinction occuring in $1, 5, 10, 15$ or $20$ years. Asymptotic extinction probabilities are shown by the thicker curve. In A, the extinction curves for the baseline individual-based IPM. In B, extinction curves for the case when seed surival is increased by a factor of three.">>=
+<<extinction, cache=FALSE, fig.width=7, fig.height=4, echo=FALSE, fig.cap="Extinction probabilities for a population initially consisting of a single individual of size $x$. Different curves correspond to extinction occuring in $1, 5, 10, 15$ or $20$ years. Asymptotic extinction probabilities are shown by the thicker curve. In A, the extinction curves for the baseline individual-based IPM. In B, extinction curves for the case when seed surival is increased by a factor of three. Individual-based simulation estimates of extinction probabilities ($10,000$ replicates per estimate) indicated by crosses. ">>=
 
 # Using the Psi.iterate function to get size- and year-dependent
 # extinction probabilities for populations starting with a single
 # individual
 
-Tf <- 15
+Tf <- 20
 out <- Psi.iterate(Tf)
-#times <- c(1, 5, 10, 15, 20) + 1
-times<-c(1,3,5,10,15)+1
+times <- c(1, 5, 10, 15, 20) + 1
+#times<-c(1,3,5,10,15)+1
 
 par(cex.lab = 1.25, cex.axis = 1.25, mar = c(4.5, 4.5, 1, 1))
 layout(matrix(c(1, 2), 1, byrow = TRUE), widths = c(4, 4))
