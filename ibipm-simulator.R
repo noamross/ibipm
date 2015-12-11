@@ -4,8 +4,8 @@ source("ipm.R")
 
 simulator=function(x.start=100,Tf=10,reps=10){
 # min and maximum sizes
-x.min=alpha*0
-x.max=beta*3
+x.min=0
+x.max=Inf
 
 # store the final population state and population size
 # and time
@@ -32,7 +32,7 @@ while((t<Tf)&&(length(x)>0)){
   kids=c()
   # determine the number of kids and their size
   if(length(flowered)>0){
-    lambda=sum(Fecundity(x[flowered]))
+    lambda=sum(Fecundity(x[flowered])) *3
     number.kids=rpois(1,lambda=lambda)
     if(number.kids>0){
       kids=rgamma(number.kids, shape = coef(recruit.size)[1], rate = coef(recruit.size)[2])
@@ -56,12 +56,12 @@ return(list(state=final.state,n=final.n,time=final.time))
 
 # trying this out to recreate some of the curves from Figure 2. 
 
-Tfs=c(1,10,20)
+Tfs=c(1,3,5,10,15)
 l=length(Tfs)
 k=5 # number of size classes
 xs=seq(alpha,beta,length=k)
 extinct.prob=matrix(0,k,l)
-reps=1000
+reps=10000
 for(i in 1:k){
   out=simulator(x.start=xs[i],Tf=max(Tfs)+1,reps=reps)
   for(j in 1:l){
@@ -75,4 +75,4 @@ for(i in 1:k){
 matplot(xs,extinct.prob,ylim=c(0,1))
 xs.temp=xs
 
-save(file="extinction.Rdata",extinct.prob,xs.temp)
+save(file="extinction-3.Rdata",extinct.prob,xs.temp)

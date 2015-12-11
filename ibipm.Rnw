@@ -264,7 +264,7 @@ where $\vec h$ corresponds to a discretized function i.e. a vector of length $n$
 # the discretization choices
 n <- 500  # number of x values
 x.min=alpha*0
-x.max=3*beta
+x.max=beta*2
 dx=(x.max-x.min)/n
 xs=seq(x.min+dx/2,x.max-dx/2,length=n)
 
@@ -362,9 +362,10 @@ Iterating $\Psi$ yields how extinction probabilities $E_t(x)$ vary with time for
 # extinction probabilities for populations starting with a single
 # individual
 
-Tf <- 100
+Tf <- 15
 out <- Psi.iterate(Tf)
-times <- c(1, 5, 10, 15, 20) + 1
+#times <- c(1, 5, 10, 15, 20) + 1
+times<-c(1,3,5,10,15)+1
 
 par(cex.lab = 1.25, cex.axis = 1.25, mar = c(4.5, 4.5, 1, 1))
 layout(matrix(c(1, 2), 1, byrow = TRUE), widths = c(4, 4))
@@ -375,6 +376,7 @@ lines(xs, h, type = "l", lwd = 5, xlim = c(alpha, beta), col = viridis(7)[1])
 # adding the values from the individual based simulations
 load("extinction.Rdata")
 matplot(xs.temp,extinct.prob,add=TRUE,type="p",pch=4,col="black")
+
 
 
 # The following code changes the mean fecundity
@@ -414,14 +416,14 @@ AE.plus <- function(tol = 0.001) {
 }
 
 out <- Psi.plus.iterate(Tf)
-times <- c(1, 5, 10, 15, 20) + 1
+#times <- c(1, 5, 10, 15, 20) + 1
 matplot(xs, t(out[times, ]), xlim = c(alpha, beta), ylim = c(0, 1), type = "l",
         lty = 1, xlab = "size x", ylab = "extinction probabilities", bty = "n",
         lwd = 2, col=rev(viridis(7)[2:6]))
 h <- AE.plus()
 lines(xs, h, type = "l", lwd = 5, xlim = c(alpha, beta), col = viridis(7)[1])
 # adding the values from the individual based simulations
-load("extinction-v2.Rdata")
+load("extinction-3.Rdata")
 matplot(xs.temp,extinct.prob,add=TRUE,type="p",pch=4,col="black")
 
 par(mar = c(0, 0, 0, 0))
