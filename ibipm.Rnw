@@ -40,7 +40,7 @@
 %\footnotesize
 \textsc{Abstract.}
 %\begin{abstract}
-%Matrix models or integral projection models (IPMs) are commonly used to study the dynamics of structured populations, where some discrete or continuous trait influences survival, growth, or reproduction. When the population's size is small, as is often the case for a threatened species or a potentially invasive species arriving in a novel habitat, the population's dynamics can be approximated by a branching process which serves as an individual-based counterparts to matrix models and IPMs. For discretely structured populations, the theory of multi-type branching processes provide analytic methods to compute how extinction risk changes over time and how it depends on the size and composition of the population. Building on prior work on continuous-state branching processes, we extend these analytic methods to individual-based models accounting for any mixture of discrete and continuous population structure. We illustrate how to numerically implement these methods using data from a short-lived desert shrub species \emph{Cryptantha flava}, and provide guidelines on applying these methods to other data sets.
+%Matrix models or integral projection models (IPMs) are commonly used to study the dynamics of structured populations, where some discrete or continuous trait influences survival, growth, or reproduction. When the population's size is small, as is often the case for a threatened species or a potentially invasive species arriving in a novel habitat, the population's dynamics can be approximated by a branching process which serves as an individual-based counterparts to matrix models and IPMs. For discretely structured populations, the theory of multi-type branching processes provide analytic methods to compute how extinction risk changes over time and how it depends on the size and composition of the population. Building on prior work on continuous-state branching processes, we ext end these analytic methods to individual-based models accounting for any mixture of discrete and continuous population structure. We illustrate how to numerically implement these methods using data from a short-lived desert shrub species \emph{Cryptantha flava}, and provide guidelines on applying these methods to other data sets.
 \begin{enumerate}\linenumbers
 \item  Matrix models or integral projection models (IPMs) are commonly used to study the dynamics of structured populations, where discrete or continuous traits influence survival, growth, or reproduction.
 
@@ -122,7 +122,7 @@ Two facts allow us to use $\Psi$ to calculate extinction probabilities. First, w
 \begin{equation}\label{star}
 \Psi(h_0)(x)=\int_{\{0\}} 1\times m(x, d\s)+\int_{\S\setminus \{0\}} 0\times m(x,d\s)= \P[\s_1=0|\s_0=(1;x)].
 \end{equation}
-Secondly, we claim that the $t$-fold composition of $\Phi$ applied to $h_0$ and evaluated at the individual state $x$,
+using the fact that the integral over $\S$ equals the integral over the extinction state $\{0\}$ plus the integral over the non-extinction states $\S\setminus \{0\}$. Secondly, we claim that the $t$-fold composition of $\Phi$ applied to $h_0$ and evaluated at the individual state $x$,
 \[
 \Psi^t(h_0)(x)=\underbrace{\Psi(\Psi(\dots \Psi}_{\mbox{$t$ times}}(h_0)\dots))(x)
 \]
@@ -521,7 +521,7 @@ Despite this relatively straightforward extension to temporally variable environ
 Finally, and perhaps most importantly, the  manners in which size-structured demography may shape extinction risk for real-world population remains to be understood. One might hope that by applying these methods to the many data sets for which IPMs have been developed, as well as future data sets, might provide a computationally efficient means to explore how size-structure for populations differing in their evolutionary history and environmental context influences their vulnerability to extinction.
 
 \vskip 0.1in
-\paragraph{\bf Acknowledgements.} We thank William Cuello, Eric Eager, Richard Erickson, Vadim Karatayev, and Jacob Moore for providing comments on an earlier draft of this manuscript.
+\paragraph{\bf Acknowledgements.} We thank William Cuello, Eric Eager, Richard Erickson, Vadim Karatayev, Jacob Moore, and an anonymous reviewer for providing comments on an earlier draft of this manuscript.
 \bibliography{references}
 
 \newpage
