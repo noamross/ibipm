@@ -356,7 +356,7 @@ Iterating $\Psi$ yields how extinction probabilities $E_t(x)$ vary with time for
 
 
 
-<<extinction, cache=FALSE, fig.width=7, fig.height=4, echo=FALSE, fig.cap="Extinction probabilities for a population initially consisting of a single individual of size $x$. Different curves correspond to extinction occuring in $1, 5, 10, 15$ or $20$ years. Asymptotic extinction probabilities are shown by the thicker curve. In A, the extinction curves for the baseline individual-based IPM. In B, extinction curves for the case when seed surival is increased by a factor of three. Individual-based simulation estimates of extinction probabilities ($10,000$ replicates per estimate) indicated by crosses. ">>=
+<<extinction, cache=TRUE, fig.width=7, fig.height=4, echo=FALSE, fig.cap="Extinction probabilities for a population initially consisting of a single individual of size $x$. Different curves correspond to extinction occuring in $1, 5, 10, 15$ or $20$ years. Asymptotic extinction probabilities are shown by the thicker curve. In A, the extinction curves for the baseline individual-based IPM. In B, extinction curves for the case when seed surival is increased by a factor of three. Individual-based simulation estimates of extinction probabilities ($10,000$ replicates per estimate) indicated by crosses. ">>=
 
 # Using the Psi.iterate function to get size- and year-dependent
 # extinction probabilities for populations starting with a single
@@ -374,8 +374,9 @@ matplot(xs, t(out[times, ]), xlim = c(alpha, beta), type = "l", lty = 1, xlab = 
 h <- AE()
 lines(xs, h, type = "l", lwd = 5, xlim = c(alpha, beta), col = viridis(7)[1])
 # adding the values from the individual based simulations
-load("extinction.Rdata")
-matplot(xs.temp,extinct.prob,add=TRUE,type="p",pch=4,col="black")
+fecundity_multiplier = 1
+source("ibipm-simulator.R")
+matplot(xs.simulated,extinct.prob,add=TRUE,type="p",pch=4,col="black")
 
 
 
@@ -423,8 +424,9 @@ matplot(xs, t(out[times, ]), xlim = c(alpha, beta), ylim = c(0, 1), type = "l",
 h <- AE.plus()
 lines(xs, h, type = "l", lwd = 5, xlim = c(alpha, beta), col = viridis(7)[1])
 # adding the values from the individual based simulations
-load("extinction-3.Rdata")
-matplot(xs.temp,extinct.prob,add=TRUE,type="p",pch=4,col="black")
+fecundity_multiplier = 3
+source("ibipm-simulator.R")
+matplot(xs.simulated,extinct.prob,add=TRUE,type="p",pch=4,col="black")
 
 par(mar = c(0, 0, 0, 0))
 legend("topright", c(as.character(times - 1), expression(Inf)),
@@ -456,7 +458,7 @@ legend("topleft", c("100 small", "8 large", "5 large"), lty = 1:3, col = viridis
 
 We also used the data to see how extinction risk over different time frames depends on the size and composition of the population. Specifically, for different founding population abundances $N$, we randomly sampled $N$ individuals from the data and computed extinction risk of this sampled population over $5$ and $10$ year periods (Figure~\ref{fig:sampling}). For each founding population abundance $N$, we considered $500$ random samples of size $N$. Figure~\ref{fig:sampling}A illustrates that, on average, $\log$ extinction risk decreases with the founding population size $N$ and is greater for the $10$ year period than the $5$ year period. For smaller founding popualation sizes $N$, there is substantial overlap in the distributions of extinction times for the $5$ and $10$ year time frames. This overlap stems from founding populations of mostly large individuals being more likely to persist at least $10$ years than founding populations of mostly small individuals persisting at least $5$ years. Consistent with this explanation, Figure~\ref{fig:sampling}B illustrates that mean size of an individual within a founding  population has a strong negative correlation with (log) extinction probability, and the slope of this correlation is steeper over shorter time frames than longer time frames.
 
-<<sampling, cache=TRUE, fig.width=7, fig.height=4, echo=FALSE, fig.cap="Extinction probabilities for founding populations of different abundance. For each founding population abundance $N$, $500$ samples consisting of $N$ randomly choosen individuals from the data set were used to create a founding population of $N$ individuals. Extinction probablities by year $5$ and year $10$ were calculated for each of these sample populations. In A, extinction probability is plotted as a box plot for different $N$ values. In B, extinction probability is plotted against the mean size of an individual for a population abundance $N=25$.">>=
+<<sampling, cache=FALSE, fig.width=7, fig.height=4, echo=FALSE, fig.cap="Extinction probabilities for founding populations of different abundance. For each founding population abundance $N$, $500$ samples consisting of $N$ randomly choosen individuals from the data set were used to create a founding population of $N$ individuals. Extinction probablities by year $5$ and year $10$ were calculated for each of these sample populations. In A, extinction probability is plotted as a box plot for different $N$ values. In B, extinction probability is plotted against the mean size of an individual for a population abundance $N=25$.">>=
 sizes <- cryptantha$size[which(cryptantha$size > 0 & cryptantha$size < beta)]  # empirical data
 T1 <- 5
 T2 <- 10
