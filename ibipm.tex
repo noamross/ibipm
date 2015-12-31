@@ -259,7 +259,7 @@ Thus, we get the pgf associated with a flowering individual is the following com
 \[
 \Psi_{flowering}(h)(x)=\phi(x, \int h(y)e(y)dy)
 \]
-To get the pgf for flowering and non-flowering contributions to fecundity, we observe that fecundity contributions of an individual of size $x$ is given by $0$ with probability $1-p(x)$ and by a flowering individuals with probability $p(x)$. By the \textbf{Fundamental Property 3}, we have the pgf for fecundity contributions equals
+To get the pgf for flowering and non-flowering contributions to fecundity, we observe that fecundity contributions of an individual of size $x$ is given by $0$ with probability $1-p(x)$ and by a flowering individual with probability $p(x)$. By the \textbf{Fundamental Property 3}, we have the pgf for fecundity contributions equals
 \[
 \Psi_f (h)(x)=(1-p(x))\times 1+p(x)\phi(x, \int h(y)e(y)dy)
 \]
@@ -324,7 +324,7 @@ We also used the data to see how extinction risk over different time frames depe
 
 To implement the methods presented here, there are two main steps. First, one needs to identify the main demographic processes of the population, the order in which these processes occur relative to the censuses used for data collection, and develop the statistical models for the each of the demographic processes. \citet{rees-etal-14} and \citet{merow-etal-14} provide excellent reviews on the philosophical and methodological issues associated with this step. Typically, whenever a study has sufficient data for constructing the mean-field IPM, there is no need to collect any additional data to build the individual-based IPM.  Unlike the mean-field IPMs, though, the individual-based IPMs make use of the complete distributional information associated with fecundity. As with other areas of stochastic demography, the shapes, not just the means, of these distributions may have significant effects on the likelihood of extinction or establishment success~\citep{nature-05}. Hence, it is best to examine several options (e.g. Poisson versus negative Binomial versus zero-inflated distributions) to identify which distribution does a better job of describing the fecundity data. As in all areas of modeling, if there is significant uncertainty about the ``best'' choice of the model, one should perform the analyses with each of the alternative fecundity distributions to identify the sensitivity of predictions of extinction risk to these alternatives.
 
-The second step, the focus of this paper, involves constructing the probability-generating functional $\Psi$. For the uninitiated, this step may be intimidating. However, there are a three basic principles that simplify this construction. First, while this pgf $\Psi$ takes functions to functions, one should focus on writing down $\Psi(h)(x)$, which involves understanding the contributions of a single individual of size $x$ to the next census. Second, one can often can break up these contributions into a sum of independent contributions, find the pgfs associated with these simpler contributions, and then use the two fundamental properties of pgfs to ``stitch" together $\Psi$. Third, the distributions used to describe the number of offspring produced by an individual typically involve random variables (e.g. Poisson, negative binomial) for which the associated pgfs are well-known. Finally, whenever in doubt, find a collaborator that you trust to help put the pieces together correctly.
+The second step, the focus of this paper, involves constructing the probability-generating functional $\Psi$. For the uninitiated, this step may be intimidating. However, there are a three basic principles that simplify this construction. First, while this pgf $\Psi$ takes functions to functions, one should focus on writing down $\Psi(h)(x)$, which involves understanding the contributions of a single individual of size $x$ to the next census. Second, one can often can break up these contributions into a sum of independent contributions, find the pgfs associated with these simpler contributions, and then use the fundamental properties of pgfs to ``stitch" together $\Psi$. Third, the distributions used to describe the number of offspring produced by an individual typically involve random variables (e.g. Poisson, negative binomial) for which the associated pgfs are well-known. Finally, whenever in doubt, find a collaborator that you trust to help put the pieces together correctly.
 
 
 For the individual-based models considered here, we assumed the environment remains constant over time. However, IPMs have and continue to be used to study the effects of fluctuating environmental conditions on population demography and life history evolution~\citep{childs-etal-04, dahlgren-ehrlen-11, rees-ellner-09}. The methods described here easily extend to fluctuating environments. Specifically, if $\Psi_t$ is the pgf of the individual-based IPM associated with year $t$, then the probability of extinction by year $t+1$ for a population initially in state $\s$ is
@@ -366,14 +366,14 @@ To write down the pgf in this case, we begin by writing down the pgf for a survi
 \[
 \Psi_{growth}(h)(x)=\int h(y) G(y,x)\,dy \mbox{ and } \Psi_{fecundity}=1-p(x)+p(x)\phi(x,\int h(y)e(y)dy).
 \]
-As these contributions are independent of one another, the pgf for a surviving individual $x$ is the product of these pgfs 
+As these contributions are independent of one another, \textbf{Fundamental Property 1} implies that the pgf for a surviving individual $x$ is  
 \[
 \Psi_{surv}(h)(x)=\int h(y) G(y,x)\,dy \times \left(1-p(x)+p(x)\phi(x,\int h(y)e(y)dy)\right). 
 \]
 
-To get the pgf for surviving and non-surviving individuals, we observe that the contributions of an individual of size $x$ is given by $0$ with probability $1-s(x)$ and by the contributions of a surviving individual with probability $s(x)$. By the \textbf{Fundamental Property 3}, 
+To get the pgf for surviving and non-surviving individuals, we observe that the contributions of an individual of size $x$ is given by $0$ with probability $1-s(x)$ and by the contributions of a surviving individual with probability $s(x)$. By the \textbf{Fundamental Property 3} of pgfs, we get 
 \begin{eqnarray*}
-\Psi (h)(x)&=&1-s(x)+s(x)\Psi_{surv}(h)(x)\\
+\Psi (h)(x)&=&(1-s(x))\times 1+s(x)\Psi_{surv}(h)(x)\\
 &=& 1-s(x)+s(x)\times \int h(y) G(y,x)\,dy \times \left(1-p(x)+p(x)\phi(x,\int h(y)e(y)dy)\right).
 \end{eqnarray*}
 
@@ -381,13 +381,13 @@ Next we consider a semelparous (monocarpic) population where flowering is follow
 \[
 N_{t+1}(x)=\int_a^b \left[ s(y)(1-p(y))G(y, x)+s(y)e(x)p(y)f(y)N_t(y)\right]\, dy.
 \]
-The main difference for the pgf of this IPM is that surviving individuals don't have independent contributions through growth and fecundity. Instead, these contributions are mutually exclusive and \textbf{Fundamental Property 3} of pgfs implies 
+The main difference for this IPM is that surviving individuals either contribute through growth with probability $1-p(x)$ or by fecundity with probability $p(x)$. \textbf{Fundamental Property 3} of pgfs implies 
 \[
 \Psi_{surv}(h)(x)=(1-p(x))\int h(y) G(y,x)\,dy +p(x)\phi(x,\int h(y)e(y)dy). 
 \]
 Hence, 
 \begin{eqnarray*}
-\Psi (h)(x)&=&1-s(x)+s(x)\Psi_{surv}(h)(x)\\
+\Psi (h)(x)&=&(1-s(x))\times 1 +s(x)\Psi_{surv}(h)(x)\\
 &=& 1-s(x) + s(x)\left((1-p(x))\int h(y) G(y,x)\,dy +p(x)\phi(x,\int h(y)e(y)dy)\right). 
 \end{eqnarray*}
 
