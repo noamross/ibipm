@@ -209,7 +209,7 @@ Using moment-generating functionals with suitable technical hypotheses, \citet{h
 
 \section*{An Illustration with a short-lived perennial}
 
-We illustrate these general methods using an individual-based IPM for the yellow-flowered perennial plant, Plateau Yellow Miner's Candle (\emph{Cryptantha flava}), of the borage family (\emph{Boraginaceae}). For populations growing along the Colorado Plateau, USA, \citet{salguero-etal-12} developed an IPM using data collected from 2004 to 2010~\citep{salguero-gomez-etal-14}. Here, we use a subset of this data available in an R package, IPMpack ~\citep{IPMpack}.  All code to for this example is archived at Zenodo~\citep{schreiber-ross-ibipm-code-2015}.
+We illustrate these general methods using an individual-based IPM for the yellow-flowered perennial plant, Plateau Yellow Miner's Candle (\emph{Cryptantha flava}), of the borage family (\emph{Boraginaceae}). For populations growing along the Colorado Plateau, USA, \citet{salguero-etal-12} developed an IPM using data collected from 2004 to 2010~\citep{salguero-gomez-etal-14}. Here, we use a subset of this data available in an R package, IPMpack ~\citep{IPMpack}.  All code to for this example is archived at Zenodo~\citep{schreiber-ross-ibipm-code-2015}. Appendix B describes the construction of pgfs for two others forms of IPMs. 
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{figure}
@@ -239,12 +239,11 @@ to get that
 \[
 \Psi=\Psi_g \times \Psi_f.
 \]
-To write down each of these pgfs, we make use of two other fundamental property of pgfs:
+To write down each of these pgfs, we make use of another fundamental property of pgfs:
 \vskip 0.1in
 \fbox{\parbox{\textwidth}{\textbf{Fundamental Property 2}: The pgf for a sum of $N$ independent, identically distributed random variables $X_i$ is the composition of the pgf for $N$ with the pgf for the $X_i$.}}
 \vskip 0.1in
-\fbox{\parbox{\textwidth}{\textbf{Fundamental Property 3}: Let $X_1$,$X_2$,\dots,$X_n$ be $n$ independent, random variables with pgfs $\Psi_1$, $\Psi_2$, \dots, $\Psi_n$. If $Y=X_i$ with probability $p_i$ where $p_1+p_2+\dots+p_n=1$, then the pgf of $Y$ is $\sum_{i=1}^n p_i \Psi_i$.}}
-\vskip 0.1in
+A third fundamental property is presented in Appendix B. 
 
 For survival and growth, $\Psi_g(h)(x)$ corresponds to integrating $h^\s$ over all possible contributions $\s$ from an individual of size $x$ surviving and growing. These contributions are of two types: $\s=0$ when the individual dies,  and $\s=(1;y)$ when the individual survives and grows to size $y$. The first event occurs with probability $1-s(x)$ and the infinitesimal probability of the second event is $s(x)G(y, x)dy$. As $h^\s=1$ when $\s=0$ and $h^\s=h(y)$ when $\s=(1;y)$, integrating over all possible contributions due to survival and growth yields
 \[
@@ -259,17 +258,17 @@ Thus, we get the pgf associated with a flowering individual is the following com
 \[
 \Psi_{flowering}(h)(x)=\phi(x, \int h(y)e(y)dy)
 \]
-To get the pgf for flowering and non-flowering contributions to fecundity, we observe that fecundity contributions of an individual of size $x$ is given by $0$ with probability $1-p(x)$ and by a flowering individual with probability $p(x)$. By the \textbf{Fundamental Property 3}, we have the pgf for fecundity contributions equals
+To get the pgf for flowering and non-flowering contributions to fecundity, we observe that fecundity contributions of an individual of size $x$ is given by the sum of a Bernoulli number of flowering individuals where the probability of success is $p(x)$. By the \textbf{Fundamental Property 2}, we need to compose the pgf of a Bernoulli, which is $\theta(\xi)=1-p(x)+p(x)\xi$ where $\xi$ is the dummy variable, with the pgf $\Psi_{flowering}$ of a flowering individual. This composition yields
 \[
-\Psi_f (h)(x)=(1-p(x))\times 1+p(x)\phi(x, \int h(y)e(y)dy)
+\Psi_f (h)(x)=\theta(\Psi_{flowering}(h)(x))=1-p(x)+p(x)\phi(x, \int h(y)e(y)dy).
 \]
-where $1$ is the pgf for the zero random variable. 
+
 
 Using \textbf{Fundamental Property 1}, we muliply $\Psi_g$ and $\Psi_f$ to get $\Psi$, the pgf for the individual-based IPM:
 \[
 \Psi(h)(x)=\left((1-s(x))\times 1 + s(x)\int h(y)G(y, x)dy\right)\left(1-p(x)+p(x)\phi(x, \int h(y)e(y)dy)\right).
 \]
-In Appendix B, we illustrate how to derive pgf for two alternative forms of this model including monocarpic species. 
+
 
 \subsection*{Numerically implementing and using the pgf $\Psi$}
 
@@ -337,7 +336,7 @@ Despite this relatively straightforward extension to temporally variable environ
 Finally, and perhaps most importantly, the  manners in which size-structured demography may shape extinction risk for real-world population remains to be understood. One might hope that by applying these methods to the many data sets for which IPMs have been developed, as well as future data sets, might provide a computationally efficient means to explore how size-structure for populations differing in their evolutionary history and environmental context influences their vulnerability to extinction.
 
 \vskip 0.1in
-\paragraph{\bf Acknowledgements.} We thank William Cuello, Eric Eager, Richard Erickson, Vadim Karatayev, Jacob Moore, and an anonymous reviewer for providing comments on an earlier draft of this manuscript.
+\paragraph{\bf Acknowledgements.} We thank William Cuello, Eric Eager, Richard Erickson, Vadim Karatayev, Jacob Moore, an anonymous reviewer and the associate editor for providing comments that greatly improved the manuscript.
 \bibliography{references}
 
 \newpage
@@ -350,38 +349,40 @@ To see how this definition of $\Psi$ recovers the pgf for the classical multi-ty
 \end{aligned}
 \]
 where the sum is taken over all $k$-tuples $n_1,n_2,\dots,n_k$ of non-negative integers.
-
 \newpage
 
 \section*{Appendix B: Probability generating functionals for other common IPMs}
-Here, we illustrate how to write down probability generating functions (pgfs) for two common alternative forms of the IPM considered in the main text. The first alternative form considers the case where survival occurs before flowering, and the second alternative considers semelparous populations.
+Here, we illustrate how to write down probability generating functions (pgfs) for two common alternative forms of the IPM considered in the main text. The first alternative form considers the case where survival occurs before flowering, and the second alternative considers semelparous (monocarpic) populations. For these alternative forms, we make use of another fundamental property of pgfs:
+\vskip 0.1in
+\fbox{\parbox{\textwidth}{\textbf{Fundamental Property 3}: Let $X_1$,$X_2$,\dots,$X_n$ be $n$ independent, random variables with pgfs $\Psi_1$, $\Psi_2$, \dots, $\Psi_n$. If $Y=X_i$ with probability $p_i$ where $p_1+p_2+\dots+p_n=1$, then the pgf of $Y$ is $\sum_{i=1}^n p_i \Psi_i$.}}
+\vskip 0.1in
 
-For the first alternative, if $N_t(x)$ denotes the density of individuals of size $x$ in year $t$, then we get an IPM of the form
+The first alternative form is 
 \[
 N_{t+1}(x)=\int_a^b \left[ s(y)G(y, x)+s(y)e(x)p(y)f(y)N_t(y)\right]\, dy
 \]
-where $s(y)$ is the probability of surviving to the next year for individuals of size $y$, $G(y, x) \, dy$ is the infinitesimal probability that a surviving individual of size $y$ is size $x$ in the next year, $p(y)$ is the probability that an individual of size $y$ flowers, $f(y)$ is the mean number of offspring produced by an individual of size $y$, and $e(x)$ is the infinitesimal probability that an offspring is of size $x$ at the time of the annual census. As in the main text, we assume that a flowering individual produces a Poisson number $N$ of offspring with mean $f(x)$. The pgf for $N$ is given by $\phi(x, \xi)=\exp(-f(x)(\xi-1))$ where $\xi$ is a dummy variable.
+where $s(y)$ is the probability of surviving to the next year for individuals of size $y$, $G(y, x) \, dy$ is the infinitesimal probability that a surviving individual of size $y$ is size $x$ in the next year, $p(y)$ is the probability that an individual of size $y$ flowers, $f(y)$ is the mean number of offspring produced by an individual of size $y$, and $e(x)$ is the infinitesimal probability that an offspring is of size $x$ at the time of the annual census. We assume that a flowering individual of size $x$ produces a random number $N$ of offspring with pgf $\phi(x,\xi)$ where $\xi$ is a dummy variable. For example, in the main text, we assumed that $N$ is Poisson with mean $f(x)$ in which case $\phi(x, \xi)=\exp(-f(x)(\xi-1))$. Alternatively, if $N$ was a negative binomial with mean $f(x)$ and ``failure'' parameter $r(x)$, then $\phi(x,\xi)=\frac{1}{(1+f(x)(1-\xi))^{r(x)}}$.
 
-To write down the pgf in this case, we begin by writing down the pgf for a surviving individual of size $x$. An individual of this type provides two indepedent contributions to the next time step: the contribution to its own growth and the contribution due the production of offspring. As discussed in the main text, the pgfs for these contributions are, respectively, 
+To write down the pgf for this IPM, we begin with the pgf for a surviving individual of size $x$. An individual of this type provides two indepedent contributions to the next time step: the contribution to its own growth and the contribution due the production of offspring. As discussed in the main text, the pgfs for these contributions are, respectively, 
 \[
 \Psi_{growth}(h)(x)=\int h(y) G(y,x)\,dy \mbox{ and } \Psi_{fecundity}=1-p(x)+p(x)\phi(x,\int h(y)e(y)dy).
 \]
-As these contributions are independent of one another, \textbf{Fundamental Property 1} implies that the pgf for a surviving individual $x$ is  
+As these contributions are independent of one another, \textbf{Fundamental Property 1} implies that the pgf for a surviving individual of size $x$ is  
 \[
 \Psi_{surv}(h)(x)=\int h(y) G(y,x)\,dy \times \left(1-p(x)+p(x)\phi(x,\int h(y)e(y)dy)\right). 
 \]
 
-To get the pgf for surviving and non-surviving individuals, we observe that the contributions of an individual of size $x$ is given by $0$ with probability $1-s(x)$ and by the contributions of a surviving individual with probability $s(x)$. By the \textbf{Fundamental Property 3} of pgfs, we get 
+To get the pgf for surviving and non-surviving individuals, we observe that the contributions of an individual of size $x$ is $0$ with probability $1-s(x)$ and given by the contributions of a surviving individual with probability $s(x)$. By \textbf{Fundamental Property 3} of pgfs, we get 
 \begin{eqnarray*}
 \Psi (h)(x)&=&(1-s(x))\times 1+s(x)\Psi_{surv}(h)(x)\\
 &=& 1-s(x)+s(x)\times \int h(y) G(y,x)\,dy \times \left(1-p(x)+p(x)\phi(x,\int h(y)e(y)dy)\right).
 \end{eqnarray*}
 
-Next we consider a semelparous (monocarpic) population where flowering is followed by death. In this case, the IPM is given by 
+For the second alternative, we consider a semelparous (monocarpic) population where flowering is followed by death. In this case, the IPM is given by 
 \[
 N_{t+1}(x)=\int_a^b \left[ s(y)(1-p(y))G(y, x)+s(y)e(x)p(y)f(y)N_t(y)\right]\, dy.
 \]
-The main difference for this IPM is that surviving individuals either contribute through growth with probability $1-p(x)$ or by fecundity with probability $p(x)$. \textbf{Fundamental Property 3} of pgfs implies 
+Here, surviving individuals either contribute through growth with probability $1-p(x)$ or by fecundity with probability $p(x)$. \textbf{Fundamental Property 3} of pgfs implies 
 \[
 \Psi_{surv}(h)(x)=(1-p(x))\int h(y) G(y,x)\,dy +p(x)\phi(x,\int h(y)e(y)dy). 
 \]
